@@ -1,5 +1,11 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rein_player/common/widgets/rp_horizontal_divider.dart';
+import 'package:rein_player/features/player_frame/views/window_actions.dart';
+import 'package:rein_player/features/player_frame/views/window_current_content_info.dart';
+import 'package:rein_player/features/player_frame/views/window_player_menu.dart';
+import 'package:rein_player/utils/constants/rp_colors.dart';
 
 class RpWindowFrame extends StatelessWidget {
   const RpWindowFrame({super.key});
@@ -7,27 +13,40 @@ class RpWindowFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      child: Column(
-        children: [
-          WindowTitleBarBox(
-            child: Row(
-              children: [
-                Expanded(child: MoveWindow(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Rein Player"),
-                  ),
-                ))
-              ],
-            ),
-          )
-        ],
+      height: 28,
+      margin: EdgeInsets.symmetric(horizontal: 11),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        color: RpColors.gray_900,
       ),
+      child: Row(
+        children: [
+          /// menu
+          Row(
+            children: [
+              /// player name and menu
+              RpWindowPlayerMenu(),
+
+              /// black line
+              const RpHorizontalDivider(),
+
+              /// video info
+              const RpWindowCurrentContentInfo(),
+            ],
+          ),
+          
+          /// move window around
+          Expanded(
+            child: MoveWindow(),
+          ),
+
+          /// window icons
+          RpWindowActions()
+        ],
+      )
     );
   }
 }
-
 
 class LeftSide extends StatelessWidget {
   const LeftSide({super.key});
