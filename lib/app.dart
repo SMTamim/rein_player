@@ -18,8 +18,8 @@ class RpApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Container(
-          constraints: BoxConstraints.expand(),
-          child: Column(
+          constraints: const BoxConstraints.expand(),
+          child: const Column(
             children: [
               RpWindowFrame(),
               Row(

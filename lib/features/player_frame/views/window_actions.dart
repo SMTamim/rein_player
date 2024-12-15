@@ -1,47 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
+import 'package:rein_player/utils/constants/rp_colors.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
 
 class RpWindowActions extends StatelessWidget {
-  const RpWindowActions({
+  RpWindowActions({
     super.key,
   });
+
+  final windowActionsController = Get.put(WindowActionsController());
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        RpHorizontalDivider(),
-        SizedBox(width: 10),
-        GestureDetector(
-          onTap: (){},
-          child: SvgPicture.asset("assets/icons/pin_left.svg"),
+        const RpHorizontalDivider(),
+        const SizedBox(width: 10),
+        Obx(
+          () => GestureDetector(
+            onTap: windowActionsController.togglePin,
+            child: windowActionsController.isPinned.value
+                ? SvgPicture.asset(
+                    "assets/icons/pin_down.svg",
+                    colorFilter:
+                        const ColorFilter.mode(RpColors.accent, BlendMode.srcIn),
+                  )
+                : SvgPicture.asset("assets/icons/pin_left.svg"),
+          ),
         ),
-        SizedBox(width: 13),
+        const SizedBox(width: 13),
         GestureDetector(
-          onTap: (){},
-          child: SvgPicture.asset("assets/icons/minimize.svg"),
+          onTap: windowActionsController.minimizeWindow,
+          child: SizedBox(height: 58 ,child: SvgPicture.asset("assets/icons/minimize.svg")),
         ),
-        SizedBox(width: 13),
+        const SizedBox(width: 13),
         GestureDetector(
-          onTap: (){},
+          onTap: windowActionsController.maximizeOrRestoreWindow,
           child: SvgPicture.asset("assets/icons/maximize.svg"),
         ),
-        SizedBox(width: 13),
+        // SizedBox(width: 13),
+        // GestureDetector(
+        //   onTap: windowActionsController.fullscreenWindow,
+        //   child: SvgPicture.asset("assets/icons/fullscreen.svg"),
+        // ),
+        const SizedBox(width: 13),
         GestureDetector(
-          onTap: (){},
-          child: SvgPicture.asset("assets/icons/fullscreen.svg"),
-        ),
-        SizedBox(width: 13),
-        GestureDetector(
-          onTap: (){},
+          onTap: windowActionsController.closeWindow,
           child: SvgPicture.asset("assets/icons/close.svg"),
         ),
-        SizedBox(width: 9)
+        const SizedBox(width: 9)
       ],
     );
   }
 }
-

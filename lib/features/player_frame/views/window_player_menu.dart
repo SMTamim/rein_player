@@ -15,9 +15,15 @@ class RpWindowPlayerMenu extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("ReinPlayer", style: Theme.of(context).textTheme.bodyMedium,),
-          SizedBox(width: 8),
-          SvgPicture.asset("assets/icons/chevron_down.svg", colorFilter: ColorFilter.mode(RpColors.black_300, BlendMode.srcIn),)
+          Text(
+            "ReinPlayer",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(width: 8),
+          SvgPicture.asset(
+            "assets/icons/chevron_down.svg",
+            colorFilter: const ColorFilter.mode(RpColors.black_300, BlendMode.srcIn),
+          )
         ],
       ),
     );

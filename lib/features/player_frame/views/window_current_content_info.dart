@@ -19,7 +19,7 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
           Container(
             height: 10,
             margin: const EdgeInsets.symmetric(horizontal: 6),
-            child: RpHorizontalDivider(backgroundColor: RpColors.black_500),
+            child: const RpHorizontalDivider(backgroundColor: RpColors.black_500),
           ),
           Text("[2/4] Ep. 02.ts", style: Theme.of(context).textTheme.bodySmall),
         ],
