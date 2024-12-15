@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rein_player/features/playback/views/video_main_screen.dart';
+import 'package:rein_player/features/playback/views/video_control_screen.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 
 import 'features/player_frame/views/window_frame.dart';
@@ -22,11 +22,13 @@ class RpApp extends StatelessWidget {
           child: const Column(
             children: [
               RpWindowFrame(),
-              Row(
-                children: [
-                  RpVideoMainScreen(),
-                  RpPlaylistSideBar()
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(child: RpVideoControlsScreen()),
+                    // RpPlaylistSideBar()
+                  ],
+                ),
               )
             ],
           ),
