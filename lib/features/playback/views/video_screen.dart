@@ -9,8 +9,9 @@ class RpVideoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final videoController = Get.put(VideoControlScreenController());
-    
-    videoController.loadVideoFromUrl("https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4");
+
+    videoController.currentVideoOrAudioUrl.value = "https://user-images.githubusercontent.com/28951144/229373695-22f88f13-d18f-4288-9bf1-c3e078d83722.mp4";
+    videoController.loadVideoFromUrl(videoController.currentVideoOrAudioUrl.value);
     final videoPlayerController =  VideoController(videoController.player);
 
     return Center(

@@ -8,7 +8,7 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  // await windowManager.ensureInitialized();
+  await windowManager.ensureInitialized();
 
   runApp(const RpApp());
 

@@ -3,6 +3,7 @@ import 'package:media_kit/media_kit.dart';
 
 class VideoControlScreenController extends GetxController {
   final isVideoToPlay = false.obs;
+  final currentVideoOrAudioUrl = "".obs;
 
   late Player player;
 
