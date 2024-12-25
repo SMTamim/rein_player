@@ -1,17 +1,13 @@
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 
-class VideoControlScreenController extends GetxController {
+import '../../../core/video_player.dart';
+
+class VideoAndControlScreenController extends GetxController {
   final isVideoToPlay = false.obs;
   final currentVideoOrAudioUrl = "".obs;
 
-  late Player player;
-
-  @override
-  void onInit() {
-    super.onInit();
-    player = Player();
-  }
+  Player player = VideoPlayer.getInstance.player;
 
   @override
   void dispose() {

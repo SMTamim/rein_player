@@ -25,7 +25,7 @@ class RpVideoControls extends StatelessWidget {
             color: RpColors.gray_900,
             child: Row(
               children: [
-                const RpVideoActionControls(),
+                RpVideoActionControls(),
                 const RpVideoTypeAndTimeCounter(),
                 const Spacer(),
                 GestureDetector(

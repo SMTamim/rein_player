@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/controls_controller.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
 
 class RpVideoActionControls extends StatelessWidget {
-  const RpVideoActionControls({super.key});
+  RpVideoActionControls({super.key});
+
+  final videoActionsController = Get.put(ControlsController());
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +20,12 @@ class RpVideoActionControls extends StatelessWidget {
         children: [
           _buildControlButton(
             assetPath: "assets/icons/pause.svg",
-            onTap: () {},
+            onTap: videoActionsController.pause,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
             assetPath: "assets/icons/play.svg",
-            onTap: () {},
+            onTap: videoActionsController.play,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
@@ -42,10 +47,12 @@ class RpVideoActionControls extends StatelessWidget {
     required String assetPath,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
+        height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16),
+        color: Colors.transparent, // Ensures the container is tappable
         child: SvgPicture.asset(
           assetPath,
         ),
