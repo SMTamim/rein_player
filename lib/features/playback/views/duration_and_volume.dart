@@ -15,13 +15,13 @@ class RpDurationAndVolume extends StatelessWidget {
       height: 16,
       width: double.infinity,
       color: RpColors.gray_900,
-      child: Row(
+      child: const Row(
         children: [
           /// duration
           Expanded(
             child: RpVideoProgressBar(),
           ),
-          const SizedBox(width: 20),
+          SizedBox(width: 20),
 
           /// volume
           RpVolumeBar()

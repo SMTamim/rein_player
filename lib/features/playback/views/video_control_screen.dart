@@ -7,7 +7,7 @@ class RpVideoAndControlsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return Column(
+      return const Column(
         children: [
           Expanded(child: RpVideoScreen()),
           SizedBox(height: 20),

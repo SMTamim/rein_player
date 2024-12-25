@@ -38,8 +38,8 @@ class RpVolumeBar extends StatelessWidget {
                     color: RpColors.accent,
                   ),
                 ),
-                Align(
-                    alignment: const Alignment(-0.8, 0),
+                const Align(
+                    alignment: Alignment(-0.8, 0),
                     child: RpRoundedIndicator()
                 )
               ],

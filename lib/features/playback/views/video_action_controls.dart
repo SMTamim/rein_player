@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
-import '../../../utils/constants/rp_colors.dart';
 
 class RpVideoActionControls extends StatelessWidget {
   const RpVideoActionControls({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 38,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -42,7 +41,6 @@ class RpVideoActionControls extends StatelessWidget {
   Widget _buildControlButton({
     required String assetPath,
     required VoidCallback onTap,
-    Size? size,
   }) {
     return GestureDetector(
       onTap: onTap,
