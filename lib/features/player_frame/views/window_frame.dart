@@ -13,7 +13,8 @@ class RpWindowFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 28,
-      margin: const EdgeInsets.symmetric(horizontal: 11),
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2),
         color: RpColors.gray_900,
@@ -27,7 +28,7 @@ class RpWindowFrame extends StatelessWidget {
               RpWindowPlayerMenu(),
 
               /// black line
-              RpHorizontalDivider(),
+              RpVerticalDivider(),
 
               /// video info
               RpWindowCurrentContentInfo(),

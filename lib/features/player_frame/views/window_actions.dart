@@ -18,7 +18,7 @@ class RpWindowActions extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const RpHorizontalDivider(),
+        const RpVerticalDivider(),
         const SizedBox(width: 10),
         Obx(
           () => GestureDetector(

@@ -25,7 +25,7 @@ class RpApp extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    Expanded(child: RpVideoControlsScreen()),
+                    Expanded(child: RpVideoAndControlsScreen()),
                     // RpPlaylistSideBar()
                   ],
                 ),
