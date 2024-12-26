@@ -12,7 +12,7 @@ void main() async {
   await windowManager.ensureInitialized();
   VideoPlayer.getInstance.ensureInitialized();
 
-  runApp(const RpApp());
+  runApp( RpApp());
 
   doWhenWindowReady((){
     const initialSize = Size(600, 450);

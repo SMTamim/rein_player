@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:rein_player/features/playback/views/video_action_controls.dart';
+import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
 import 'duration_and_volume.dart';
@@ -10,6 +12,8 @@ class RpVideoControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playlistController = Get.put(PlaylistController());
+    
     return Container(
       margin: const EdgeInsets.only(right: 3, left: 3, bottom: 3),
       child: Column(
@@ -29,14 +33,19 @@ class RpVideoControls extends StatelessWidget {
                 const RpVideoTypeAndTimeCounter(),
                 const Spacer(),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: playlistController.togglePlaylistWindow,
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: const BoxDecoration(
                         color: Colors.transparent,
                         border: Border(left: BorderSide(width: 1, color: RpColors.black))
                     ),
-                    child: SvgPicture.asset("assets/icons/playlist_burger.svg"),
+                    child: Obx((){
+                      if(playlistController.isPlaylistWindowOpened.value){
+                         return SvgPicture.asset("assets/icons/playlist_burger.svg");
+                      }
+                      return SvgPicture.asset("assets/icons/playlist_burger.svg", colorFilter: ColorFilter.mode(RpColors.white, BlendMode.srcIn),);
+                    }),
                   ),
                 )
               ],
