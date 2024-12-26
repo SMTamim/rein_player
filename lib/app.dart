@@ -20,7 +20,10 @@ class RpApp extends StatelessWidget {
           constraints: const BoxConstraints.expand(),
           child: const Column(
             children: [
+              /// custom window frame
               RpWindowFrame(),
+
+              /// video screen and controls
               Expanded(
                 child: Row(
                   children: [

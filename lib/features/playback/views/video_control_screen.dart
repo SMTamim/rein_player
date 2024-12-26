@@ -9,8 +9,11 @@ class RpVideoAndControlsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
       return const Column(
         children: [
+          /// video
           Expanded(child: RpVideoScreen()),
           SizedBox(height: 20),
+
+          /// controls
           RpVideoControls()
         ],
       );

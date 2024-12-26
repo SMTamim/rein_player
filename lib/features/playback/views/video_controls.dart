@@ -15,11 +15,11 @@ class RpVideoControls extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Duration and volume controls
+          /// Duration and volume controls
           const RpDurationAndVolume(),
           const SizedBox(height: 2),
 
-          // Action controls
+          /// Action controls
           Container(
             width: double.infinity,
             color: RpColors.gray_900,
