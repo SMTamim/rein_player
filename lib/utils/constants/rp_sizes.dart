@@ -7,4 +7,9 @@ class RpSizes {
   static const double md = 16.0;
   static const double lg = 24.0;
   static const double xl = 32.0;
+
+
+  // layout sizes
+  static const double minPlaylistWindowSize = 100;
+  static const double minWindowAndControlScreenSize = 450;
 }

@@ -4,11 +4,16 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../../core/video_player.dart';
+import '../../../utils/constants/rp_sizes.dart';
 
 class VideoAndControlScreenController extends GetxController {
   final isVideoToPlay = false.obs;
   final isFullScreenMode = false.obs;
   Rx<String> currentVideoOrAudioUrl = "".obs;
+
+  // sizes
+  Rx<double> videoAndControlScreenSize =
+      RpSizes.minWindowAndControlScreenSize.obs;
 
   Player player = VideoPlayer.getInstance.player;
   late final videoPlayerController = VideoController(player);
