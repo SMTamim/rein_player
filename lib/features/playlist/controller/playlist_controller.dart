@@ -4,11 +4,15 @@ import 'package:rein_player/features/playback/controller/video_control_screen_co
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 
 class PlaylistController extends GetxController {
+  static PlaylistController get instance => Get.find();
+
   final isPlaylistWindowOpened = false.obs;
   Rx<double> playlistWindowWidth = RpSizes.minPlaylistWindowSize.obs;
 
-  void togglePlaylistWindow() =>
-      isPlaylistWindowOpened.value = !isPlaylistWindowOpened.value;
+  void togglePlaylistWindow(){
+    isPlaylistWindowOpened.value = !isPlaylistWindowOpened.value;
+
+  }
 
   void updatePlaylistWindowSizeOnDrag(DragUpdateDetails details) {
     final dx = details.delta.dx;

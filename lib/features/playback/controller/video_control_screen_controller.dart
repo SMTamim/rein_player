@@ -7,6 +7,8 @@ import '../../../core/video_player.dart';
 import '../../../utils/constants/rp_sizes.dart';
 
 class VideoAndControlScreenController extends GetxController {
+  static VideoAndControlScreenController get instance => Get.find();
+
   final isVideoToPlay = false.obs;
   final isFullScreenMode = false.obs;
   Rx<String> currentVideoOrAudioUrl = "".obs;
@@ -17,6 +19,7 @@ class VideoAndControlScreenController extends GetxController {
 
   Player player = VideoPlayer.getInstance.player;
   late final videoPlayerController = VideoController(player);
+
 
   @override
   void onInit() {
@@ -35,6 +38,7 @@ class VideoAndControlScreenController extends GetxController {
 
   void loadVideoFromUrl(String url) {
     player.open(Media(url));
+    player.pause();
   }
 
   void activateFullScreenMode(BuildContext context) {

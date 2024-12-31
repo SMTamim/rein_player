@@ -2,17 +2,16 @@ import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
 
-class ControlsController extends GetxController{
+class ControlsController extends GetxController {
+  static ControlsController get instance => Get.find();
 
   final Player player = VideoPlayer.getInstance.player;
 
-  void play(){
+  void play() {
     player.play();
   }
 
   void pause() {
     player.pause();
   }
-
-
 }
