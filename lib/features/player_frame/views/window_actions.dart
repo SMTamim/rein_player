@@ -11,10 +11,9 @@ class RpWindowActions extends StatelessWidget {
     super.key,
   });
 
-  final windowActionsController = Get.put(WindowActionsController());
-
   @override
   Widget build(BuildContext context) {
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -22,8 +21,8 @@ class RpWindowActions extends StatelessWidget {
         const SizedBox(width: 10),
         Obx(
           () => GestureDetector(
-            onTap: windowActionsController.togglePin,
-            child: windowActionsController.isPinned.value
+            onTap: WindowActionsController.to.togglePin,
+            child: WindowActionsController.to.isPinned.value
                 ? SvgPicture.asset(
                     "assets/icons/pin_down.svg",
                     colorFilter:
@@ -34,22 +33,22 @@ class RpWindowActions extends StatelessWidget {
         ),
         const SizedBox(width: 13),
         GestureDetector(
-          onTap: windowActionsController.minimizeWindow,
+          onTap: WindowActionsController.to.minimizeWindow,
           child: SizedBox(height: 58 ,child: SvgPicture.asset("assets/icons/minimize.svg")),
         ),
         const SizedBox(width: 13),
         GestureDetector(
-          onTap: windowActionsController.maximizeOrRestoreWindow,
+          onTap: WindowActionsController.to.maximizeOrRestoreWindow,
           child: SvgPicture.asset("assets/icons/maximize.svg"),
         ),
         // SizedBox(width: 13),
         // GestureDetector(
-        //   onTap: windowActionsController.fullscreenWindow,
+        //   onTap: WindowActionsController.to.fullscreenWindow,
         //   child: SvgPicture.asset("assets/icons/fullscreen.svg"),
         // ),
         const SizedBox(width: 13),
         GestureDetector(
-          onTap: windowActionsController.closeWindow,
+          onTap: WindowActionsController.to.closeWindow,
           child: SvgPicture.asset("assets/icons/close.svg"),
         ),
         const SizedBox(width: 9)

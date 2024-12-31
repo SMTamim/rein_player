@@ -12,7 +12,6 @@ class RpVideoControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playlistController = Get.put(PlaylistController());
     
     return Container(
       margin: const EdgeInsets.only(right: 3, left: 3, bottom: 3),
@@ -33,7 +32,7 @@ class RpVideoControls extends StatelessWidget {
                 const RpVideoTypeAndTimeCounter(),
                 const Spacer(),
                 GestureDetector(
-                  onTap: playlistController.togglePlaylistWindow,
+                  onTap: PlaylistController.to.togglePlaylistWindow,
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: const BoxDecoration(
@@ -41,7 +40,7 @@ class RpVideoControls extends StatelessWidget {
                         border: Border(left: BorderSide(width: 1, color: RpColors.black))
                     ),
                     child: Obx((){
-                      if(playlistController.isPlaylistWindowOpened.value){
+                      if(PlaylistController.to.isPlaylistWindowOpened.value){
                          return SvgPicture.asset("assets/icons/playlist_burger.svg");
                       }
                       return SvgPicture.asset("assets/icons/playlist_burger.svg", colorFilter: ColorFilter.mode(RpColors.white, BlendMode.srcIn),);

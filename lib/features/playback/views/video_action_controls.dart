@@ -9,10 +9,9 @@ import '../../../common/widgets/rp_horizontal_divider.dart';
 class RpVideoActionControls extends StatelessWidget {
   RpVideoActionControls({super.key});
 
-  final videoActionsController = Get.put(ControlsController());
-
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 38,
       child: Row(
@@ -20,12 +19,12 @@ class RpVideoActionControls extends StatelessWidget {
         children: [
           _buildControlButton(
             assetPath: "assets/icons/pause.svg",
-            onTap: videoActionsController.pause,
+            onTap: ControlsController.to.pause,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
             assetPath: "assets/icons/play.svg",
-            onTap: videoActionsController.play,
+            onTap: ControlsController.to.play,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
