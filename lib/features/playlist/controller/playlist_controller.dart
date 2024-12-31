@@ -17,7 +17,7 @@ class PlaylistController extends GetxController {
   void updatePlaylistWindowSizeOnDrag(DragUpdateDetails details) {
     final dx = details.delta.dx;
     final videoAndControlScreenSize =
-        Get.find<VideoAndControlScreenController>().videoAndControlScreenSize.value;
+        Get.find<VideoAndControlController>().videoAndControlScreenSize.value;
 
 
     if (dx > 0 && playlistWindowWidth.value > RpSizes.minPlaylistWindowSize) {

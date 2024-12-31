@@ -8,7 +8,7 @@ class RpVideoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final videoController = Get.put(VideoAndControlScreenController());
+    final videoController = Get.put(VideoAndControlController());
 
     return Center(
       child: SizedBox(

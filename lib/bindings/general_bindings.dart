@@ -10,7 +10,7 @@ class GeneralBindings extends Bindings {
   void dependencies() {
     Get.put(PlaylistController());
     Get.put(ControlsController());
-    Get.put(VideoAndControlScreenController());
+    Get.put(VideoAndControlController());
     Get.put(WindowActionsController());
   }
 }

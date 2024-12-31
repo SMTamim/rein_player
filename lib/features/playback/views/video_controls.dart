@@ -12,7 +12,6 @@ class RpVideoControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       margin: const EdgeInsets.only(right: 3, left: 3, bottom: 3),
       child: Column(
@@ -26,24 +25,38 @@ class RpVideoControls extends StatelessWidget {
           Container(
             width: double.infinity,
             color: RpColors.gray_900,
+            height: 30,
             child: Row(
               children: [
+                /// video action controls
                 RpVideoActionControls(),
+
+                /// type and time counter
                 const RpVideoTypeAndTimeCounter(),
                 const Spacer(),
+
+                /// toggle playlist
                 GestureDetector(
                   onTap: PlaylistController.to.togglePlaylistWindow,
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 13),
                     decoration: const BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border(left: BorderSide(width: 1, color: RpColors.black))
+                      color: Colors.transparent,
+                      border: Border(
+                        left: BorderSide(width: 1, color: RpColors.black),
+                      ),
                     ),
-                    child: Obx((){
-                      if(PlaylistController.to.isPlaylistWindowOpened.value){
-                         return SvgPicture.asset("assets/icons/playlist_burger.svg");
+                    child: Obx(() {
+                      if (PlaylistController.to.isPlaylistWindowOpened.value) {
+                        return SvgPicture.asset(
+                            "assets/icons/playlist_burger.svg");
                       }
-                      return SvgPicture.asset("assets/icons/playlist_burger.svg", colorFilter: ColorFilter.mode(RpColors.white, BlendMode.srcIn),);
+                      return SvgPicture.asset(
+                        "assets/icons/playlist_burger.svg",
+                        colorFilter:
+                            ColorFilter.mode(RpColors.white, BlendMode.srcIn),
+                      );
                     }),
                   ),
                 )
@@ -69,14 +82,15 @@ class RpVideoTypeAndTimeCounter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("00:00:02",
-              style: Theme.of(context).textTheme.bodySmall),
+          Text("00:00:02", style: Theme.of(context).textTheme.bodySmall),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-              child: Text("/",style:  Theme.of(context).textTheme.labelSmall!.copyWith(color: RpColors.black_500))
-          ),
-          Text("04:00:02",
-              style: Theme.of(context).textTheme.bodySmall),
+              padding: const EdgeInsets.symmetric(horizontal: 7),
+              child: Text("/",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall!
+                      .copyWith(color: RpColors.black_500))),
+          Text("04:00:02", style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );

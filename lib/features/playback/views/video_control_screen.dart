@@ -13,7 +13,7 @@ class RpVideoAndControlsScreen extends StatelessWidget {
 
       return LayoutBuilder(
         builder: (context, constraint) {
-          VideoAndControlScreenController.to.videoAndControlScreenSize.value  = constraint.minWidth;
+          VideoAndControlController.to.videoAndControlScreenSize.value  = constraint.minWidth;
 
           return const Column(
             children: [

@@ -6,8 +6,8 @@ import 'package:media_kit_video/media_kit_video.dart';
 import '../../../core/video_player.dart';
 import '../../../utils/constants/rp_sizes.dart';
 
-class VideoAndControlScreenController extends GetxController {
-  static VideoAndControlScreenController get to => Get.find();
+class VideoAndControlController extends GetxController {
+  static VideoAndControlController get to => Get.find();
 
   final isVideoToPlay = false.obs;
   final isFullScreenMode = false.obs;
@@ -19,6 +19,9 @@ class VideoAndControlScreenController extends GetxController {
 
   Player player = VideoPlayer.getInstance.player;
   late final videoPlayerController = VideoController(player);
+
+  //volume
+  RxDouble currentVolume = 0.5.obs;
 
 
   @override
@@ -50,5 +53,10 @@ class VideoAndControlScreenController extends GetxController {
   //         MaterialPageRoute(builder: (BuildContext context) => RpFullScreenModeScreen()));
   //     isFullScreenMode.value = true;
   //     };
+  }
+
+  void updateVolume(double volume){
+    currentVolume.value = volume;
+    player.setVolume(volume * 100);
   }
 }

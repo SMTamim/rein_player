@@ -13,18 +13,17 @@ class RpVideoActionControls extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      height: 38,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildControlButton(
-            assetPath: "assets/icons/pause.svg",
-            onTap: ControlsController.to.pause,
+            assetPath: "assets/icons/play.svg",
+            onTap: ControlsController.to.play,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
-            assetPath: "assets/icons/play.svg",
-            onTap: ControlsController.to.play,
+            assetPath: "assets/icons/pause.svg",
+            onTap: ControlsController.to.pause,
           ),
           const RpVerticalDivider(),
           _buildControlButton(
@@ -49,7 +48,6 @@ class RpVideoActionControls extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         color: Colors.transparent, // Ensures the container is tappable
         child: SvgPicture.asset(
