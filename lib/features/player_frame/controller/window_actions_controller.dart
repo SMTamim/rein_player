@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart';
 
 class WindowActionsController extends GetxController {
-  static WindowActionsController get instance => Get.find();
+  static WindowActionsController get to => Get.find();
 
   final Rx<bool> isPinned = false.obs;
   final Rx<bool> isFullScreenMode = false.obs;

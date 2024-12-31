@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:rein_player/utils/constants/rp_sizes.dart';
 
 import 'app.dart';
 
@@ -15,10 +16,13 @@ void main() async {
   runApp( RpApp());
 
   doWhenWindowReady((){
-    const initialSize = Size(600, 450);
+    const initialSize = Size(RpSizes.initialAppWidthSize, RpSizes.initialAppHeightSize);
     appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
 }
+
+
+

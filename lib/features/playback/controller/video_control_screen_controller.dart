@@ -7,7 +7,7 @@ import '../../../core/video_player.dart';
 import '../../../utils/constants/rp_sizes.dart';
 
 class VideoAndControlScreenController extends GetxController {
-  static VideoAndControlScreenController get instance => Get.find();
+  static VideoAndControlScreenController get to => Get.find();
 
   final isVideoToPlay = false.obs;
   final isFullScreenMode = false.obs;
