@@ -15,7 +15,7 @@ class RpVideoScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width * 9.0 / 16.0,
         child: GestureDetector(
-          onDoubleTap: () => videoController.activateFullScreenMode(context),
+          onDoubleTap: () {},
           child: Video(
             controller: videoController.videoPlayerController,
             controls: NoVideoControls,
