@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/video_control_screen_controller.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 
 class PlaylistController extends GetxController {

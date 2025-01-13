@@ -4,8 +4,8 @@ import 'package:rein_player/features/playback/views/volume_bar.dart';
 
 import '../../../utils/constants/rp_colors.dart';
 
-class RpDurationAndVolume extends StatelessWidget {
-  const RpDurationAndVolume({
+class RpVideoProgressAndVolume extends StatelessWidget {
+  const RpVideoProgressAndVolume({
     super.key,
   });
 

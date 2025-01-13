@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/controls_controller.dart';
+import 'package:rein_player/features/playback/controller/video_controls_controller.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
 
 class RpVideoActionControls extends StatelessWidget {
-  RpVideoActionControls({super.key});
+  const RpVideoActionControls({super.key});
 
   @override
   Widget build(BuildContext context) {

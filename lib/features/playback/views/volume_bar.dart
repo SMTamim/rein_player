@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/video_control_screen_controller.dart';
+import 'package:rein_player/features/playback/controller/volume_controller.dart';
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
 import '../../../utils/constants/rp_colors.dart';
@@ -23,10 +23,10 @@ class RpVolumeBar extends StatelessWidget {
           GestureDetector(
             onPanUpdate: (details) {
               double newVolume =
-                  VideoAndControlController.to.currentVolume.value +
+                  VolumeController.to.currentVolume.value +
                       details.delta.dx / 50;
               newVolume = newVolume.clamp(0.0, 1.0);
-              VideoAndControlController.to.updateVolume(newVolume);
+              VolumeController.to.updateVolume(newVolume);
             },
             onTapDown: (details) {
               RenderBox box =
@@ -34,7 +34,7 @@ class RpVolumeBar extends StatelessWidget {
               double containerWidth = box.size.width;
               double localDx = details.localPosition.dx;
               double newVolume = (localDx / containerWidth).clamp(0.0, 1.0);
-              VideoAndControlController.to.updateVolume(newVolume);
+              VolumeController.to.updateVolume(newVolume);
             },
             child: Obx(
               () => SizedBox(
@@ -50,7 +50,7 @@ class RpVolumeBar extends StatelessWidget {
                     ),
                     FractionallySizedBox(
                       widthFactor:
-                          VideoAndControlController.to.currentVolume.value,
+                      VolumeController.to.currentVolume.value,
                       child: Container(
                         height: 2,
                         color: RpColors.accent,
@@ -58,10 +58,10 @@ class RpVolumeBar extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment(
-                          VideoAndControlController.to.currentVolume.value * 2 -
+                          VolumeController.to.currentVolume.value * 2 -
                               1,
                           0),
-                      child: RpRoundedIndicator(),
+                      child: const RpRoundedIndicator(),
                     ),
                   ],
                 ),

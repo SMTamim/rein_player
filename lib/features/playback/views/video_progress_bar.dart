@@ -3,10 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/video_control_screen_controller.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
 import '../../../utils/constants/rp_colors.dart';
+import '../controller/video_controls_controller.dart';
 
 class RpVideoProgressBar extends StatelessWidget {
   RpVideoProgressBar({
@@ -14,7 +15,6 @@ class RpVideoProgressBar extends StatelessWidget {
   });
 
   final GlobalKey progressBarKey = GlobalKey();
-  Timer? _debounce;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class RpVideoProgressBar extends StatelessWidget {
         double localDx = details.localPosition.dx;
         double totalWidth = box.size.width;
         double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
-        VideoAndControlController.to.updateVideoProgress(newProgress);
+        ControlsController.to.updateVideoProgress(newProgress);
       },
       onTapDown: (TapDownDetails details) {
         RenderBox box =
@@ -33,7 +33,7 @@ class RpVideoProgressBar extends StatelessWidget {
         double localDx = details.localPosition.dx;
         double totalWidth = box.size.width;
         double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
-        VideoAndControlController.to.updateVideoProgress(newProgress);
+        ControlsController.to.updateVideoProgress(newProgress);
       },
       child: Obx(
         () => Container(
@@ -45,7 +45,7 @@ class RpVideoProgressBar extends StatelessWidget {
             children: [
               FractionallySizedBox(
                 widthFactor:
-                    VideoAndControlController.to.currentVideoProgress.value,
+                ControlsController.to.currentVideoProgress.value,
                 child: Container(
                   height: 2,
                   color: RpColors.accent,
@@ -58,11 +58,11 @@ class RpVideoProgressBar extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment(
-                    VideoAndControlController.to.currentVideoProgress.value *
+                    ControlsController.to.currentVideoProgress.value *
                             2 -
                         1,
                     0),
-                child: RpRoundedIndicator(),
+                child: const RpRoundedIndicator(),
               )
             ],
           ),

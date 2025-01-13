@@ -5,10 +5,10 @@ import 'package:rein_player/features/playback/views/video_action_controls.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
-import 'duration_and_volume.dart';
+import 'video_progress_and_volume.dart';
 
-class RpVideoControls extends StatelessWidget {
-  const RpVideoControls({super.key});
+class RpControls extends StatelessWidget {
+  const RpControls({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class RpVideoControls extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           /// Duration and volume controls
-          const RpDurationAndVolume(),
+          const RpVideoProgressAndVolume(),
           const SizedBox(height: 2),
 
           /// Action controls

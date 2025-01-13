@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/bindings/general_bindings.dart';
-import 'package:rein_player/features/playback/views/video_control_screen.dart';
+import 'package:rein_player/features/playback/views/video_and_controls_screen.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/theme/theme.dart';
