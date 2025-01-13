@@ -78,16 +78,12 @@ class ControlsController extends GetxController {
     player.seek(seekPosition);
   }
 
-  // void _resetVideoProgress() {
-  //   currentVideoProgress.value = 0.0;
-  //   videoDuration.value = null;
-  // }
-
   void _resetPlayer(){
     videoDuration.value = null;
     videoPosition.value = null;
     currentVideoProgress.value = 0;
     VideoAndControlController.to.currentVideoUrl.value = "";
+    VideoAndControlController.to.currentVideo.value = null;
   }
 
   Future<void> _pickFileAndPlay() async {
@@ -98,8 +94,10 @@ class ControlsController extends GetxController {
 
     if(result != null){
       final file = result.files.single;
-      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, file.path!, size: file.size);
+      if(file.path == null || file.extension == null) return;
+      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, file.path!, file.extension!, size: file.size);
       VideoAndControlController.to.currentVideoUrl.value = srcFile.location;
+      VideoAndControlController.to.currentVideo.value = srcFile;
       VideoAndControlController.to.loadVideoFromUrl(srcFile.location);
       player.play();
     }

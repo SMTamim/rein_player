@@ -47,37 +47,3 @@ class RpWindowFrame extends StatelessWidget {
     );
   }
 }
-
-class LeftSide extends StatelessWidget {
-  const LeftSide({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: Container(
-        color: const Color(0xFF2B2B2B),
-        child: Column(
-          children: [
-            WindowTitleBarBox(
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.menu, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text(
-                      "Menu",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(child: Container()),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:rein_player/features/playback/models/video_audio_item.dart';
 
 import '../../../core/video_player.dart';
 import '../../../utils/constants/rp_sizes.dart';
@@ -12,6 +13,7 @@ class VideoAndControlController extends GetxController {
   final isVideoPlaying = false.obs;
   final isFullScreenMode = false.obs;
   Rx<String> currentVideoUrl = "".obs;
+  Rx<VideoOrAudioItem?> currentVideo  = Rx<VideoOrAudioItem?>(null);
 
   // sizes
   Rx<double> videoAndControlScreenSize =
