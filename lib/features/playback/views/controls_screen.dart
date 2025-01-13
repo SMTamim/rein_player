@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/video_controls_controller.dart';
 import 'package:rein_player/features/playback/views/video_action_controls.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
@@ -54,8 +55,8 @@ class RpControls extends StatelessWidget {
                       }
                       return SvgPicture.asset(
                         "assets/icons/playlist_burger.svg",
-                        colorFilter:
-                            ColorFilter.mode(RpColors.white, BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(
+                            RpColors.white, BlendMode.srcIn),
                       );
                     }),
                   ),
@@ -82,15 +83,22 @@ class RpVideoTypeAndTimeCounter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("00:00:02", style: Theme.of(context).textTheme.bodySmall),
+          Obx(() => Text(ControlsController.to.getFormattedTimeWatched(),
+              style: Theme.of(context).textTheme.bodySmall)),
           Container(
-              padding: const EdgeInsets.symmetric(horizontal: 7),
-              child: Text("/",
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall!
-                      .copyWith(color: RpColors.black_500))),
-          Text("04:00:02", style: Theme.of(context).textTheme.bodySmall),
+            padding: const EdgeInsets.symmetric(horizontal: 7),
+            child: Text(
+              "/",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(color: RpColors.black_500),
+            ),
+          ),
+          Text(
+            ControlsController.to.getFormattedTotalDuration(),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );

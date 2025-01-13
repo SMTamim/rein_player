@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
+import 'package:rein_player/utils/constants/rp_text.dart';
+import 'package:rein_player/utils/helpers/duration_helper.dart';
 
 class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
@@ -34,9 +36,33 @@ class ControlsController extends GetxController {
     player.pause();
   }
 
-  // String getTimeWatchedAndTotalDuration(){
-  //
-  // }
+  void stop(){
+    player.stop();
+    _resetPlayer();
+  }
+
+  String getFormattedTimeWatched(){
+    if(videoPosition.value == null) return RpText.defaultVideoTimeWatched;
+    return RpDurationHelper.formatDuration(videoPosition.value!);
+  }
+
+  String getFormattedTotalDuration(){
+    if(videoDuration.value == null) return RpText.defaultVideoDuration;
+    return RpDurationHelper.formatDuration(videoDuration.value!);
+  }
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes % 60;
+    final seconds = duration.inSeconds % 60;
+
+    if (hours > 0) {
+      return "${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}";
+    } else {
+      return "${twoDigits(minutes)}:${twoDigits(seconds)}";
+    }
+  }
 
   void _updateProgressFromPosition(){
     if(videoPosition.value == null || videoDuration.value == null) return;
@@ -54,8 +80,14 @@ class ControlsController extends GetxController {
     player.seek(seekPosition);
   }
 
-  void resetVideoProgress() {
-    currentVideoProgress.value = 0.0;
+  // void _resetVideoProgress() {
+  //   currentVideoProgress.value = 0.0;
+  //   videoDuration.value = null;
+  // }
+
+  void _resetPlayer(){
     videoDuration.value = null;
+    videoPosition.value = null;
+    currentVideoProgress.value = 0;
   }
 }

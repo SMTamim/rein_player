@@ -28,16 +28,29 @@ class RpVideoActionControls extends StatelessWidget {
                   );
           }),
           const RpVerticalDivider(),
+
+          /// stop
+          _buildControlButton(
+            assetPath: "assets/icons/stop_video.svg",
+            onTap:  ControlsController.to.stop,
+          ),
+          const RpVerticalDivider(),
+
+          /// previous
           _buildControlButton(
             assetPath: "assets/icons/previous.svg",
             onTap: () {},
           ),
           const RpVerticalDivider(),
+
+          /// next
           _buildControlButton(
             assetPath: "assets/icons/next.svg",
             onTap: () {},
           ),
           const RpVerticalDivider(),
+
+          /// open
           _buildControlButton(
             assetPath: "assets/icons/open_video.svg",
             onTap: ControlsController.to.pause,
