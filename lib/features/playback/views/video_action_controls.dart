@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/video_controls_controller.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
@@ -9,20 +11,22 @@ class RpVideoActionControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildControlButton(
-            assetPath: "assets/icons/play.svg",
-            onTap: ControlsController.to.play,
-          ),
-          const RpVerticalDivider(),
-          _buildControlButton(
-            assetPath: "assets/icons/pause.svg",
-            onTap: ControlsController.to.pause,
-          ),
+          /// play  or pause
+          Obx(() {
+            return VideoAndControlController.to.isVideoPlaying.value
+                ? _buildControlButton(
+                    assetPath: "assets/icons/pause.svg",
+                    onTap: ControlsController.to.pause,
+                  )
+                : _buildControlButton(
+                    assetPath: "assets/icons/play.svg",
+                    onTap: ControlsController.to.play,
+                  );
+          }),
           const RpVerticalDivider(),
           _buildControlButton(
             assetPath: "assets/icons/previous.svg",
@@ -32,6 +36,11 @@ class RpVideoActionControls extends StatelessWidget {
           _buildControlButton(
             assetPath: "assets/icons/next.svg",
             onTap: () {},
+          ),
+          const RpVerticalDivider(),
+          _buildControlButton(
+            assetPath: "assets/icons/open_video.svg",
+            onTap: ControlsController.to.pause,
           ),
           const RpVerticalDivider(),
         ],
@@ -47,7 +56,8 @@ class RpVideoActionControls extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        color: Colors.transparent, // Ensures the container is tappable
+        color: Colors.transparent,
+        height: double.infinity,
         child: SvgPicture.asset(
           assetPath,
         ),

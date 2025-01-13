@@ -8,7 +8,7 @@ import '../../../utils/constants/rp_sizes.dart';
 class VideoAndControlController extends GetxController {
   static VideoAndControlController get to => Get.find();
 
-  final isVideoToPlay = false.obs;
+  final isVideoPlaying = false.obs;
   final isFullScreenMode = false.obs;
   Rx<String> currentVideoOrAudioUrl = "".obs;
 
@@ -26,6 +26,11 @@ class VideoAndControlController extends GetxController {
         "/home/amalitechpc4100602/disk_d/courses/designship/Module 1- Welcome/2. Install Files.mp4";
     if (currentVideoOrAudioUrl.value.isEmpty) return;
     loadVideoFromUrl(currentVideoOrAudioUrl.value);
+
+    /// listen to playing
+    player.stream.playing.listen((playing){
+      isVideoPlaying.value = playing;
+    });
   }
 
   @override
