@@ -18,13 +18,22 @@ class RpVolumeBar extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset("assets/icons/volume.svg"),
+          /// volume icon
+          GestureDetector(
+            onTap: VolumeController.to.toggleVolumeMuteState,
+            child: Obx(() {
+              return VolumeController.to.isVideoOnMute()
+                  ? SvgPicture.asset("assets/icons/volume_mute.svg")
+                  : SvgPicture.asset("assets/icons/volume.svg");
+            }),
+          ),
           const SizedBox(width: 8),
+
+          /// volume slider
           GestureDetector(
             onPanUpdate: (details) {
-              double newVolume =
-                  VolumeController.to.currentVolume.value +
-                      details.delta.dx / 50;
+              double newVolume = VolumeController.to.currentVolume.value +
+                  details.delta.dx / 50;
               newVolume = newVolume.clamp(0.0, 1.0);
               VolumeController.to.updateVolume(newVolume);
             },
@@ -37,7 +46,8 @@ class RpVolumeBar extends StatelessWidget {
               VolumeController.to.updateVolume(newVolume);
             },
             child: Obx(
-              () => SizedBox(
+              () => Container(
+                color: Colors.transparent,
                 height: double.infinity,
                 width: 63,
                 child: Stack(
@@ -49,8 +59,7 @@ class RpVolumeBar extends StatelessWidget {
                       color: RpColors.black,
                     ),
                     FractionallySizedBox(
-                      widthFactor:
-                      VolumeController.to.currentVolume.value,
+                      widthFactor: VolumeController.to.currentVolume.value,
                       child: Container(
                         height: 2,
                         color: RpColors.accent,
@@ -58,9 +67,7 @@ class RpVolumeBar extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment(
-                          VolumeController.to.currentVolume.value * 2 -
-                              1,
-                          0),
+                          VolumeController.to.currentVolume.value * 2 - 1, 0),
                       child: const RpRoundedIndicator(),
                     ),
                   ],

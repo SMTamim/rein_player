@@ -13,4 +13,14 @@ class VolumeController extends GetxController {
     currentVolume.value = volume;
     player.setVolume(volume * 100);
   }
+
+  bool isVideoOnMute() => currentVolume.value == 0;
+
+  void toggleVolumeMuteState(){
+    if(isVideoOnMute()){
+      currentVolume.value = 0.5;
+    }else{
+      currentVolume.value = 0;
+    }
+  }
 }
