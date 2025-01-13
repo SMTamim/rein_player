@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/video_controls_controller.dart';
+import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/views/video_action_controls.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
@@ -95,9 +95,11 @@ class RpVideoTypeAndTimeCounter extends StatelessWidget {
                   .copyWith(color: RpColors.black_500),
             ),
           ),
-          Text(
-            ControlsController.to.getFormattedTotalDuration(),
-            style: Theme.of(context).textTheme.bodySmall,
+          Obx(
+            () => Text(
+              ControlsController.to.getFormattedTotalDuration(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ),
         ],
       ),

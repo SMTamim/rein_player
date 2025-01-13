@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
-import 'package:rein_player/features/playback/controller/video_controls_controller.dart';
+import 'package:rein_player/features/playback/controller/controls_controller.dart';
 
 import '../../../common/widgets/rp_horizontal_divider.dart';
 
@@ -53,7 +53,7 @@ class RpVideoActionControls extends StatelessWidget {
           /// open
           _buildControlButton(
             assetPath: "assets/icons/open_video.svg",
-            onTap: ControlsController.to.pause,
+            onTap: ControlsController.to.open,
           ),
           const RpVerticalDivider(),
         ],

@@ -45,6 +45,7 @@ dependencies:
   media_kit_video: ^1.2.5
   media_kit_libs_video: ^1.0.5
   iconsax: ^0.0.8
+  file_picker: ^8.1.7
 
 dev_dependencies:
   flutter_test:

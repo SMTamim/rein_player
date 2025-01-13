@@ -1,8 +1,12 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
+
+import '../models/video_audio_item.dart';
 
 class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
@@ -13,23 +17,13 @@ class ControlsController extends GetxController {
   Rx<Duration?> videoPosition = Rx<Duration?>(null);
   Rx<Duration?> videoDuration = Rx<Duration?>(null);
 
-  @override
-  void onInit() {
-    super.onInit();
-    /// duration listener
-    player.stream.duration.listen((duration) {
-      videoDuration.value = duration;
-    });
-
-    /// current video position listener
-    player.stream.position.listen((position){
-      videoPosition.value = position;
-      _updateProgressFromPosition();
-    });
-  }
-
-  void play() {
-    player.play();
+  void play() async {
+    final currentVideoUrl = VideoAndControlController.to.currentVideoUrl;
+    if(currentVideoUrl.isEmpty){
+      await _pickFileAndPlay();
+    }else{
+      player.play();
+    }
   }
 
   void pause() {
@@ -39,6 +33,10 @@ class ControlsController extends GetxController {
   void stop(){
     player.stop();
     _resetPlayer();
+  }
+
+  void open() async {
+    await _pickFileAndPlay();
   }
 
   String getFormattedTimeWatched(){
@@ -64,7 +62,7 @@ class ControlsController extends GetxController {
     }
   }
 
-  void _updateProgressFromPosition(){
+  void updateProgressFromPosition(){
     if(videoPosition.value == null || videoDuration.value == null) return;
     double progress = videoPosition.value!.inMilliseconds / videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);
@@ -89,5 +87,21 @@ class ControlsController extends GetxController {
     videoDuration.value = null;
     videoPosition.value = null;
     currentVideoProgress.value = 0;
+    VideoAndControlController.to.currentVideoUrl.value = "";
+  }
+
+  Future<void> _pickFileAndPlay() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowMultiple: false
+    );
+
+    if(result != null){
+      final file = result.files.single;
+      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, file.path!, size: file.size);
+      VideoAndControlController.to.currentVideoUrl.value = srcFile.location;
+      VideoAndControlController.to.loadVideoFromUrl(srcFile.location);
+      player.play();
+    }
   }
 }

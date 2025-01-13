@@ -7,7 +7,7 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
 import '../../../utils/constants/rp_colors.dart';
-import '../controller/video_controls_controller.dart';
+import '../controller/controls_controller.dart';
 
 class RpVideoProgressBar extends StatelessWidget {
   RpVideoProgressBar({
