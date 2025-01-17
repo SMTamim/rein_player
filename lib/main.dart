@@ -13,14 +13,15 @@ void main() async {
   await windowManager.ensureInitialized();
   VideoPlayer.getInstance.ensureInitialized();
 
-  runApp(RpApp());
-
   doWhenWindowReady((){
     windowManager.setSize(RpSizes.initialAppWindowSize);
     windowManager.setMinimumSize(RpSizes.initialAppWindowSize);
     appWindow.alignment = Alignment.center;
     windowManager.show();
   });
+
+  runApp(RpApp());
+
 }
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -18,6 +19,9 @@ class WindowController extends GetxController with WindowListener {
   @override
   void onWindowResize() async {
     super.onWindowResize();
+    /// checking it maximize to fix maximize and restore
+    /// respecting the previous window size
+    if(WindowActionsController.to.isMaximize) return;
     currentWindowSize = await windowManager.getSize();
 
     final adjustedWidth = RpSizes.minWindowAndControlScreenSize +

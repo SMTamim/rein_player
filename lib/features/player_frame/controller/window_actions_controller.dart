@@ -8,6 +8,8 @@ class WindowActionsController extends GetxController {
   final Rx<bool> isPinned = false.obs;
   final Rx<bool> isFullScreenMode = false.obs;
 
+  bool isMaximize = false;
+
   Future<void> togglePin() async {
     isPinned.value = !isPinned.value;
     await windowManager.setAlwaysOnTop(isPinned.value);
@@ -19,6 +21,7 @@ class WindowActionsController extends GetxController {
 
   void maximizeOrRestoreWindow() {
     appWindow.maximizeOrRestore();
+    isMaximize = !isMaximize;
   }
 
   void fullscreenWindow() {

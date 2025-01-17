@@ -23,7 +23,6 @@ class RpWindowFrame extends StatelessWidget {
         children: [
           /// menu
           const Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
               /// player name and menu
               RpWindowPlayerMenu(),
