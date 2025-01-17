@@ -1,7 +1,9 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
+import 'package:window_manager/window_manager.dart';
 
 class PlaylistController extends GetxController {
   static PlaylistController get to => Get.find();
@@ -9,9 +11,14 @@ class PlaylistController extends GetxController {
   final isPlaylistWindowOpened = false.obs;
   Rx<double> playlistWindowWidth = RpSizes.minPlaylistWindowSize.obs;
 
-  void togglePlaylistWindow(){
+  void togglePlaylistWindow() async {
+    final currentSize = await windowManager.getSize();
+    if(isPlaylistWindowOpened.value){
+      windowManager.setSize(Size(currentSize.width - playlistWindowWidth.value, currentSize.height));
+    }else{
+      windowManager.setSize(Size(currentSize.width + playlistWindowWidth.value, currentSize.height));
+    }
     isPlaylistWindowOpened.value = !isPlaylistWindowOpened.value;
-
   }
 
   void updatePlaylistWindowSizeOnDrag(DragUpdateDetails details) {

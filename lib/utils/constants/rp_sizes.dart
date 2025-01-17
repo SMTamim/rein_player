@@ -10,8 +10,8 @@ class RpSizes {
 
 
   // layout sizes
-  static const double minPlaylistWindowSize = 150;
-  static const double minWindowAndControlScreenSize = 450;
+  static const double minPlaylistWindowSize = 250;
+  static const double minWindowAndControlScreenSize = 600;
   static const double initialAppWidthSize = 600;
   static const double initialAppHeightSize = 450;
 }

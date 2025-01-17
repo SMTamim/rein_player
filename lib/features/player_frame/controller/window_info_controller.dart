@@ -13,6 +13,7 @@ class WindowInfoController extends GetxController {
   String getCurrentVideoTitle(){
     final currentVideo = VideoAndControlController.to.currentVideo.value;
     if(currentVideo == null ) return "";
+    if(currentVideo.name.length < 25 ) return currentVideo.name;
     return "${currentVideo.name.substring(0, 25)}..";
   }
 }

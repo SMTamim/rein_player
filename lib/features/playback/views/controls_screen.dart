@@ -28,6 +28,7 @@ class RpControls extends StatelessWidget {
             color: RpColors.gray_900,
             height: 30,
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 /// video action controls
                 RpVideoActionControls(),

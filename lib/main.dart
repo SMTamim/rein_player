@@ -13,14 +13,15 @@ void main() async {
   await windowManager.ensureInitialized();
   VideoPlayer.getInstance.ensureInitialized();
 
-  runApp( RpApp());
+  runApp(RpApp());
 
   doWhenWindowReady((){
     const initialSize = Size(RpSizes.initialAppWidthSize, RpSizes.initialAppHeightSize);
-    appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
+    windowManager.setSize(initialSize);
+    windowManager.setMinimumSize(initialSize);
     appWindow.alignment = Alignment.center;
-    appWindow.show();
+    print("width: ${initialSize.width}");
+    windowManager.show();
   });
 }
 

@@ -14,7 +14,7 @@ class WindowActionsController extends GetxController {
   }
 
   void minimizeWindow() {
-    appWindow.minimize();
+    windowManager.minimize();
   }
 
   void maximizeOrRestoreWindow() {
@@ -33,6 +33,6 @@ class WindowActionsController extends GetxController {
   }
 
   void closeWindow() {
-    appWindow.close();
+    windowManager.close();
   }
 }
