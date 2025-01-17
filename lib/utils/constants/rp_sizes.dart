@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class RpSizes {
   RpSizes._();
 
@@ -11,7 +13,10 @@ class RpSizes {
 
   // layout sizes
   static const double minPlaylistWindowSize = 250;
-  static const double minWindowAndControlScreenSize = 600;
-  static const double initialAppWidthSize = 600;
-  static const double initialAppHeightSize = 450;
+  static const double minWindowAndControlScreenSize = 400;
+  static const Size initialAppWindowSize = Size(400, 350);
+  static const Size initialVideoLoadedAppWidowSize = Size(600, 400);
+
+  // volume
+  static const double defaultVolume = 0.5;
 }

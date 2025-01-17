@@ -1,4 +1,3 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
@@ -25,7 +24,6 @@ class PlaylistController extends GetxController {
     final dx = details.delta.dx;
     final videoAndControlScreenSize =
         Get.find<VideoAndControlController>().videoAndControlScreenSize.value;
-
 
     if (dx > 0 && playlistWindowWidth.value > RpSizes.minPlaylistWindowSize) {
       playlistWindowWidth.value -= dx;

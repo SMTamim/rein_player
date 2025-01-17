@@ -16,11 +16,9 @@ void main() async {
   runApp(RpApp());
 
   doWhenWindowReady((){
-    const initialSize = Size(RpSizes.initialAppWidthSize, RpSizes.initialAppHeightSize);
-    windowManager.setSize(initialSize);
-    windowManager.setMinimumSize(initialSize);
+    windowManager.setSize(RpSizes.initialAppWindowSize);
+    windowManager.setMinimumSize(RpSizes.initialAppWindowSize);
     appWindow.alignment = Alignment.center;
-    print("width: ${initialSize.width}");
     windowManager.show();
   });
 }
