@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 
+import 'no_media_placeholder.dart';
+
 class RpVideoScreen extends StatelessWidget {
   const RpVideoScreen({super.key});
 
@@ -16,10 +18,16 @@ class RpVideoScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.width * 9.0 / 16.0,
         child: GestureDetector(
           onDoubleTap: () {},
-          child: Video(
-            controller: videoController.videoPlayerController,
-            controls: NoVideoControls,
-          ),
+          child: Obx(() {
+            if (VideoAndControlController.to.currentVideoUrl.isEmpty) {
+              return const RpNoMediaPlaceholder();
+            }
+            return Video(
+              key: ValueKey(VideoAndControlController.to.currentVideoUrl),
+              controller: videoController.videoPlayerController,
+              controls: NoVideoControls,
+            );
+          }),
         ),
       ),
     );

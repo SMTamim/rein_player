@@ -4,8 +4,10 @@ import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
+import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
+import 'package:window_manager/window_manager.dart';
 
 import '../models/video_audio_item.dart';
 
@@ -86,6 +88,7 @@ class ControlsController extends GetxController {
     VideoAndControlController.to.currentVideoUrl.value = "";
     VideoAndControlController.to.currentVideo.value = null;
     VolumeController.to.currentVolume.value = 0;
+    windowManager.setSize(RpSizes.initialAppWindowSize);
   }
 
   Future<void> _pickFileAndPlay() async {
