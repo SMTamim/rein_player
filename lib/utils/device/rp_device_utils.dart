@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:window_manager/window_manager.dart';
 
 class RpDeviceUtils {
   RpDeviceUtils._();
@@ -26,5 +27,13 @@ class RpDeviceUtils {
 
   static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
+  }
+
+  static Future<Size> getWindowFrameSize() async {
+    return await windowManager.getSize();
+  }
+
+  static void setWindowFrameSize(Size size){
+    windowManager.setSize(size);
   }
 }

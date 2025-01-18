@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
+import 'package:rein_player/utils/constants/rp_extensions.dart';
+import 'package:rein_player/utils/helpers/media_helper.dart';
 
 class AlbumContentController extends GetxController {
   static AlbumContentController get to => Get.find();
@@ -25,77 +27,86 @@ class AlbumContentController extends GetxController {
   }
 
   Future<void> loadDirectory(String dirPath, {navDirection = "down"}) async {
-    isLoading.value = false;
     try {
+      isLoading.value = false;
       final directory = Directory(dirPath);
-      final List<PlaylistItem> items = [];
+      final List<PlaylistItem> mediaFiles = [];
 
       await for (var entity in directory.list()) {
         final name = path.basename(entity.path);
-        items.add(
-          PlaylistItem(
-            name: name,
-            location: entity.path,
-            isDirectory: entity is Directory,
-          ),
-        );
+        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
+          continue;
+        }
+
+        mediaFiles.add(PlaylistItem(
+          name: name,
+          location: entity.path,
+          isDirectory: entity is Directory,
+          type: RpMediaHelper.getPlaylistItemType(entity.path),
+        ));
       }
 
       /// Sort: folders first, then files
-      items.sort((a, b) {
-        if (a.isDirectory && !b.isDirectory) return -1;
-        if (!a.isDirectory && b.isDirectory) return 1;
-        return a.name.compareTo(b.name);
-      });
+      mediaFiles.sort(_sortMediaFiles);
 
-      if(navDirection == "down"){
+      if (navDirection == "down") {
         _navigationStack.add(dirPath);
       }
 
-      currentContent.value = items;
+      currentContent.value = mediaFiles;
       currentPath.value = dirPath;
-    } finally{
+    } finally {
       isLoading.value = false;
       canNavigateBack.value = canNavigationStackBack();
     }
   }
 
-  void navigateBack(){
-    print(_navigationStack.length);
-    print(canNavigateBack.value);
-    if(_navigationStack.length > 1){
+  void navigateBack() {
+    if (_navigationStack.length > 1) {
       _navigationStack.removeLast();
-      print("*****: ${_navigationStack.length}");
       canNavigateBack.value = canNavigationStackBack();
-      print("*****Dw: ${canNavigationStackBack()}");
       loadDirectory(_navigationStack.last, navDirection: "up");
-      print("*****D: ${canNavigationStackBack()}");
     }
   }
 
-  bool canNavigationStackBack(){
+  bool canNavigationStackBack() {
     return _navigationStack.length > 1;
   }
 
   bool isMediaFile(String filePath) {
-    final videoAndAudioExtensions = [
-      // video
-      '.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm',
-      '.m4v', '.3gp', '.3g2', '.mts', '.ts', '.vob', '.ogv', '.f4v',
-
-      //audio
-      '.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a',
-      '.aiff', '.alac', '.opus', '.amr', '.pcm', '.mid', '.midi', '.caf'
-    ];
     final extension = path.extension(filePath).toLowerCase().trim();
-    return videoAndAudioExtensions.contains(extension);
+    return RpFileExtensions.mediaFileExtensions.contains(extension);
   }
 
-  void handleItemOnTap(PlaylistItem item){
-      if (item.isDirectory) {
-        loadDirectory(item.location);
-      } else if (isMediaFile(item.location)) {
-        VideoAndControlController.to.loadVideoFromUrl(item.location);
+  void handleItemOnTap(PlaylistItem item) {
+    if (item.isDirectory) {
+      loadDirectory(item.location);
+    } else if (isMediaFile(item.location)) {
+      VideoAndControlController.to.loadVideoFromUrl(item.location);
+    }
+  }
+
+  int _sortMediaFiles(a, b){
+    if (a.isDirectory != b.isDirectory) {
+      return a.isDirectory ? -1 : 1;
+    }
+
+    RegExp numberPrefix = RegExp(r'^(\d+)\.\s*(.*)');
+    var matchA = numberPrefix.firstMatch(a.name);
+    var matchB = numberPrefix.firstMatch(b.name);
+
+    if (matchA != null && matchB != null) {
+      int numberA = int.parse(matchA.group(1)!);
+      int numberB = int.parse(matchB.group(1)!);
+      if (numberA != numberB) {
+        return numberA.compareTo(numberB);
       }
+      return matchA.group(2)!.compareTo(matchB.group(2)!);
+    }
+
+    if (matchA != null) return -1;
+    if (matchB != null) return 1;
+
+    return a.name.compareTo(b.name);
   }
 }

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:rein_player/features/playlist/controller/album_controller.dart';
-import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 
 import '../controller/album_content_controller.dart';
 
@@ -22,12 +19,13 @@ class AlbumContent extends StatelessWidget {
             onTap: AlbumContentController.to.navigateBack,
             child: Container(
               padding: const EdgeInsets.only(left: 7),
+              color: Colors.transparent,
               child: const Row(
                 children: [
                   Icon(
                     Icons.folder,
                     color: Colors.amber,
-                    size: 17,
+                    size: 15,
                   ),
                   SizedBox(width: 5),
                   Text("..."),
@@ -36,14 +34,14 @@ class AlbumContent extends StatelessWidget {
             ),
           );
         }),
-        const Expanded(child: RpAlbumItem())
+        const Expanded(child: RpAlbumItems())
       ],
     );
   }
 }
 
-class RpAlbumItem extends StatelessWidget {
-  const RpAlbumItem({
+class RpAlbumItems extends StatelessWidget {
+  const RpAlbumItems({
     super.key,
   });
 
@@ -64,17 +62,19 @@ class RpAlbumItem extends StatelessWidget {
                     Icon(
                       item.isDirectory ? Icons.folder : Icons.video_file,
                       color: item.isDirectory ? Colors.amber : Colors.white,
-                      size: 20,
+                      size: 15,
                     ),
                     const SizedBox(width: 5),
 
                     /// title
-                    Text(item.name,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      item.name,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     const Spacer(),
 
                     /// video duration
-                    const Text("00:24:56")
+                    // const Text("00:24:56")
                   ],
                 ),
               ),

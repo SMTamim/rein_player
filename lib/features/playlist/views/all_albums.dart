@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
-import 'package:rein_player/features/playlist/models/album.dart';
 
 import '../../../utils/constants/rp_colors.dart';
-import '../models/playlist_item.dart';
 import 'add_new_playlist_button.dart';
 
 class RpAllAlbums extends StatelessWidget {
@@ -13,15 +11,15 @@ class RpAllAlbums extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 38,
       child: ListView.builder(
-          itemCount: AlbumController.to.albums.value.length + 1,
+          itemCount: AlbumController.to.albums.length + 1,
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
-            if (index == AlbumController.to.albums.value.length) return RpAddNewPlaylistButton();
+            if (index == AlbumController.to.albums.length) return RpAddNewPlaylistButton();
 
-            final playlistItem = AlbumController.to.albums.value[index];
+            final playlistItem = AlbumController.to.albums[index];
             return GestureDetector(
               onTap: () => AlbumController.to.updateSelectedAlbumIndex(index),
               child: Container(

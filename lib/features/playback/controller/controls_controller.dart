@@ -101,7 +101,6 @@ class ControlsController extends GetxController {
       final file = result.files.single;
       if(file.path == null || file.extension == null) return;
       VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, file.path!, file.extension!, size: file.size);
-      VideoAndControlController.to.currentVideoUrl.value = srcFile.location;
       VideoAndControlController.to.currentVideo.value = srcFile;
       VideoAndControlController.to.loadVideoFromUrl(srcFile.location);
       player.play();

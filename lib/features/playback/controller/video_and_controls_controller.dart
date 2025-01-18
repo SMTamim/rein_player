@@ -5,6 +5,7 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
+import 'package:rein_player/utils/device/rp_device_utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../../core/video_player.dart';
@@ -31,11 +32,16 @@ class VideoAndControlController extends GetxController {
     player.dispose();
   }
 
-  void loadVideoFromUrl(String url) {
+  void loadVideoFromUrl(String url)  async {
+    currentVideoUrl.value = url;
     VolumeController.to.currentVolume.value = RpSizes.defaultVolume;
-    windowManager.setSize(RpSizes.initialVideoLoadedAppWidowSize);
+    final windowSize = await RpDeviceUtils.getWindowFrameSize();
+    if (windowSize.height == RpSizes.initialAppWindowSize.height &&
+        windowSize.width == RpSizes.initialAppWindowSize.width) {
+      RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
+    }
+
     player.open(Media(url));
-    player.pause();
 
     /// playing listener
     player.stream.playing.listen((playing) {

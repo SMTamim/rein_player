@@ -16,7 +16,7 @@ class RpPlaylistSideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return Container(
-        decoration: BoxDecoration(color: RpColors.gray_800),
+        decoration: const BoxDecoration(color: RpColors.gray_800),
         width: PlaylistController.to.playlistWindowWidth.value,
         height: double.infinity,
         child: Column(
