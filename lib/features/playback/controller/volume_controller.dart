@@ -18,6 +18,7 @@ class VolumeController extends GetxController {
   }
 
   void updateVolume(double volume) {
+    if(VideoAndControlController.to.currentVideoUrl.isEmpty) return;
     currentVolume.value = volume;
     player.setVolume(volume * 100);
   }
