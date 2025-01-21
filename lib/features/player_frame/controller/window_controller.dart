@@ -21,14 +21,14 @@ class WindowController extends GetxController with WindowListener {
     super.onWindowResize();
     /// checking it maximize to fix maximize and restore
     /// respecting the previous window size
-    if(WindowActionsController.to.isMaximize) return;
-    currentWindowSize = await windowManager.getSize();
-
-    final adjustedWidth = RpSizes.minWindowAndControlScreenSize +
-        (PlaylistController.to.isPlaylistWindowOpened.value
-            ? PlaylistController.to.playlistWindowWidth.value
-            : -PlaylistController.to.playlistWindowWidth.value);
-
-    windowManager.setMinimumSize(Size(adjustedWidth, currentWindowSize.height));
+    // if(WindowActionsController.to.isMaximize) return;
+    // currentWindowSize = await windowManager.getSize();
+    //
+    // final adjustedWidth = RpSizes.minWindowAndControlScreenSize +
+    //     (PlaylistController.to.isPlaylistWindowOpened.value
+    //         ? PlaylistController.to.playlistWindowWidth.value
+    //         : -PlaylistController.to.playlistWindowWidth.value);
+    //
+    // windowManager.setMinimumSize(Size(adjustedWidth, currentWindowSize.height));
   }
 }

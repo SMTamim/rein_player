@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/utils/constants/rp_colors.dart';
 
 import '../controller/album_content_controller.dart';
 
@@ -8,78 +10,109 @@ class AlbumContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isHovered = false.obs;
+
     return Column(
       children: [
+        /// folder back navigation
         Obx(() {
           if (!AlbumContentController.to.canNavigateBack.value) {
             return const SizedBox.shrink();
           }
 
           return GestureDetector(
-            onTap: AlbumContentController.to.navigateBack,
-            child: Container(
-              padding: const EdgeInsets.only(left: 7),
-              color: Colors.transparent,
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.folder,
-                    color: Colors.amber,
-                    size: 15,
+            onDoubleTap: AlbumContentController.to.navigateBack,
+            child: MouseRegion(
+              onEnter: (_) => isHovered.value = true,
+              onExit: (_) => isHovered.value = false,
+              cursor: SystemMouseCursors.click,
+              child: Obx(() {
+                return Container(
+                  padding: const EdgeInsets.only(left: 7),
+                  color: isHovered.value
+                      ? RpColors.gray_900.withOpacity(0.2)
+                      : Colors.transparent,
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.folder,
+                        color: Colors.amber,
+                        size: 15,
+                      ),
+                      SizedBox(width: 5),
+                      Text("..."),
+                    ],
                   ),
-                  SizedBox(width: 5),
-                  Text("..."),
-                ],
-              ),
+                );
+              }),
             ),
           );
         }),
-        const Expanded(child: RpAlbumItems())
+
+        /// playlist items
+        const Expanded(child: RpAlbumItems()),
       ],
     );
   }
 }
 
 class RpAlbumItems extends StatelessWidget {
-  const RpAlbumItems({
-    super.key,
-  });
+  const RpAlbumItems({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return ListView.builder(
-          itemCount: AlbumContentController.to.currentContent.length,
-          itemBuilder: (context, index) {
-            final item = AlbumContentController.to.currentContent[index];
+        itemCount: AlbumContentController.to.currentContent.length,
+        itemBuilder: (context, index) {
+          final item = AlbumContentController.to.currentContent[index];
+          final isHovered = false.obs;
 
-            return GestureDetector(
-              onTap: () => AlbumContentController.to.handleItemOnTap(item),
-              child: Container(
-                padding: const EdgeInsets.only(left: 7),
-                child: Row(
+          return GestureDetector(
+            onDoubleTap: () => AlbumContentController.to.handleItemOnTap(item),
+            child: MouseRegion(
+              onEnter: (_) => isHovered.value = true,
+              onExit: (_) => isHovered.value = false,
+              cursor: SystemMouseCursors.click,
+              child: Obx(() {
+                return Row(
                   children: [
+                    const SizedBox(width: 5),
                     Icon(
                       item.isDirectory ? Icons.folder : Icons.video_file,
-                      color: item.isDirectory ? Colors.amber : Colors.white,
+                      color: item.isDirectory
+                          ? (isHovered.value ? Colors.orange : Colors.amber)
+                          : (isHovered.value ? RpColors.accent : Colors.white),
                       size: 15,
                     ),
                     const SizedBox(width: 5),
 
-                    /// title
-                    Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    /// Title
+                    SizedBox(
+                      width: PlaylistController.to.playlistWindowWidth *
+                          (item.isDirectory ? 0.8 : 0.7),
+                      child: Text(
+                        item.name,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: isHovered.value
+                                  ? RpColors.accent
+                                  : RpColors.black_300,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
                     const Spacer(),
 
                     /// video duration
                     // const Text("00:24:56")
                   ],
-                ),
-              ),
-            );
-          });
+                );
+              }),
+            ),
+          );
+        },
+      );
     });
   }
 }

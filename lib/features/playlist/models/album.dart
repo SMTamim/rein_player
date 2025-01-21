@@ -1,7 +1,5 @@
 class Album {
-  Album({required this.name, required this.location}): id = "2";
+  Album({required this.name, required this.location, this.id = "", this.currentItemToPlay = ""});
 
-  String name;
-  String location;
-  String id;
+  String name, location, id, currentItemToPlay;
 }

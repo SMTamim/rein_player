@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 
 import '../../../utils/constants/rp_colors.dart';
 
@@ -8,20 +9,21 @@ class RpAddNewPlaylistButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: EdgeInsets.symmetric(
-          horizontal: 23, vertical: 13),
-      decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(
-              width: 1, color: RpColors.black),
-          bottom: BorderSide(
-              width: 1, color: RpColors.black),
+    return GestureDetector(
+      onTap: PlaylistController.to.showAddPlaylistModal,
+      child: Container(
+        height: 50,
+        padding: EdgeInsets.symmetric(
+            horizontal: 23, vertical: 13),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border(
+            left: BorderSide(
+                width: 1, color: RpColors.black),
+            bottom: BorderSide(
+                width: 1, color: RpColors.black),
+          ),
         ),
-      ),
-      child: InkWell(
-        onTap: () {},
         child: Center(
           child: Icon(Iconsax.add, size: 16,)
         ),

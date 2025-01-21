@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_extensions.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
@@ -17,14 +18,6 @@ class AlbumContentController extends GetxController {
 
   // Stack to keep track of navigation history
   final List<String> _navigationStack = [];
-
-  @override
-  void onInit() async {
-    super.onInit();
-    // await AlbumContentController.to.loadDirectory("/home/amalitechpc4100602/disk_d/courses/Complete algorithmic forex trading and back testing system/");
-    // print(currentContent);
-    print("ssss");
-  }
 
   Future<void> loadDirectory(String dirPath, {navDirection = "down"}) async {
     try {
@@ -108,5 +101,16 @@ class AlbumContentController extends GetxController {
     if (matchB != null) return 1;
 
     return a.name.compareTo(b.name);
+  }
+
+  String adjustTitleOnPlaylistSidebarSize(String title) {
+    final sidebarWidth = PlaylistController.to.playlistWindowWidth.value;
+    final adjustedWidth = (sidebarWidth * 1).round();
+    const averageCharWidth = 8;
+    final maxChars = (adjustedWidth / averageCharWidth).floor();
+    if (title.length > maxChars) {
+      return '${title.substring(0, maxChars)}...';
+    }
+    return title;
   }
 }

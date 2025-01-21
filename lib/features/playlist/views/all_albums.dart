@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 
 import '../../../utils/constants/rp_colors.dart';
@@ -13,44 +14,50 @@ class RpAllAlbums extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 38,
-      child: ListView.builder(
-          itemCount: AlbumController.to.albums.length + 1,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == AlbumController.to.albums.length) return RpAddNewPlaylistButton();
+      child: Obx(() {
+        return ListView.builder(
+            itemCount: AlbumController.to.albums.length + 1,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == AlbumController.to.albums.length)
+                return RpAddNewPlaylistButton();
 
-            final playlistItem = AlbumController.to.albums[index];
-            return GestureDetector(
-              onTap: () => AlbumController.to.updateSelectedAlbumIndex(index),
-              child: Container(
-                height: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: index == 0
-                        ? BorderSide.none
-                        : const BorderSide(
-                      width: 1,
-                      color: RpColors.black,
+              final playlistItem = AlbumController.to.albums[index];
+              return GestureDetector(
+                onTap: () => AlbumController.to.updateSelectedAlbumIndex(index),
+                child: Container(
+                  height: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: index == 0
+                          ? BorderSide.none
+                          : const BorderSide(
+                              width: 1,
+                              color: RpColors.black,
+                            ),
+                      bottom:
+                          AlbumController.to.selectedAlbumIndex.value == index
+                              ? BorderSide.none
+                              : const BorderSide(
+                                  width: 1,
+                                  color: RpColors.black,
+                                ),
                     ),
-                    bottom: const BorderSide(
-                      width: 1,
-                      color: RpColors.black,
+                  ),
+                  child: Center(
+                    child: Text(
+                      playlistItem.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: RpColors.black_300),
                     ),
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    playlistItem.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: RpColors.black_300),
-                  ),
-                ),
-              ),
-            );
-          }),
+              );
+            });
+      }),
     );
   }
 }

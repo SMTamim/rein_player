@@ -19,4 +19,7 @@ class RpSizes {
 
   // volume
   static const double defaultVolume = 0.5;
+
+  // input
+  static const double textInputSize = 40;
 }
