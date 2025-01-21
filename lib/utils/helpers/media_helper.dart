@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:rein_player/features/playback/models/video_audio_item.dart';
 
 import '../../features/playlist/models/playlist_item_type.dart';
 import 'package:path/path.dart' as path;
@@ -44,5 +45,11 @@ class RpMediaHelper {
     final allTypes = [...RpFileExtensions.audioExtensions, ...RpFileExtensions.videoExtensions];
     final extension = path.extension(filePath).toLowerCase().trim();
     return allTypes.contains(extension);
+  }
+
+  static VideoOrAudioItem getCurrentVideoInfoFromUrl(String filePath){
+    String extension = path.extension(filePath);
+    String name = path.basenameWithoutExtension(filePath);
+    return VideoOrAudioItem(name, filePath, extension);
   }
 }
