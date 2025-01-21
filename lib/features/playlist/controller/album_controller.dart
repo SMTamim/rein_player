@@ -15,6 +15,7 @@ class AlbumController extends GetxController {
 
   Future<void> updateSelectedAlbumIndex(int index) async {
     if(index == selectedAlbumIndex.value) return;
+    AlbumContentController.to.clearNavigationStack();
     selectedAlbumIndex.value = index;
     AlbumContentController.to.currentContent.value = [];
     await AlbumContentController.to.loadDirectory(albums[index].location);

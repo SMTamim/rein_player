@@ -16,7 +16,6 @@ class AlbumContentController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool canNavigateBack = false.obs;
 
-  // Stack to keep track of navigation history
   final List<String> _navigationStack = [];
 
   Future<void> loadDirectory(String dirPath, {navDirection = "down"}) async {
@@ -64,6 +63,10 @@ class AlbumContentController extends GetxController {
 
   bool canNavigationStackBack() {
     return _navigationStack.length > 1;
+  }
+
+  void clearNavigationStack(){
+    _navigationStack.clear();
   }
 
   bool isMediaFile(String filePath) {

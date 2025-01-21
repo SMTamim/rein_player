@@ -25,33 +25,35 @@ class RpAllAlbums extends StatelessWidget {
               final playlistItem = AlbumController.to.albums[index];
               return GestureDetector(
                 onTap: () => AlbumController.to.updateSelectedAlbumIndex(index),
-                child: Container(
-                  height: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: index == 0
-                          ? BorderSide.none
-                          : const BorderSide(
-                              width: 1,
-                              color: RpColors.black,
-                            ),
-                      bottom:
-                          AlbumController.to.selectedAlbumIndex.value == index
-                              ? BorderSide.none
-                              : const BorderSide(
-                                  width: 1,
-                                  color: RpColors.black,
-                                ),
+                child: Obx(
+                  () => Container(
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: index == 0
+                            ? BorderSide.none
+                            : const BorderSide(
+                                width: 1,
+                                color: RpColors.black,
+                              ),
+                        bottom:
+                            AlbumController.to.selectedAlbumIndex.value == index
+                                ? BorderSide.none
+                                : const BorderSide(
+                                    width: 1,
+                                    color: RpColors.black,
+                                  ),
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      playlistItem.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: RpColors.black_300),
+                    child: Center(
+                      child: Text(
+                        playlistItem.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: RpColors.black_300),
+                      ),
                     ),
                   ),
                 ),
