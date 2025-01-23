@@ -4,7 +4,7 @@ import 'package:window_manager/window_manager.dart';
 
 class WindowController extends GetxController with WindowListener {
   static WindowController get to => Get.find();
-  Size currentWindowSize = Size.zero;
+  Rx<Size> currentWindowSize = Size.zero.obs;
 
   @override
   void onInit() {
@@ -15,5 +15,6 @@ class WindowController extends GetxController with WindowListener {
   @override
   void onWindowResize() async {
     super.onWindowResize();
+    currentWindowSize.value = await windowManager.getSize();
   }
 }

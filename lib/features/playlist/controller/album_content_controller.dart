@@ -126,4 +126,12 @@ class AlbumContentController extends GetxController {
     }
     return title;
   }
+
+  String getPlaylistPlayingProgress(){
+    final currentVideo = VideoAndControlController.to.currentVideo.value;
+    if(currentContent.isEmpty || currentVideo == null) return "";
+    final currentVideoIndex = currentContent.indexWhere((item) => item.location == currentVideo.location);
+    if(currentVideoIndex == -1) return "";
+    return "[${currentVideoIndex + 1}/${currentContent.length}]";
+  }
 }
