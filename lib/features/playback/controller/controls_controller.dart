@@ -4,6 +4,10 @@ import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
+import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
+import 'package:rein_player/features/playlist/controller/album_controller.dart';
+import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
@@ -22,9 +26,9 @@ class ControlsController extends GetxController {
 
   void play() async {
     final currentVideoUrl = VideoAndControlController.to.currentVideoUrl;
-    if(currentVideoUrl.isEmpty){
+    if (currentVideoUrl.isEmpty) {
       await _pickFileAndPlay();
-    }else{
+    } else {
       player.play();
     }
   }
@@ -33,7 +37,7 @@ class ControlsController extends GetxController {
     player.pause();
   }
 
-  void stop(){
+  void stop() {
     player.stop();
     _resetPlayer();
   }
@@ -42,13 +46,13 @@ class ControlsController extends GetxController {
     await _pickFileAndPlay();
   }
 
-  String getFormattedTimeWatched(){
-    if(videoPosition.value == null) return RpText.defaultVideoTimeWatched;
+  String getFormattedTimeWatched() {
+    if (videoPosition.value == null) return RpText.defaultVideoTimeWatched;
     return RpDurationHelper.formatDuration(videoPosition.value!);
   }
 
-  String getFormattedTotalDuration(){
-    if(videoDuration.value == null) return RpText.defaultVideoDuration;
+  String getFormattedTotalDuration() {
+    if (videoDuration.value == null) return RpText.defaultVideoDuration;
     return RpDurationHelper.formatDuration(videoDuration.value!);
   }
 
@@ -65,23 +69,25 @@ class ControlsController extends GetxController {
     }
   }
 
-  void updateProgressFromPosition(){
-    if(videoPosition.value == null || videoDuration.value == null) return;
-    double progress = videoPosition.value!.inMilliseconds / videoDuration.value!.inMilliseconds;
+  void updateProgressFromPosition() {
+    if (videoPosition.value == null || videoDuration.value == null) return;
+    double progress = videoPosition.value!.inMilliseconds /
+        videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);
     currentVideoProgress.value = progress;
   }
 
   void updateVideoProgress(double progress) {
-    if(videoDuration.value == null) return;
+    if (videoDuration.value == null) return;
     currentVideoProgress.value = progress;
     final duration = videoDuration.value!;
-    final seekPosition = Duration(seconds: (progress * duration.inSeconds).toInt());
+    final seekPosition =
+        Duration(seconds: (progress * duration.inSeconds).toInt());
     currentVideoProgress.value = progress;
     player.seek(seekPosition);
   }
 
-  void _resetPlayer(){
+  void _resetPlayer() {
     videoDuration.value = null;
     videoPosition.value = null;
     currentVideoProgress.value = 0;
@@ -92,17 +98,21 @@ class ControlsController extends GetxController {
   }
 
   Future<void> _pickFileAndPlay() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.video,
-        allowMultiple: false
-    );
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.video, allowMultiple: false);
 
-    if(result != null){
+    if (result != null) {
       final file = result.files.single;
-      if(file.path == null || file.extension == null) return;
-      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, file.path!, file.extension!, size: file.size);
+      if (file.path == null || file.extension == null) return;
+      VideoOrAudioItem srcFile = VideoOrAudioItem(
+          file.name, file.path!, file.extension!,
+          size: file.size);
       VideoAndControlController.to.currentVideo.value = srcFile;
       VideoAndControlController.to.loadVideoFromUrl(srcFile.location);
+      AlbumController.to.updateSelectedAlbumIndex(0);
+      AlbumContentController.to.addToCurrentPlaylistContent(
+        PlaylistItem(name: file.name, location: file.path!, isDirectory: false),
+      );
       player.play();
     }
   }

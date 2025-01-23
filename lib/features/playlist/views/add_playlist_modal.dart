@@ -19,7 +19,7 @@ class RpAddPlaylistModal extends StatelessWidget {
       ),
       child: Container(
         width: 400,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class RpAddPlaylistModal extends StatelessWidget {
               children: [
                  Text(
                   'Add New Playlist',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
                   icon: Icon(Icons.close, color: Colors.white),
@@ -41,7 +41,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
 
             /// Playlist Name Field
             GestureDetector(
@@ -56,7 +56,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   focusNode: PlaylistController.to.playlistNameFocusNode,
                   decoration:  const InputDecoration(
                     labelText: 'Playlist Name',
-                    labelStyle: TextStyle(color: RpColors.black_600, fontSize: 14),
+                    labelStyle: TextStyle(color: RpColors.black_600, fontSize: 12),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: RpColors.black_500),
                     ),
@@ -83,7 +83,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                       PlaylistController.to.selectedFolderPath.value.isEmpty
                           ? 'No folder selected'
                           : PlaylistController.to.selectedFolderPath.value,
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelMedium,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -96,6 +96,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   label: Text('Browse'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: RpColors.black_500,
+                    textStyle: TextStyle(fontSize: 12)
                   ),
                 ),
               ],
@@ -113,7 +114,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   },
                   child: Text(
                     'Cancel',
-                    style: TextStyle(color: Colors.white70),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -122,7 +123,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: RpColors.accent,
                   ),
-                  child: Text('Create Playlist', style: TextStyle(color: Colors.black),),
+                  child: Text('Create Playlist', style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.black),),
                 ),
               ],
             ),

@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
@@ -21,7 +24,7 @@ class AlbumContent extends StatelessWidget {
           }
 
           return GestureDetector(
-            onDoubleTap: AlbumContentController.to.navigateBack,
+            onTap: AlbumContentController.to.navigateBack,
             child: MouseRegion(
               onEnter: (_) => isHovered.value = true,
               onExit: (_) => isHovered.value = false,
@@ -65,24 +68,30 @@ class RpAlbumItems extends StatelessWidget {
       return ListView.builder(
         itemCount: AlbumContentController.to.currentContent.length,
         itemBuilder: (context, index) {
-          final item = AlbumContentController.to.currentContent[index];
+          final media = AlbumContentController.to.currentContent[index];
           final isHovered = false.obs;
 
           return GestureDetector(
-            onDoubleTap: () => AlbumContentController.to.handleItemOnTap(item),
+            onDoubleTap: () => AlbumContentController.to.handleItemOnTap(media),
             child: MouseRegion(
               onEnter: (_) => isHovered.value = true,
               onExit: (_) => isHovered.value = false,
               cursor: SystemMouseCursors.click,
               child: Obx(() {
+                final isCurrentPlayingMedia =
+                    VideoAndControlController.to.currentVideo.value?.location ==
+                        media.location;
+
                 return Row(
                   children: [
                     const SizedBox(width: 5),
                     Icon(
-                      item.isDirectory ? Icons.folder : Icons.video_file,
-                      color: item.isDirectory
-                          ? (isHovered.value ? Colors.orange : Colors.amber)
-                          : (isHovered.value ? RpColors.accent : Colors.white),
+                      media.isDirectory ? Icons.folder : Icons.video_file,
+                      color: (isCurrentPlayingMedia ||
+                              isHovered.value ||
+                              media.isDirectory)
+                          ? RpColors.accent
+                          : Colors.white,
                       size: 15,
                     ),
                     const SizedBox(width: 5),
@@ -90,11 +99,11 @@ class RpAlbumItems extends StatelessWidget {
                     /// Title
                     SizedBox(
                       width: PlaylistController.to.playlistWindowWidth *
-                          (item.isDirectory ? 0.8 : 0.7),
+                          (media.isDirectory ? 0.8 : 0.7),
                       child: Text(
-                        item.name,
+                        "${index + 1}. ${media.name}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isHovered.value
+                              color: (isCurrentPlayingMedia || isHovered.value)
                                   ? RpColors.accent
                                   : RpColors.black_300,
                             ),

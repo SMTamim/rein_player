@@ -52,6 +52,11 @@ class AlbumContentController extends GetxController {
       canNavigateBack.value = canNavigationStackBack();
     }
   }
+  
+  void addToCurrentPlaylistContent(PlaylistItem item){
+    if(currentContent.any((el) => el.location.trim() == item.location)) return;
+    currentContent.add(item);
+  }
 
   void navigateBack() {
     if (_navigationStack.length > 1) {
@@ -63,6 +68,11 @@ class AlbumContentController extends GetxController {
 
   bool canNavigationStackBack() {
     return _navigationStack.length > 1;
+  }
+
+  void addToNavigationStack(String path){
+    if(path.isEmpty) return;
+    _navigationStack.add(path);
   }
 
   void clearNavigationStack(){

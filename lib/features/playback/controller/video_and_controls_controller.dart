@@ -45,6 +45,7 @@ class VideoAndControlController extends GetxController {
     }
 
     player.open(Media(url));
+    player.pause();
 
     /// playing listener
     player.stream.playing.listen((playing) {
