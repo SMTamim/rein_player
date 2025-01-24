@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
-import 'package:rein_player/utils/constants/rp_storage.dart';
+import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 
 import '../models/album.dart';
@@ -11,29 +11,18 @@ class AlbumController extends GetxController {
 
   final storage = RpLocalStorage();
 
+  RxString defaultAlbumLocation = "".obs;
+  RxList<Album> albums = <Album>[].obs;
+
+  RxInt selectedAlbumIndex = 0.obs;
+
   @override
   onInit() async {
     super.onInit();
     Get.put(AlbumContentController());
-    String? defaultAlbumLocation =
-        storage.readData(RpStorageConstants.defaultAlbumLocationKey);
-    if (defaultAlbumLocation == null || defaultAlbumLocation.isEmpty) return;
-    AlbumContentController.to.clearNavigationStack();
-    AlbumContentController.to.currentContent.value = [];
-    await AlbumContentController.to.loadDirectory(defaultAlbumLocation);
+    loadAllAlbumsFromStorage();
+    await loadDefaultAlbumPlaylistContent();
   }
-
-  RxString defaultAlbumLocation = "".obs;
-
-  RxList albums = <Album>[
-    Album(name: "Default", location: "", id: "default_album"),
-    Album(
-        name: "Playlist 1",
-        location:
-            "/home/amalitechpc4100602/disk_d/courses/Complete algorithmic forex trading and back testing system/"),
-  ].obs;
-
-  RxInt selectedAlbumIndex = 0.obs;
 
   Future<void> updateSelectedAlbumIndex(int index) async {
     if (index == selectedAlbumIndex.value) return;
@@ -56,7 +45,34 @@ class AlbumController extends GetxController {
       }
       return album;
     }).toList();
-    await storage.saveData(
-        RpStorageConstants.defaultAlbumLocationKey, location);
+    await storage.saveData(RpKeysConstants.defaultAlbumLocationKey, location);
+  }
+
+  void dumpAllAlbumsToStorage() async {
+    final albumJson = albums
+        .where((album) => album.id != RpKeysConstants.defaultAlbumKey)
+        .map((album) => album.toJson())
+        .toList();
+    await storage.saveData(RpKeysConstants.allAlbumsKey, albumJson);
+  }
+
+  void loadAllAlbumsFromStorage() async {
+    List<dynamic> albumJson =
+        storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
+    albums([
+      Album(name: "Default", location: "", id: "default_album"),
+      ...albumJson.map((el) => Album.fromJson(el))
+    ]);
+  }
+
+  Future<void> loadDefaultAlbumPlaylistContent() async {
+    String? defaultAlbumLocation =
+        storage.readData(RpKeysConstants.defaultAlbumLocationKey);
+    if (defaultAlbumLocation == null || defaultAlbumLocation.isEmpty) {
+      return;
+    }
+    AlbumContentController.to.clearNavigationStack();
+    AlbumContentController.to.currentContent.value = [];
+    await AlbumContentController.to.loadDirectory(defaultAlbumLocation);
   }
 }

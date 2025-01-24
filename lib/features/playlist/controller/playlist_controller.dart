@@ -5,12 +5,16 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/models/album.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
+import 'package:rein_player/utils/constants/rp_keys.dart';
+import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../views/add_playlist_modal.dart';
 
 class PlaylistController extends GetxController {
   static PlaylistController get to => Get.find();
+
+  final storage = RpLocalStorage();
 
   final isPlaylistWindowOpened = false.obs;
   Rx<double> playlistWindowWidth = RpSizes.minPlaylistWindowSize.obs;
@@ -46,7 +50,6 @@ class PlaylistController extends GetxController {
   }
 
   Future<void> showAddPlaylistModal() {
-    print("object");
     return Get.dialog(const RpAddPlaylistModal(), barrierDismissible: false);
   }
 
@@ -65,12 +68,20 @@ class PlaylistController extends GetxController {
       return;
     }
 
+    if(AlbumController.to.albums.any((album) => album.location == selectedFolderPath.value)){
+      Get.snackbar('Error', 'Album already added',
+          snackPosition: SnackPosition.TOP, maxWidth: 500);
+      return;
+    }
+
     AlbumController.to.albums.add(
       Album(
         name: playlistNameController.value.text.trim(),
         location: selectedFolderPath.value,
       ),
     );
+    /// dump list to local storage
+    AlbumController.to.dumpAllAlbumsToStorage();
     await AlbumController.to.updateSelectedAlbumIndex(AlbumController.to.albums.length - 1);
     clearForm();
     Get.back();
