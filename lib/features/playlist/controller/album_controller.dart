@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/utils/constants/rp_keys.dart';
+import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 
 import '../models/album.dart';
@@ -48,7 +49,7 @@ class AlbumController extends GetxController {
     await storage.saveData(RpKeysConstants.defaultAlbumLocationKey, location);
   }
 
-  void dumpAllAlbumsToStorage() async {
+  Future<void> dumpAllAlbumsToStorage() async {
     final albumJson = albums
         .where((album) => album.id != RpKeysConstants.defaultAlbumKey)
         .map((album) => album.toJson())
@@ -56,11 +57,14 @@ class AlbumController extends GetxController {
     await storage.saveData(RpKeysConstants.allAlbumsKey, albumJson);
   }
 
-  void loadAllAlbumsFromStorage() async {
+  Future<void> loadAllAlbumsFromStorage() async {
     List<dynamic> albumJson =
         storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
     albums([
-      Album(name: "Default", location: "", id: "default_album"),
+      Album(
+          name: RpText.defaultAlbumName,
+          location: "",
+          id: RpKeysConstants.defaultAlbumKey),
       ...albumJson.map((el) => Album.fromJson(el))
     ]);
   }
@@ -74,5 +78,17 @@ class AlbumController extends GetxController {
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
     await AlbumContentController.to.loadDirectory(defaultAlbumLocation);
+  }
+
+  void removeAlbumFromList(Album album) async {
+    final filteredAlbums = albums
+        .where((album) =>
+            album.id == RpKeysConstants.defaultAlbumKey ||
+            album.location != album.location)
+        .toList();
+
+    albums(filteredAlbums);
+    await storage.removeData(RpKeysConstants.allAlbumsKey);
+    final _ = await dumpAllAlbumsToStorage();
   }
 }
