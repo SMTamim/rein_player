@@ -40,14 +40,14 @@ class RpVideoActionControls extends StatelessWidget {
           /// previous
           _buildControlButton(
             assetPath: "assets/icons/previous.svg",
-            onTap: () {},
+            onTap: ControlsController.to.goPreviousItemInPlaylist,
           ),
           const RpVerticalDivider(),
 
           /// next
           _buildControlButton(
             assetPath: "assets/icons/next.svg",
-            onTap: () {},
+            onTap: ControlsController.to.goNextItemInPlaylist,
           ),
           const RpVerticalDivider(),
 

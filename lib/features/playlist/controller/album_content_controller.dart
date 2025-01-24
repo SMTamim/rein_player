@@ -127,11 +127,29 @@ class AlbumContentController extends GetxController {
     return title;
   }
 
-  String getPlaylistPlayingProgress(){
+  int getIndexOfCurrentItemInPlaylist(){
     final currentVideo = VideoAndControlController.to.currentVideo.value;
-    if(currentContent.isEmpty || currentVideo == null) return "";
-    final currentVideoIndex = currentContent.indexWhere((item) => item.location == currentVideo.location);
+    if(currentContent.isEmpty || currentVideo == null) return -1;
+    return currentContent.indexWhere((item) => item.location == currentVideo.location);
+  }
+
+  String getPlaylistPlayingProgress(){
+    final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if(currentVideoIndex == -1) return "";
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
   }
+
+  void goNextItemInPlaylist(){
+    final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
+    if(currentVideoIndex == -1 || currentContent.isEmpty) return;
+    if(currentVideoIndex + 1 == currentContent.length) return;
+    VideoAndControlController.to.loadVideoFromUrl(currentContent[currentVideoIndex + 1].location);
+  }
+
+  void goPreviousItemInPlaylist(){
+    final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
+    if(currentVideoIndex == -1 || currentContent.isEmpty || currentVideoIndex == 0) return;
+    VideoAndControlController.to.loadVideoFromUrl(currentContent[currentVideoIndex - 1].location);
+  }
+
 }

@@ -29,21 +29,29 @@ class ControlsController extends GetxController {
     if (currentVideoUrl.isEmpty) {
       await _pickFileAndPlay();
     } else {
-      player.play();
+     await player.play();
     }
   }
 
-  void pause() {
-    player.pause();
+  void pause() async {
+    await player.pause();
   }
 
-  void stop() {
-    player.stop();
+  void stop() async {
+    await player.stop();
     _resetPlayer();
   }
 
   void open() async {
     await _pickFileAndPlay();
+  }
+
+  void goNextItemInPlaylist(){
+    AlbumContentController.to.goNextItemInPlaylist();
+  }
+
+  void goPreviousItemInPlaylist(){
+    AlbumContentController.to.goPreviousItemInPlaylist();
   }
 
   String getFormattedTimeWatched() {
@@ -77,14 +85,14 @@ class ControlsController extends GetxController {
     currentVideoProgress.value = progress;
   }
 
-  void updateVideoProgress(double progress) {
+  void updateVideoProgress(double progress) async {
     if (videoDuration.value == null) return;
     currentVideoProgress.value = progress;
     final duration = videoDuration.value!;
     final seekPosition =
         Duration(seconds: (progress * duration.inSeconds).toInt());
     currentVideoProgress.value = progress;
-    player.seek(seekPosition);
+    await player.seek(seekPosition);
   }
 
   void _resetPlayer() {
@@ -113,7 +121,7 @@ class ControlsController extends GetxController {
       AlbumContentController.to.addToCurrentPlaylistContent(
         PlaylistItem(name: file.name, location: file.path!, isDirectory: false),
       );
-      player.play();
+      await player.play();
     }
   }
 }
