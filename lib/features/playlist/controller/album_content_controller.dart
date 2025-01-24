@@ -84,11 +84,13 @@ class AlbumContentController extends GetxController {
     return RpFileExtensions.mediaFileExtensions.contains(extension);
   }
 
-  void handleItemOnTap(PlaylistItem item) {
+  void handleItemOnTap(PlaylistItem item) async {
     if (item.isDirectory) {
       loadDirectory(item.location);
     } else if (isMediaFile(item.location)) {
-      VideoAndControlController.to.loadVideoFromUrl(item.location);
+      await VideoAndControlController.to.loadVideoFromUrl(item.location);
+      VideoAndControlController.to.isVideoPlaying.value = false;
+
     }
   }
 

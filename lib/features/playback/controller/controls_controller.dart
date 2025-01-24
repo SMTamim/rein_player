@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:path/path.dart' as path;
 import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
@@ -9,14 +12,18 @@ import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
+import 'package:rein_player/utils/constants/rp_storage.dart';
 import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
+import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../models/video_audio_item.dart';
 
 class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
+
+  final storage = RpLocalStorage();
 
   final Player player = VideoPlayer.getInstance.player;
 
@@ -73,7 +80,7 @@ class ControlsController extends GetxController {
     if (hours > 0) {
       return "${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}";
     } else {
-      return "${twoDigits(minutes)}:${twoDigits(seconds)}";
+      return "00:${twoDigits(minutes)}:${twoDigits(seconds)}";
     }
   }
 
@@ -129,6 +136,10 @@ class ControlsController extends GetxController {
       AlbumContentController.to.addToCurrentPlaylistContent(
         PlaylistItem(name: file.name, location: file.path!, isDirectory: false),
       );
+
+      /// set the default album location
+      await AlbumController.to.setDefaultAlbumLocation(result.files.single.path!);
+      // TODO: load additional file in the directory
       await player.play();
     }
   }

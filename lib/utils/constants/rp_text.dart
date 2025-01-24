@@ -3,6 +3,6 @@ class RpText {
 
   static const appName = "Rein Player";
 
-  static const defaultVideoDuration = "00:00";
-  static const defaultVideoTimeWatched = "00:00";
+  static const defaultVideoDuration = "00:00:00";
+  static const defaultVideoTimeWatched = "00:00:00";
 }
