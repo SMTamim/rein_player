@@ -29,7 +29,7 @@ class ControlsController extends GetxController {
     if (currentVideoUrl.isEmpty) {
       await _pickFileAndPlay();
     } else {
-     await player.play();
+      await player.play();
     }
   }
 
@@ -46,11 +46,11 @@ class ControlsController extends GetxController {
     await _pickFileAndPlay();
   }
 
-  void goNextItemInPlaylist(){
+  void goNextItemInPlaylist() {
     AlbumContentController.to.goNextItemInPlaylist();
   }
 
-  void goPreviousItemInPlaylist(){
+  void goPreviousItemInPlaylist() {
     AlbumContentController.to.goPreviousItemInPlaylist();
   }
 
@@ -78,7 +78,9 @@ class ControlsController extends GetxController {
   }
 
   void updateProgressFromPosition() {
-    if (videoPosition.value == null || videoDuration.value == null) return;
+    if (videoPosition.value == null ||
+        videoDuration.value == null ||
+        videoDuration.value!.inMilliseconds == 0) return;
     double progress = videoPosition.value!.inMilliseconds /
         videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);
@@ -103,6 +105,12 @@ class ControlsController extends GetxController {
     VideoAndControlController.to.currentVideo.value = null;
     VolumeController.to.currentVolume.value = 0;
     windowManager.setSize(RpSizes.initialAppWindowSize);
+  }
+
+  void resetVideoProgress() {
+    currentVideoProgress.value = 0;
+    videoPosition.value = null;
+    videoDuration.value = null;
   }
 
   Future<void> _pickFileAndPlay() async {

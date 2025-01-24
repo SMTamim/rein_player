@@ -1,9 +1,5 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
 import '../../../utils/constants/rp_colors.dart';
@@ -57,11 +53,7 @@ class RpVideoProgressBar extends StatelessWidget {
                 color: RpColors.black_600,
               ),
               Align(
-                alignment: Alignment(
-                    ControlsController.to.currentVideoProgress.value *
-                            2 -
-                        1,
-                    0),
+                alignment: Alignment(ControlsController.to.currentVideoProgress.value * 2 - 1, 0),
                 child: const RpRoundedIndicator(),
               )
             ],

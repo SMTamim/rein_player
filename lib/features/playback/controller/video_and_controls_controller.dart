@@ -36,10 +36,7 @@ class VideoAndControlController extends GetxController {
   void loadVideoFromUrl(String url)  async {
     currentVideoUrl.value = url;
     currentVideo.value = RpMediaHelper.getCurrentVideoInfoFromUrl(url);
-    isVideoPlaying.value = false;
-    ControlsController.to.currentVideoProgress.value = 0;
-    ControlsController.to.videoDuration.value = null;
-    ControlsController.to.videoPosition.value = null;
+    ControlsController.to.resetVideoProgress();
 
     VolumeController.to.currentVolume.value = RpSizes.defaultVolume;
     final windowSize = await RpDeviceUtils.getWindowFrameSize();
@@ -48,13 +45,10 @@ class VideoAndControlController extends GetxController {
       RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
     }
 
-    await player.open(Media(url));
-    await player.pause();
 
     /// playing listener
     player.stream.playing.listen((playing) {
       isVideoPlaying.value = playing;
-      print('is video playing: ${isVideoPlaying.value}');
     });
 
     /// duration listener
@@ -67,5 +61,7 @@ class VideoAndControlController extends GetxController {
       ControlsController.to.videoPosition.value = position;
       ControlsController.to.updateProgressFromPosition();
     });
+
+    await player.open(Media(url));
   }
 }

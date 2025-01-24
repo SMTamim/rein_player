@@ -32,4 +32,8 @@ class VolumeController extends GetxController {
       currentVolume.value = 0;
     }
   }
+
+  void resetVolume(){
+    currentVolume.value = 0;
+  }
 }

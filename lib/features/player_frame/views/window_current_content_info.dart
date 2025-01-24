@@ -38,8 +38,8 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
                     child: const RpVerticalDivider(
                         backgroundColor: RpColors.black_500),
                   ),
-                  SizedBox(
-                    width: WindowController.to.currentWindowSize.value.width * 0.4,
+                  Container(
+                    width: WindowController.to.currentWindowSize.value.width <= 650 ? 180 : WindowController.to.currentWindowSize.value.width * 0.4,
                     child: Text(
                       "${AlbumContentController.to.getPlaylistPlayingProgress()} ${VideoAndControlController.to.currentVideo.value!.name}",
                       style: Theme.of(context).textTheme.bodySmall,

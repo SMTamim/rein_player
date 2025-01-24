@@ -19,30 +19,28 @@ class RpWindowFrame extends StatelessWidget {
         borderRadius: BorderRadius.circular(2),
         color: RpColors.gray_900,
       ),
-      child: Row(
-        children: [
-          /// menu
-          const Row(
-            children: [
-              /// player name and menu
-              RpWindowPlayerMenu(),
-
-              /// black line
-              RpVerticalDivider(),
-
-              /// video info
-              RpWindowCurrentContentInfo(),
-            ],
-          ),
-          
-          /// move window around
-          Expanded(
-            child: MoveWindow(),
-          ),
-
-          /// window icons
-          RpWindowActions()
-        ],
+      child: MoveWindow(
+        child:  const Row(
+          children: [
+            /// menu
+            Row(
+              children: [
+                /// player name and menu
+                RpWindowPlayerMenu(),
+        
+                /// black line
+                RpVerticalDivider(),
+        
+                /// video info
+                RpWindowCurrentContentInfo(),
+              ],
+            ),
+            Spacer(),
+        
+            /// window icons
+            RpWindowActions()
+          ],
+        ),
       )
     );
   }
