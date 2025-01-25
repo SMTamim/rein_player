@@ -33,20 +33,27 @@ class AlbumController extends GetxController {
     await AlbumContentController.to.loadDirectory(albums[index].location);
   }
 
-  Future<void> setDefaultAlbumLocation(String filePath) async {
+  Future<void> setDefaultAlbum(String filePath,
+      {currentItemToPlay = ""}) async {
     final location = path.dirname(filePath);
     AlbumController.to.defaultAlbumLocation.value = path.dirname(location);
-    AlbumController.to.albums.value = AlbumController.to.albums.map((album) {
-      if (album.id == 'default_album') {
-        return Album(
-          name: album.name,
-          location: location,
-          id: album.id,
-        );
-      }
-      return album;
-    }).toList();
-    await storage.saveData(RpKeysConstants.defaultAlbumLocationKey, location);
+    AlbumController.to.albums.value = await Future.wait(
+      AlbumController.to.albums.map(
+        (album) async {
+          if (album.id == 'default_album') {
+            final defaultAlbum = Album(
+              name: album.name,
+              location: location,
+              id: album.id,
+            );
+            await storage.saveData(
+                RpKeysConstants.defaultAlbumLocationKey, defaultAlbum.toJson());
+            return album;
+          }
+          return album;
+        },
+      ),
+    );
   }
 
   Future<void> dumpAllAlbumsToStorage() async {
@@ -70,14 +77,14 @@ class AlbumController extends GetxController {
   }
 
   Future<void> loadDefaultAlbumPlaylistContent() async {
-    String? defaultAlbumLocation =
+    final defaultAlbumJson =
         storage.readData(RpKeysConstants.defaultAlbumLocationKey);
-    if (defaultAlbumLocation == null || defaultAlbumLocation.isEmpty) {
-      return;
-    }
+    if (defaultAlbumJson == null) return;
+    final defaultAlbum = Album.fromJson(defaultAlbumJson);
+
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
-    await AlbumContentController.to.loadDirectory(defaultAlbumLocation);
+    await AlbumContentController.to.loadDirectory(defaultAlbum.location);
   }
 
   void removeAlbumFromList(Album album) async {

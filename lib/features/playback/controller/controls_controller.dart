@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:rein_player/features/playback/controller/volume_controller.dart'
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/features/playlist/models/album.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
@@ -111,6 +113,7 @@ class ControlsController extends GetxController {
     VideoAndControlController.to.currentVideoUrl.value = "";
     VideoAndControlController.to.currentVideo.value = null;
     VolumeController.to.currentVolume.value = 0;
+    PlaylistController.to.isPlaylistWindowOpened.value = false;
     windowManager.setSize(RpSizes.initialAppWindowSize);
   }
 
@@ -127,20 +130,46 @@ class ControlsController extends GetxController {
     if (result != null) {
       final file = result.files.single;
       if (file.path == null || file.extension == null) return;
-      VideoOrAudioItem srcFile = VideoOrAudioItem(
-          file.name, file.path!, file.extension!,
-          size: file.size);
-      VideoAndControlController.to.currentVideo.value = srcFile;
-      VideoAndControlController.to.loadVideoFromUrl(srcFile.location);
-      AlbumController.to.updateSelectedAlbumIndex(0);
+      VideoOrAudioItem srcFile =
+          VideoOrAudioItem(file.name, file.path!, size: file.size);
+      VideoAndControlController.to.loadVideoFromUrl(srcFile);
+      AlbumContentController.to.currentContent.clear();
       AlbumContentController.to.addToCurrentPlaylistContent(
         PlaylistItem(name: file.name, location: file.path!, isDirectory: false),
       );
+      AlbumController.to.updateSelectedAlbumIndex(0);
 
       /// set the default album location
-      await AlbumController.to.setDefaultAlbumLocation(result.files.single.path!);
-      // TODO: load additional file in the directory
+      await AlbumController.to
+          .setDefaultAlbum(file.path!, currentItemToPlay: file.path);
+      await loadSimilarContentInDefaultAlbum(
+          path.basename(file.path!), path.dirname(file.path!));
+
       await player.play();
     }
+  }
+
+  Future<void> loadSimilarContentInDefaultAlbum(
+      String filename, String dirPath) async {
+    final List<PlaylistItem> mediaFiles =
+        await AlbumContentController.to.getMediaFilesInDirectory(dirPath);
+    String fileNameWithoutExtension = filename.split('.').first;
+
+    String substringToMatch;
+    if (fileNameWithoutExtension.length > 3) {
+      int lengthToTake = (fileNameWithoutExtension.length * 0.3).floor();
+      substringToMatch =
+          fileNameWithoutExtension.substring(3, 3 + lengthToTake);
+    } else {
+      substringToMatch = fileNameWithoutExtension.substring(0, 1);
+    }
+
+    final relatedMedia = mediaFiles.where((file) {
+      String otherFileNameWithoutExtension = file.name.split('.').first;
+      return otherFileNameWithoutExtension.contains(substringToMatch) &&
+          file.name != filename;
+    }).toList();
+
+    AlbumContentController.to.addItemsToPlaylistContent(relatedMedia);
   }
 }

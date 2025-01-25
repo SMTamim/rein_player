@@ -21,7 +21,6 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 9),
       child: Obx(() {
-        print("size: ${appWindow.size.width * 0.8}");
         return VideoAndControlController.to.currentVideo.value == null
             ? const SizedBox.shrink()
             : Row(

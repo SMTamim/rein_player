@@ -32,9 +32,9 @@ class VideoAndControlController extends GetxController {
     await player.dispose();
   }
 
-  Future<void> loadVideoFromUrl(String url)  async {
-    currentVideoUrl.value = url;
-    currentVideo.value = RpMediaHelper.getCurrentVideoInfoFromUrl(url);
+  Future<void> loadVideoFromUrl(VideoOrAudioItem media)  async {
+    currentVideoUrl.value = media.location;
+    currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
 
     VolumeController.to.currentVolume.value = RpSizes.defaultVolume;
@@ -44,6 +44,7 @@ class VideoAndControlController extends GetxController {
       RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
     }
 
+    /// Todo: set seleted item in album and hightlight for the user.
 
     /// playing listener
     player.stream.playing.listen((playing) {
@@ -61,7 +62,7 @@ class VideoAndControlController extends GetxController {
       ControlsController.to.updateProgressFromPosition();
     });
 
-    await player.open(Media(url));
+    await player.open(Media(media.location));
     await player.pause();
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/features/playback/models/video_audio_item.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_extensions.dart';
@@ -20,26 +21,8 @@ class AlbumContentController extends GetxController {
 
   Future<void> loadDirectory(String dirPath, {navDirection = "down"}) async {
     try {
-      isLoading.value = false;
-      final directory = Directory(dirPath);
-      final List<PlaylistItem> mediaFiles = [];
-
-      await for (var entity in directory.list()) {
-        final name = path.basename(entity.path);
-        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
-          continue;
-        }
-
-        mediaFiles.add(PlaylistItem(
-          name: name,
-          location: entity.path,
-          isDirectory: entity is Directory,
-          type: RpMediaHelper.getPlaylistItemType(entity.path),
-        ));
-      }
-
-      /// Sort: folders first, then files
-      mediaFiles.sort(_sortMediaFiles);
+      final List<PlaylistItem> mediaFiles =
+          await getMediaFilesInDirectory(dirPath);
 
       if (navDirection == "down") {
         _navigationStack.add(dirPath);
@@ -48,14 +31,43 @@ class AlbumContentController extends GetxController {
       currentContent.value = mediaFiles;
       currentPath.value = dirPath;
     } finally {
-      isLoading.value = false;
       canNavigateBack.value = canNavigationStackBack();
     }
   }
-  
-  void addToCurrentPlaylistContent(PlaylistItem item){
-    if(currentContent.any((el) => el.location.trim() == item.location)) return;
+
+  Future<List<PlaylistItem>> getMediaFilesInDirectory(String dirPath) async {
+    final List<PlaylistItem> mediaFiles = [];
+    final directory = Directory(dirPath);
+
+    await for (var entity in directory.list()) {
+      final name = path.basename(entity.path);
+      if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
+        continue;
+      }
+
+      mediaFiles.add(PlaylistItem(
+        name: name,
+        location: entity.path,
+        isDirectory: entity is Directory,
+        type: RpMediaHelper.getPlaylistItemType(entity.path),
+      ));
+    }
+
+    /// Sort: folders first, then files
+    mediaFiles.sort(_sortMediaFiles);
+
+    return mediaFiles;
+  }
+
+  void addToCurrentPlaylistContent(PlaylistItem item) {
+    if (currentContent.any((el) => el.location.trim() == item.location)) return;
     currentContent.add(item);
+  }
+
+  void addItemsToPlaylistContent(List<PlaylistItem> items) {
+    if (items.isEmpty) return;
+    currentContent.addAll(items);
+    sortPlaylistContent();
   }
 
   void navigateBack() {
@@ -70,12 +82,12 @@ class AlbumContentController extends GetxController {
     return _navigationStack.length > 1;
   }
 
-  void addToNavigationStack(String path){
-    if(path.isEmpty) return;
+  void addToNavigationStack(String path) {
+    if (path.isEmpty) return;
     _navigationStack.add(path);
   }
 
-  void clearNavigationStack(){
+  void clearNavigationStack() {
     _navigationStack.clear();
   }
 
@@ -88,13 +100,13 @@ class AlbumContentController extends GetxController {
     if (item.isDirectory) {
       loadDirectory(item.location);
     } else if (isMediaFile(item.location)) {
-      await VideoAndControlController.to.loadVideoFromUrl(item.location);
+      await VideoAndControlController.to
+          .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
       VideoAndControlController.to.isVideoPlaying.value = false;
-
     }
   }
 
-  int _sortMediaFiles(a, b){
+  int _sortMediaFiles(a, b) {
     if (a.isDirectory != b.isDirectory) {
       return a.isDirectory ? -1 : 1;
     }
@@ -129,29 +141,39 @@ class AlbumContentController extends GetxController {
     return title;
   }
 
-  int getIndexOfCurrentItemInPlaylist(){
+  int getIndexOfCurrentItemInPlaylist() {
     final currentVideo = VideoAndControlController.to.currentVideo.value;
-    if(currentContent.isEmpty || currentVideo == null) return -1;
-    return currentContent.indexWhere((item) => item.location == currentVideo.location);
+    if (currentContent.isEmpty || currentVideo == null) return -1;
+    return currentContent
+        .indexWhere((item) => item.location == currentVideo.location);
   }
 
-  String getPlaylistPlayingProgress(){
+  String getPlaylistPlayingProgress() {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
-    if(currentVideoIndex == -1) return "";
+    if (currentVideoIndex == -1) return "";
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
   }
 
-  void goNextItemInPlaylist(){
+  void goNextItemInPlaylist() {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
-    if(currentVideoIndex == -1 || currentContent.isEmpty) return;
-    if(currentVideoIndex + 1 == currentContent.length) return;
-    VideoAndControlController.to.loadVideoFromUrl(currentContent[currentVideoIndex + 1].location);
+    if (currentVideoIndex == -1 || currentContent.isEmpty) return;
+    if (currentVideoIndex + 1 == currentContent.length) return;
+    final item = currentContent[currentVideoIndex + 1];
+    VideoAndControlController.to
+        .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
   }
 
-  void goPreviousItemInPlaylist(){
+  void goPreviousItemInPlaylist() {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
-    if(currentVideoIndex == -1 || currentContent.isEmpty || currentVideoIndex == 0) return;
-    VideoAndControlController.to.loadVideoFromUrl(currentContent[currentVideoIndex - 1].location);
+    if (currentVideoIndex == -1 ||
+        currentContent.isEmpty ||
+        currentVideoIndex == 0) return;
+    final item = currentContent[currentVideoIndex - 1];
+    VideoAndControlController.to
+        .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
   }
 
+  void sortPlaylistContent(){
+    currentContent.sort(_sortMediaFiles);
+  }
 }
