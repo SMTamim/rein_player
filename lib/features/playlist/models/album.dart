@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 class Album {
-  static final _uuid = Uuid();
+  static const _uuid = Uuid();
 
   Album({
     required this.name,

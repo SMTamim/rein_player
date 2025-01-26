@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/views/controls_screen.dart';
 import 'package:rein_player/features/playback/views/video_screen.dart';
-import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 
 class RpVideoAndControlsScreen extends StatelessWidget {
   const RpVideoAndControlsScreen({super.key});

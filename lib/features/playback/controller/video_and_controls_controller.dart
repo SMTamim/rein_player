@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
@@ -6,7 +5,6 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
 import 'package:rein_player/utils/device/rp_device_utils.dart';
-import 'package:rein_player/utils/helpers/media_helper.dart';
 
 import '../../../core/video_player.dart';
 import '../../../utils/constants/rp_sizes.dart';

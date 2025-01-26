@@ -31,7 +31,7 @@ class RpControls extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 /// video action controls
-                RpVideoActionControls(),
+                const RpVideoActionControls(),
 
                 /// type and time counter
                 const RpVideoTypeAndTimeCounter(),

@@ -1,8 +1,8 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
@@ -81,6 +81,11 @@ class RpAlbumItems extends StatelessWidget {
                 final isCurrentPlayingMedia =
                     VideoAndControlController.to.currentVideo.value?.location ==
                         media.location;
+                final isAlbumCurrentItemToPlay = AlbumController
+                        .to
+                        .albums[AlbumController.to.selectedAlbumIndex.value]
+                        .currentItemToPlay ==
+                    media.location;
 
                 return Row(
                   children: [
@@ -89,7 +94,8 @@ class RpAlbumItems extends StatelessWidget {
                       media.isDirectory ? Icons.folder : Icons.video_file,
                       color: (isCurrentPlayingMedia ||
                               isHovered.value ||
-                              media.isDirectory)
+                              media.isDirectory ||
+                              isAlbumCurrentItemToPlay)
                           ? RpColors.accent
                           : Colors.white,
                       size: 15,
@@ -103,7 +109,9 @@ class RpAlbumItems extends StatelessWidget {
                       child: Text(
                         "${index + 1}. ${media.name}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: (isCurrentPlayingMedia || isHovered.value)
+                              color: (isCurrentPlayingMedia ||
+                                      isHovered.value ||
+                                      isAlbumCurrentItemToPlay)
                                   ? RpColors.accent
                                   : RpColors.black_300,
                             ),

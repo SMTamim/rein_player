@@ -1,9 +1,9 @@
-import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
+import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_extensions.dart';
@@ -22,7 +22,7 @@ class AlbumContentController extends GetxController {
   Future<void> loadDirectory(String dirPath, {navDirection = "down"}) async {
     try {
       final List<PlaylistItem> mediaFiles =
-          await getMediaFilesInDirectory(dirPath);
+          await RpMediaHelper.getMediaFilesInDirectory(dirPath);
 
       if (navDirection == "down") {
         _navigationStack.add(dirPath);
@@ -33,30 +33,6 @@ class AlbumContentController extends GetxController {
     } finally {
       canNavigateBack.value = canNavigationStackBack();
     }
-  }
-
-  Future<List<PlaylistItem>> getMediaFilesInDirectory(String dirPath) async {
-    final List<PlaylistItem> mediaFiles = [];
-    final directory = Directory(dirPath);
-
-    await for (var entity in directory.list()) {
-      final name = path.basename(entity.path);
-      if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
-        continue;
-      }
-
-      mediaFiles.add(PlaylistItem(
-        name: name,
-        location: entity.path,
-        isDirectory: entity is Directory,
-        type: RpMediaHelper.getPlaylistItemType(entity.path),
-      ));
-    }
-
-    /// Sort: folders first, then files
-    mediaFiles.sort(_sortMediaFiles);
-
-    return mediaFiles;
   }
 
   void addToCurrentPlaylistContent(PlaylistItem item) {
@@ -100,34 +76,11 @@ class AlbumContentController extends GetxController {
     if (item.isDirectory) {
       loadDirectory(item.location);
     } else if (isMediaFile(item.location)) {
+      AlbumController.to.updateAlbumCurrentItemToPlay(item.location);
+      await AlbumController.to.dumpAllAlbumsToStorage();
       await VideoAndControlController.to
           .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
-      VideoAndControlController.to.isVideoPlaying.value = false;
     }
-  }
-
-  int _sortMediaFiles(a, b) {
-    if (a.isDirectory != b.isDirectory) {
-      return a.isDirectory ? -1 : 1;
-    }
-
-    RegExp numberPrefix = RegExp(r'^(\d+)\.\s*(.*)');
-    var matchA = numberPrefix.firstMatch(a.name);
-    var matchB = numberPrefix.firstMatch(b.name);
-
-    if (matchA != null && matchB != null) {
-      int numberA = int.parse(matchA.group(1)!);
-      int numberB = int.parse(matchB.group(1)!);
-      if (numberA != numberB) {
-        return numberA.compareTo(numberB);
-      }
-      return matchA.group(2)!.compareTo(matchB.group(2)!);
-    }
-
-    if (matchA != null) return -1;
-    if (matchB != null) return 1;
-
-    return a.name.compareTo(b.name);
   }
 
   String adjustTitleOnPlaylistSidebarSize(String title) {
@@ -174,6 +127,33 @@ class AlbumContentController extends GetxController {
   }
 
   void sortPlaylistContent(){
-    currentContent.sort(_sortMediaFiles);
+    currentContent.sort(RpMediaHelper.sortMediaFiles);
+  }
+
+  Future<void> loadSimilarContentInDefaultAlbum(
+      String filename, String dirPath, {excludeCurrentFile = true}) async {
+    final List<PlaylistItem> mediaFiles =
+    await RpMediaHelper.getMediaFilesInDirectory(dirPath);
+    String fileNameWithoutExtension = filename.split('.').first;
+
+    String substringToMatch;
+    if (fileNameWithoutExtension.length > 3) {
+      int lengthToTake = (fileNameWithoutExtension.length * 0.3).floor();
+      substringToMatch =
+          fileNameWithoutExtension.substring(3, 3 + lengthToTake);
+    } else {
+      substringToMatch = fileNameWithoutExtension.substring(0, 1);
+    }
+
+    final relatedMedia = mediaFiles.where((file) {
+      String otherFileNameWithoutExtension = file.name.split('.').first;
+      if(excludeCurrentFile){
+        return otherFileNameWithoutExtension.contains(substringToMatch) &&
+            file.name != filename;
+      }
+      return otherFileNameWithoutExtension.contains(substringToMatch);
+    }).toList();
+
+    addItemsToPlaylistContent(relatedMedia);
   }
 }

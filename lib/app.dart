@@ -29,13 +29,13 @@ class RpApp extends StatelessWidget {
           child: Column(
             children: [
               /// custom window frame
-              RpWindowFrame(),
+              const RpWindowFrame(),
 
               Expanded(
                 child: Row(
                   children: [
                     /// video and controls screen
-                    Expanded(child: RpVideoAndControlsScreen()),
+                    const Expanded(child: RpVideoAndControlsScreen()),
 
                     /// slider
                     GestureDetector(
@@ -53,8 +53,8 @@ class RpApp extends StatelessWidget {
                     /// playlist
                     Obx(() {
                       return playlistController.isPlaylistWindowOpened.value
-                          ? RpPlaylistSideBar()
-                          : SizedBox.shrink();
+                          ? const RpPlaylistSideBar()
+                          : const SizedBox.shrink();
                     })
                   ],
                 ),

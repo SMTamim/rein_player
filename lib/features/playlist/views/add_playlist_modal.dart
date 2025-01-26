@@ -33,7 +33,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
-                  icon: Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.close, color: Colors.white),
                   onPressed: () {
                     PlaylistController.to.clearForm();
                     Get.back();
@@ -52,7 +52,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                 height: RpSizes.textInputSize,
                 child: TextField(
                   controller: PlaylistController.to.playlistNameController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
                   focusNode: PlaylistController.to.playlistNameFocusNode,
                   decoration:  const InputDecoration(
                     labelText: 'Playlist Name',
@@ -74,7 +74,7 @@ class RpAddPlaylistModal extends StatelessWidget {
               children: [
                 Expanded(
                   child: Obx(() => Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       border: Border.all(color: RpColors.black_500),
                       borderRadius: BorderRadius.circular(4),
@@ -92,11 +92,11 @@ class RpAddPlaylistModal extends StatelessWidget {
                 const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: PlaylistController.to.pickFolder,
-                  icon: Icon(Icons.folder_open),
-                  label: Text('Browse'),
+                  icon: const Icon(Icons.folder_open),
+                  label: const Text('Browse'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: RpColors.black_500,
-                    textStyle: TextStyle(fontSize: 12)
+                    backgroundColor: RpColors.black_600,
+                    textStyle: const TextStyle(fontSize: 12)
                   ),
                 ),
               ],

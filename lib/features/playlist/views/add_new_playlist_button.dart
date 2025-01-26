@@ -13,9 +13,9 @@ class RpAddNewPlaylistButton extends StatelessWidget {
       onTap: PlaylistController.to.showAddPlaylistModal,
       child: Container(
         height: 50,
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
             horizontal: 23, vertical: 13),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.transparent,
           border: Border(
             left: BorderSide(
@@ -24,7 +24,7 @@ class RpAddNewPlaylistButton extends StatelessWidget {
                 width: 1, color: RpColors.black),
           ),
         ),
-        child: Center(
+        child: const Center(
           child: Icon(Iconsax.add, size: 16,)
         ),
       ),

@@ -5,7 +5,6 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/models/album.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
-import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 import 'package:window_manager/window_manager.dart';
 

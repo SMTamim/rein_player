@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
 
+import '../../features/playlist/models/playlist_item.dart';
 import '../../features/playlist/models/playlist_item_type.dart';
 import 'package:path/path.dart' as path;
 
@@ -49,5 +50,53 @@ class RpMediaHelper {
   static VideoOrAudioItem getCurrentVideoInfoFromUrl(String filePath){
     String name = path.basenameWithoutExtension(filePath);
     return VideoOrAudioItem(name, filePath);
+  }
+
+  static Future<List<PlaylistItem>> getMediaFilesInDirectory(String dirPath) async {
+    final List<PlaylistItem> mediaFiles = [];
+    final directory = Directory(dirPath);
+
+    await for (var entity in directory.list()) {
+      final name = path.basename(entity.path);
+      if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
+        continue;
+      }
+
+      mediaFiles.add(PlaylistItem(
+        name: name,
+        location: entity.path,
+        isDirectory: entity is Directory,
+        type: RpMediaHelper.getPlaylistItemType(entity.path),
+      ));
+    }
+
+    /// Sort: folders first, then files
+    mediaFiles.sort(sortMediaFiles);
+
+    return mediaFiles;
+  }
+
+  static int sortMediaFiles(a, b) {
+    if (a.isDirectory != b.isDirectory) {
+      return a.isDirectory ? -1 : 1;
+    }
+
+    RegExp numberPrefix = RegExp(r'^(\d+)\.\s*(.*)');
+    var matchA = numberPrefix.firstMatch(a.name);
+    var matchB = numberPrefix.firstMatch(b.name);
+
+    if (matchA != null && matchB != null) {
+      int numberA = int.parse(matchA.group(1)!);
+      int numberB = int.parse(matchB.group(1)!);
+      if (numberA != numberB) {
+        return numberA.compareTo(numberB);
+      }
+      return matchA.group(2)!.compareTo(matchB.group(2)!);
+    }
+
+    if (matchA != null) return -1;
+    if (matchB != null) return 1;
+
+    return a.name.compareTo(b.name);
   }
 }
