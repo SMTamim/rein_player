@@ -19,6 +19,10 @@ class WindowActionsController extends GetxController {
     windowManager.minimize();
   }
 
+  void maximizeWindow() {
+    windowManager.maximize();
+  }
+
   void maximizeOrRestoreWindow() {
     isMaximize = !isMaximize;
     appWindow.maximizeOrRestore();

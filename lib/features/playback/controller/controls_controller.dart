@@ -6,6 +6,7 @@ import 'package:path/path.dart' as path;
 import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
@@ -47,6 +48,10 @@ class ControlsController extends GetxController {
     _resetPlayer();
   }
 
+  void pauseOrPlay() async {
+    await player.playOrPause();
+  }
+
   void open() async {
     await _pickFileAndPlay();
   }
@@ -64,22 +69,47 @@ class ControlsController extends GetxController {
     return RpDurationHelper.formatDuration(videoPosition.value!);
   }
 
+  Duration _calculateSeekTime({required double percentage}) {
+    final duration = videoDuration.value;
+    if (duration == null) {
+      return const Duration(seconds: 10);
+    }
+    return Duration(seconds: (duration.inSeconds * percentage).round());
+  }
+
+  Future<void> seekBackward() async {
+    final seekTime = _calculateSeekTime(percentage: 0.01);
+    final position = videoPosition.value?.inSeconds  ?? 0;
+    final seekTo = position - seekTime.inSeconds;
+    if(seekTo < 0) return;
+    await player.seek(Duration(seconds: seekTo));
+  }
+
+  Future<void> seekForward() async {
+    final seekTime = _calculateSeekTime(percentage: 0.01);
+    final position = videoPosition.value?.inSeconds  ?? 0;
+    final seekTo = position + seekTime.inSeconds;
+    await player.seek(Duration(seconds: seekTo));
+  }
+
+  Future<void> bigSeekBackward() async {
+    final seekTime = _calculateSeekTime(percentage: 0.05);
+    final position = videoPosition.value?.inSeconds  ?? 0;
+    final seekTo = position - seekTime.inSeconds;
+    if(seekTo < 0) return;
+    await player.seek(Duration(seconds: seekTo));
+  }
+
+  Future<void> bigSeekForward() async {
+    final seekTime = _calculateSeekTime(percentage: 0.05);
+    final position = videoPosition.value?.inSeconds  ?? 0;
+    final seekTo = position + seekTime.inSeconds;
+    await player.seek(Duration(seconds: seekTo));
+  }
+
   String getFormattedTotalDuration() {
     if (videoDuration.value == null) return RpText.defaultVideoDuration;
     return RpDurationHelper.formatDuration(videoDuration.value!);
-  }
-
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes % 60;
-    final seconds = duration.inSeconds % 60;
-
-    if (hours > 0) {
-      return "${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}";
-    } else {
-      return "00:${twoDigits(minutes)}:${twoDigits(seconds)}";
-    }
   }
 
   void updateProgressFromPosition() {
@@ -147,6 +177,7 @@ class ControlsController extends GetxController {
           path.basename(filePath), path.dirname(filePath));
       AlbumContentController.to.updatePlaylistItemDuration(filePath);
 
+      WindowActionsController.to.maximizeWindow();
       await player.play();
     }
   }

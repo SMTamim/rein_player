@@ -7,7 +7,7 @@ class WindowInfoController extends GetxController {
   String getFileType(){
     final currentVideo = VideoAndControlController.to.currentVideo.value;
     if(currentVideo == null ) return "";
-    return currentVideo.extension.toUpperCase();
+    return currentVideo.extension.toUpperCase().replaceAll(".", "");
   }
 
   String getCurrentVideoTitle(){
