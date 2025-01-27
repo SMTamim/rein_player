@@ -81,20 +81,16 @@ class AlbumContentController extends GetxController {
       await AlbumController.to.dumpAllAlbumsToStorage();
       await VideoAndControlController.to
           .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
-      updatePlaylistItemDuration(media.location);
     }
   }
 
+  //TODO: show time on watched videos
   void updatePlaylistItemDuration(String url) {
     for (var item in currentContent) {
       if (item.location == url) {
         item.duration.value = RpDurationHelper.formatDuration(ControlsController.to.videoDuration.value);
         break;
       }
-    }
-
-    for(var item in currentContent){
-      print("**********: ${item.duration.value}");
     }
   }
 
@@ -122,23 +118,27 @@ class AlbumContentController extends GetxController {
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
   }
 
-  void goNextItemInPlaylist() {
+  void goNextItemInPlaylist() async {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1 || currentContent.isEmpty) return;
     if (currentVideoIndex + 1 == currentContent.length) return;
-    final item = currentContent[currentVideoIndex + 1];
+    final media = currentContent[currentVideoIndex + 1];
     VideoAndControlController.to
-        .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
+        .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+    AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
+    await AlbumController.to.dumpAllAlbumsToStorage();
   }
 
-  void goPreviousItemInPlaylist() {
+  void goPreviousItemInPlaylist() async {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1 ||
         currentContent.isEmpty ||
         currentVideoIndex == 0) return;
-    final item = currentContent[currentVideoIndex - 1];
+    final media = currentContent[currentVideoIndex - 1];
     VideoAndControlController.to
-        .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
+        .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+    AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
+    await AlbumController.to.dumpAllAlbumsToStorage();
   }
 
   void sortPlaylistContent() {

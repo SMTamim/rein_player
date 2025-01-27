@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/features/playback/models/video_audio_item.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
@@ -83,9 +85,10 @@ class AlbumController extends GetxController {
     AlbumContentController.to.currentContent.value = [];
     final mediaInDirectory =
         await RpMediaHelper.getMediaFilesInDirectory(defaultAlbum.location);
-    final currentItemToPlayExist = mediaInDirectory
-        .any((media) => media.location == defaultAlbum.currentItemToPlay);
-    if (currentItemToPlayExist) {
+    final currentItemToPlay = mediaInDirectory
+        .firstWhereOrNull((media) => media.location == defaultAlbum.currentItemToPlay);
+    if (currentItemToPlay != null) {
+      await VideoAndControlController.to.loadVideoFromUrl(VideoOrAudioItem(currentItemToPlay.name, currentItemToPlay.location));
       await AlbumContentController.to.loadSimilarContentInDefaultAlbum(
           path.basename(defaultAlbum.currentItemToPlay), defaultAlbum.location,
           excludeCurrentFile: false);

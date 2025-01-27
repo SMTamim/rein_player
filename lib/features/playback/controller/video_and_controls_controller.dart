@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -31,12 +30,16 @@ class VideoAndControlController extends GetxController {
     await player.dispose();
   }
 
-  Future<void> loadVideoFromUrl(VideoOrAudioItem media)  async {
+  Future<void> loadVideoFromUrl(VideoOrAudioItem media) async {
     currentVideoUrl.value = media.location;
     currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
 
-    VolumeController.to.currentVolume.value = RpSizes.defaultVolume;
+    VolumeController.to.currentVolume.value =
+        VolumeController.to.currentVolume.value == 0
+            ? RpSizes.defaultVolume
+            : VolumeController.to.currentVolume.value;
+
     final windowSize = await RpDeviceUtils.getWindowFrameSize();
     if (windowSize.height == RpSizes.initialAppWindowSize.height &&
         windowSize.width == RpSizes.initialAppWindowSize.width) {
