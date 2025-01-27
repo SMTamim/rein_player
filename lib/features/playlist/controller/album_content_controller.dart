@@ -1,12 +1,13 @@
-
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
+import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_extensions.dart';
+import 'package:rein_player/utils/helpers/duration_helper.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
 
 class AlbumContentController extends GetxController {
@@ -72,14 +73,28 @@ class AlbumContentController extends GetxController {
     return RpFileExtensions.mediaFileExtensions.contains(extension);
   }
 
-  void handleItemOnTap(PlaylistItem item) async {
-    if (item.isDirectory) {
-      loadDirectory(item.location);
-    } else if (isMediaFile(item.location)) {
-      AlbumController.to.updateAlbumCurrentItemToPlay(item.location);
+  void handleItemOnTap(PlaylistItem media) async {
+    if (media.isDirectory) {
+      loadDirectory(media.location);
+    } else if (isMediaFile(media.location)) {
+      AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
       await AlbumController.to.dumpAllAlbumsToStorage();
       await VideoAndControlController.to
-          .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
+          .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+      updatePlaylistItemDuration(media.location);
+    }
+  }
+
+  void updatePlaylistItemDuration(String url) {
+    for (var item in currentContent) {
+      if (item.location == url) {
+        item.duration.value = RpDurationHelper.formatDuration(ControlsController.to.videoDuration.value);
+        break;
+      }
+    }
+
+    for(var item in currentContent){
+      print("**********: ${item.duration.value}");
     }
   }
 
@@ -126,14 +141,14 @@ class AlbumContentController extends GetxController {
         .loadVideoFromUrl(VideoOrAudioItem(item.name, item.location));
   }
 
-  void sortPlaylistContent(){
+  void sortPlaylistContent() {
     currentContent.sort(RpMediaHelper.sortMediaFiles);
   }
 
-  Future<void> loadSimilarContentInDefaultAlbum(
-      String filename, String dirPath, {excludeCurrentFile = true}) async {
+  Future<void> loadSimilarContentInDefaultAlbum(String filename, String dirPath,
+      {excludeCurrentFile = true}) async {
     final List<PlaylistItem> mediaFiles =
-    await RpMediaHelper.getMediaFilesInDirectory(dirPath);
+        await RpMediaHelper.getMediaFilesInDirectory(dirPath);
     String fileNameWithoutExtension = filename.split('.').first;
 
     String substringToMatch;
@@ -147,7 +162,7 @@ class AlbumContentController extends GetxController {
 
     final relatedMedia = mediaFiles.where((file) {
       String otherFileNameWithoutExtension = file.name.split('.').first;
-      if(excludeCurrentFile){
+      if (excludeCurrentFile) {
         return otherFileNameWithoutExtension.contains(substringToMatch) &&
             file.name != filename;
       }

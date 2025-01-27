@@ -105,7 +105,7 @@ class RpAlbumItems extends StatelessWidget {
                     /// Title
                     SizedBox(
                       width: PlaylistController.to.playlistWindowWidth *
-                          (media.isDirectory ? 0.8 : 0.7),
+                          (media.isDirectory ? 0.8 : 0.8),
                       child: Text(
                         "${index + 1}. ${media.name}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -122,7 +122,7 @@ class RpAlbumItems extends StatelessWidget {
                     const Spacer(),
 
                     /// video duration
-                    // const Text("00:24:56")
+                    // Text(media.duration.value)
                   ],
                 );
               }),

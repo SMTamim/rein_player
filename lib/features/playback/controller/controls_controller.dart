@@ -142,9 +142,10 @@ class ControlsController extends GetxController {
 
       /// set the default album location
       await AlbumController.to
-          .setDefaultAlbum(file.path!, currentItemToPlay: file.path!);
+          .setDefaultAlbum(filePath, currentItemToPlay: filePath);
       await AlbumContentController.to.loadSimilarContentInDefaultAlbum(
-          path.basename(file.path!), path.dirname(file.path!));
+          path.basename(filePath), path.dirname(filePath));
+      AlbumContentController.to.updatePlaylistItemDuration(filePath);
 
       await player.play();
     }
