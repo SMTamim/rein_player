@@ -6,6 +6,7 @@ import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_c
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/features/settings/controller/menu_controller.dart';
 
 import '../features/player_frame/controller/window_controller.dart';
 import '../features/player_frame/controller/window_info_controller.dart';
@@ -23,5 +24,6 @@ class GeneralBindings extends Bindings {
     Get.put(WindowInfoController());
     Get.put(AlbumController());
     Get.put(AlbumContentController());
+    Get.put(MainMenuController());
   }
 }
