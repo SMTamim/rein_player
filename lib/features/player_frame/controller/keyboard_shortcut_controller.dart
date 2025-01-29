@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
+import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 
@@ -72,6 +73,9 @@ class KeyboardController extends GetxController {
           }
         case LogicalKeyboardKey.keyM:
           VolumeController.to.toggleVolumeMuteState();
+          break;
+        case LogicalKeyboardKey.keyH:
+          SubtitleController.to.toggleSubtitle();
           break;
       }
     }

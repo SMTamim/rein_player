@@ -3,32 +3,32 @@ import 'package:get/get.dart';
 import 'package:rein_player/features/settings/views/menu/custom_menu.dart';
 import 'package:rein_player/features/settings/views/menu/menu_item.dart';
 import 'package:rein_player/features/settings/views/menu/sub_menu.dart';
+import 'package:rein_player/main.dart';
 
 class MainMenuController extends GetxController {
   static MainMenuController get to => Get.find();
 
-  OverlayEntry? overlayEntry;
+  Rx<OverlayEntry?> overlayEntry = Rx<OverlayEntry?>(null);
   OverlayEntry? submenuOverlay;
-
-  RxBool isHovered = false.obs;
+  RxBool isHovering = false.obs;
 
   void showMainMenu(BuildContext context, Offset position) {
-    hideMenu();
-    overlayEntry = OverlayEntry(
+    overlayEntry.value = OverlayEntry(
       builder: (context) => Positioned(
         left: position.dx,
         top: position.dy,
         child: RpCustomMenu(),
       ),
     );
-    Overlay.of(context).insert(overlayEntry!);
+    Overlay.of(context).insert(overlayEntry.value!);
+    isHovering.value = true;
   }
 
   void showSubmenu(BuildContext context, Offset position, List<MenuItem> submenuItems) {
     hideSubmenu();
     submenuOverlay = OverlayEntry(
       builder: (context) => Positioned(
-        left: position.dx + 200, // Offset submenu to the right of main menu
+        left: position.dx + 200,
         top: position.dy,
         child: Submenu(items: submenuItems),
       ),
@@ -37,8 +37,14 @@ class MainMenuController extends GetxController {
   }
 
   void hideMenu() {
-    overlayEntry?.remove();
-    overlayEntry = null;
+    print("now here ${isHovering.value}");
+    if (!isHovering.value) {
+      print("hiding menu");
+      overlayEntry.value?.remove();
+      overlayEntry.value = null;
+      hideSubmenu();
+    }
+    print("HHHH: $overlayEntry");
   }
 
   void hideSubmenu() {
@@ -47,12 +53,12 @@ class MainMenuController extends GetxController {
   }
 
   void onHover(bool value, BuildContext context, Offset position, List<MenuItem> submenuItems) {
-    isHovered.value = value;
+    isHovering.value = value;
     if (value) {
       showSubmenu(context, position, submenuItems);
     } else {
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (!isHovered.value) hideSubmenu();
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (!isHovering.value) hideSubmenu();
       });
     }
   }

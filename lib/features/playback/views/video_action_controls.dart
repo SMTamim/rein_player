@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 
-import '../../../common/widgets/rp_horizontal_divider.dart';
+import '../../../common/widgets/rp_vertical_divider.dart';
 
 class RpVideoActionControls extends StatelessWidget {
   const RpVideoActionControls({super.key});

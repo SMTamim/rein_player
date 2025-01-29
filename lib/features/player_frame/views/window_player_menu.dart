@@ -5,20 +5,25 @@ import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import '../../../utils/constants/rp_colors.dart';
 
 class RpWindowPlayerMenu extends StatelessWidget {
-  const RpWindowPlayerMenu({
-    super.key,
-  });
+  const RpWindowPlayerMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        RenderBox renderBox = context.findRenderObject() as RenderBox;
-        Offset position = renderBox.localToGlobal(Offset.zero);
-        MainMenuController.to.showMainMenu(context, position + Offset(0, 50));
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 9),
+      child: MouseRegion(
+        onEnter: (_) {
+          RenderBox renderBox = context.findRenderObject() as RenderBox;
+          Offset position = renderBox.localToGlobal(Offset.zero);
+          MainMenuController.to.showMainMenu(context, position + const Offset(0, 25));
+        },
+        onExit: (_) {
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (!MainMenuController.to.isHovering.value) {
+              MainMenuController.to.hideMenu();
+            }
+          });
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -4,7 +4,7 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 
-import '../../../common/widgets/rp_horizontal_divider.dart';
+import '../../../common/widgets/rp_vertical_divider.dart';
 import '../../../utils/constants/rp_colors.dart';
 import '../controller/window_info_controller.dart';
 

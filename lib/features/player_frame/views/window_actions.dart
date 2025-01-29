@@ -5,7 +5,7 @@ import 'package:rein_player/features/player_frame/controller/window_actions_cont
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 
-import '../../../common/widgets/rp_horizontal_divider.dart';
+import '../../../common/widgets/rp_vertical_divider.dart';
 
 class RpWindowActions extends StatelessWidget {
   const RpWindowActions({

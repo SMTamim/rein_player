@@ -4,6 +4,7 @@ import 'package:rein_player/bindings/general_bindings.dart';
 import 'package:rein_player/features/playback/views/video_and_controls_screen.dart';
 import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 

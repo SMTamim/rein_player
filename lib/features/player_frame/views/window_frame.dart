@@ -1,6 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:rein_player/common/widgets/rp_horizontal_divider.dart';
+import 'package:rein_player/common/widgets/rp_vertical_divider.dart';
 import 'package:rein_player/features/player_frame/views/window_actions.dart';
 import 'package:rein_player/features/player_frame/views/window_current_content_info.dart';
 import 'package:rein_player/features/player_frame/views/window_player_menu.dart';

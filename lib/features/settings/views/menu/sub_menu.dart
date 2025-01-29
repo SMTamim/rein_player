@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:rein_player/utils/constants/rp_colors.dart';
 
+import '../../controller/menu_controller.dart';
 import 'menu_item.dart';
-
 
 class Submenu extends StatelessWidget {
   final List<MenuItem> items;
 
-  Submenu({required this.items});
+  const Submenu({required this.items});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Title"),
-          ...items
-        ],
+    return MouseRegion(
+      onEnter: (_) => MainMenuController.to.isHovering.value = true,
+      onExit: (_) {
+        MainMenuController.to.isHovering.value = false;
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (!MainMenuController.to.isHovering.value) {
+            MainMenuController.to.hideSubmenu();
+            MainMenuController.to.hideMenu();
+          }
+        });
+      },
+      child: Material(
+        color: RpColors.gray_800,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: items,
+        ),
       ),
     );
   }

@@ -30,7 +30,7 @@ class VideoAndControlController extends GetxController {
     await player.dispose();
   }
 
-  Future<void> loadVideoFromUrl(VideoOrAudioItem media) async {
+  Future<void> loadVideoFromUrl(VideoOrAudioItem media, {bool play = true}) async {
     currentVideoUrl.value = media.location;
     currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
@@ -63,6 +63,10 @@ class VideoAndControlController extends GetxController {
     });
 
     await player.open(Media(media.location));
-    await player.pause();
+    if(play){
+      await player.play();
+    }else{
+      await player.pause();
+    }
   }
 }
