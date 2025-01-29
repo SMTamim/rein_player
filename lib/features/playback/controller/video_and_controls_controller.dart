@@ -3,6 +3,7 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/utils/device/rp_device_utils.dart';
 
@@ -30,7 +31,9 @@ class VideoAndControlController extends GetxController {
     await player.dispose();
   }
 
-  Future<void> loadVideoFromUrl(VideoOrAudioItem media, {bool play = true}) async {
+  Future<void> loadVideoFromUrl(VideoOrAudioItem media,
+      {bool play = true}) async {
+    if (currentVideo.value?.location == media.location) return;
     currentVideoUrl.value = media.location;
     currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
@@ -43,7 +46,7 @@ class VideoAndControlController extends GetxController {
     final windowSize = await RpDeviceUtils.getWindowFrameSize();
     if (windowSize.height == RpSizes.initialAppWindowSize.height &&
         windowSize.width == RpSizes.initialAppWindowSize.width) {
-      RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
+        await RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
     }
 
     /// playing listener
@@ -63,9 +66,9 @@ class VideoAndControlController extends GetxController {
     });
 
     await player.open(Media(media.location));
-    if(play){
+    if (play) {
       await player.play();
-    }else{
+    } else {
       await player.pause();
     }
   }

@@ -1,5 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:window_manager/window_manager.dart';
 
 class WindowActionsController extends GetxController {
@@ -39,7 +40,8 @@ class WindowActionsController extends GetxController {
     }
   }
 
-  void closeWindow() {
+  void closeWindow() async {
+    await VolumeController.to.dumpVolumeToStorage();
     windowManager.close();
   }
 }

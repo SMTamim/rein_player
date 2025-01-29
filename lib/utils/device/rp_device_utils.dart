@@ -33,7 +33,7 @@ class RpDeviceUtils {
     return await windowManager.getSize();
   }
 
-  static void setWindowFrameSize(Size size){
-    windowManager.setSize(size);
+  static Future<void> setWindowFrameSize(Size size) async {
+    await windowManager.setSize(size);
   }
 }
