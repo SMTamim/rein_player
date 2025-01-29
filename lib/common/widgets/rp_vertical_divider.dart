@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../utils/constants/rp_colors.dart';
 
-class RpHorizontalDivider extends StatelessWidget {
-  const RpHorizontalDivider({
+class RpVerticalDivider extends StatelessWidget {
+  const RpVerticalDivider({
     super.key,
-    this.height = 1,
+    this.height = double.infinity,
     this.backgroundColor = RpColors.black,
-    this.width = double.infinity,
+    this.width = 1,
   });
 
   final double height, width;
