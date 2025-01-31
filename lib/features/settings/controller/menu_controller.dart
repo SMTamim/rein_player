@@ -3,24 +3,25 @@ import 'package:get/get.dart';
 import 'package:rein_player/features/settings/views/menu/custom_menu.dart';
 import 'package:rein_player/features/settings/views/menu/menu_item.dart';
 import 'package:rein_player/features/settings/views/menu/sub_menu.dart';
-import 'package:rein_player/main.dart';
 
 class MainMenuController extends GetxController {
   static MainMenuController get to => Get.find();
 
-  Rx<OverlayEntry?> overlayEntry = Rx<OverlayEntry?>(null);
+  OverlayEntry? overlayEntry;
   OverlayEntry? submenuOverlay;
   RxBool isHovering = false.obs;
 
   void showMainMenu(BuildContext context, Offset position) {
-    overlayEntry.value = OverlayEntry(
+    overlayEntry = null;
+    overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         left: position.dx,
         top: position.dy,
         child: RpCustomMenu(),
       ),
     );
-    Overlay.of(context).insert(overlayEntry.value!);
+    Overlay.of(context).insert(overlayEntry!);
+    overlayEntry!.markNeedsBuild();
     isHovering.value = true;
   }
 
@@ -38,11 +39,12 @@ class MainMenuController extends GetxController {
 
   void hideMenu() {
     print("now here ${isHovering.value}");
-    if (!isHovering.value) {
+    if (overlayEntry != null ) {
       print("hiding menu");
-      overlayEntry.value?.remove();
-      overlayEntry.value = null;
-      hideSubmenu();
+      overlayEntry?.remove();
+      overlayEntry!.markNeedsBuild();
+      overlayEntry = null;
+      // hideSubmenu();
     }
     print("HHHH: $overlayEntry");
   }

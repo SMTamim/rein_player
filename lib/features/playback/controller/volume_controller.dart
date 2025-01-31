@@ -25,10 +25,10 @@ class VolumeController extends GetxController {
 
   bool isVideoOnMute() => currentVolume.value == 0;
 
-  void updateVolume(double volume) {
+  Future<void> updateVolume(double volume) async {
     if(VideoAndControlController.to.currentVideoUrl.isEmpty) return;
     currentVolume.value = volume;
-    player.setVolume(volume * 100);
+    await player.setVolume(volume * 100);
   }
 
   void toggleVolumeMuteState(){

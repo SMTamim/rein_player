@@ -15,12 +15,12 @@ class VideoAndControlController extends GetxController {
   static VideoAndControlController get to => Get.find();
 
   final isVideoPlaying = false.obs;
+  final isVideoCompleted = false.obs;
   final isFullScreenMode = false.obs;
   Rx<String> currentVideoUrl = "".obs;
   Rx<VideoOrAudioItem?> currentVideo = Rx<VideoOrAudioItem?>(null);
 
-  Rx<double> videoAndControlScreenSize =
-      RpSizes.minWindowAndControlScreenSize.obs;
+  Rx<double> videoAndControlScreenSize = RpSizes.minWindowAndControlScreenSize.obs;
 
   Player player = VideoPlayer.getInstance.player;
   late final videoPlayerController = VideoController(player);
@@ -31,22 +31,20 @@ class VideoAndControlController extends GetxController {
     await player.dispose();
   }
 
-  Future<void> loadVideoFromUrl(VideoOrAudioItem media,
-      {bool play = true}) async {
+  Future<void> loadVideoFromUrl(VideoOrAudioItem media, {bool play = true}) async {
     if (currentVideo.value?.location == media.location) return;
     currentVideoUrl.value = media.location;
     currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
 
-    VolumeController.to.currentVolume.value =
-        VolumeController.to.currentVolume.value == 0
-            ? RpSizes.defaultVolume
-            : VolumeController.to.currentVolume.value;
+    VolumeController.to.currentVolume.value = VolumeController.to.currentVolume.value == 0
+        ? RpSizes.defaultVolume
+        : VolumeController.to.currentVolume.value;
 
     final windowSize = await RpDeviceUtils.getWindowFrameSize();
     if (windowSize.height == RpSizes.initialAppWindowSize.height &&
         windowSize.width == RpSizes.initialAppWindowSize.width) {
-        await RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
+      await RpDeviceUtils.setWindowFrameSize(RpSizes.initialVideoLoadedAppWidowSize);
     }
 
     /// playing listener
@@ -65,6 +63,16 @@ class VideoAndControlController extends GetxController {
       ControlsController.to.updateProgressFromPosition();
     });
 
+    /// current video completion status
+    player.stream.completed.listen((isCompleted) async {
+      if (isCompleted && !isVideoCompleted.value) {
+        isVideoCompleted.value = true;
+        if (AlbumContentController.to.currentContent.length > 1) {
+          await AlbumContentController.to.goNextItemInPlaylist();
+        }
+        isVideoCompleted.value = false;
+      }
+    });
     await player.open(Media(media.location));
     if (play) {
       await player.play();

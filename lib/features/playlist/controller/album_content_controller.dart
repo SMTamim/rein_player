@@ -113,17 +113,18 @@ class AlbumContentController extends GetxController {
   }
 
   String getPlaylistPlayingProgress() {
+    if(AlbumContentController.to.currentContent.length == 1) return "";
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1) return "";
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
   }
 
-  void goNextItemInPlaylist() async {
+  Future<void> goNextItemInPlaylist() async {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1 || currentContent.isEmpty) return;
     if (currentVideoIndex + 1 == currentContent.length) return;
     final media = currentContent[currentVideoIndex + 1];
-    VideoAndControlController.to
+    await VideoAndControlController.to
         .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
     AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
     await AlbumController.to.dumpAllAlbumsToStorage();
