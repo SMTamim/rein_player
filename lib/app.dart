@@ -17,6 +17,8 @@ class RpApp extends StatelessWidget {
   final playlistController = Get.put(PlaylistController());
   final keyboardController = Get.put(KeyboardController());
 
+  final focus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -26,44 +28,47 @@ class RpApp extends StatelessWidget {
       darkTheme: RpAppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       home: Scaffold(
-        body: KeyboardListener(
-          autofocus: true,
-          focusNode: FocusNode(),
-          onKeyEvent: keyboardController.handleKey,
-          child: Container(
-            constraints: const BoxConstraints.expand(),
-            child: Column(
-              children: [
-                /// custom window frame
-                const RpWindowFrame(),
+        body: GestureDetector(
+          onTap: focus.requestFocus,
+          child: KeyboardListener(
+            autofocus: true,
+            focusNode: focus,
+            onKeyEvent: keyboardController.handleKey,
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              child: Column(
+                children: [
+                  /// custom window frame
+                  const RpWindowFrame(),
 
-                Expanded(
-                  child: Row(
-                    children: [
-                      /// video and controls screen
-                      const Expanded(child: RpVideoAndControlsScreen()),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        /// video and controls screen
+                        const Expanded(child: RpVideoAndControlsScreen()),
 
-                      /// slider
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onHorizontalDragUpdate:
-                            playlistController.updatePlaylistWindowSizeOnDrag,
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.resizeColumn,
-                          child: Container(width: 2, color: RpColors.black),
+                        /// slider
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onHorizontalDragUpdate:
+                              playlistController.updatePlaylistWindowSizeOnDrag,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.resizeColumn,
+                            child: Container(width: 2, color: RpColors.black),
+                          ),
                         ),
-                      ),
 
-                      /// playlist
-                      Obx(() {
-                        return playlistController.isPlaylistWindowOpened.value
-                            ? const RpPlaylistSideBar()
-                            : const SizedBox.shrink();
-                      })
-                    ],
-                  ),
-                )
-              ],
+                        /// playlist
+                        Obx(() {
+                          return playlistController.isPlaylistWindowOpened.value
+                              ? const RpPlaylistSideBar()
+                              : const SizedBox.shrink();
+                        })
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
