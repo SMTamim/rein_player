@@ -10,10 +10,17 @@ class WindowInfoController extends GetxController {
     return currentVideo.extension.toUpperCase().replaceAll(".", "");
   }
 
-  String getCurrentVideoTitle(){
+  String getCurrentVideoTitle() {
     final currentVideo = VideoAndControlController.to.currentVideo.value;
-    if(currentVideo == null ) return "";
-    if(currentVideo.name.length < 25 ) return currentVideo.name;
-    return "${currentVideo.name.substring(0, 25)}..";
+    if (currentVideo == null) return "";
+
+    final String fullName = currentVideo.name;
+    final int extensionIndex = fullName.lastIndexOf(".");
+
+    final String fileName = extensionIndex != -1 ? fullName.substring(0, extensionIndex) : fullName;
+    print("filename: $fileName");
+    if (fileName.length < 25) return fileName;
+    return "${fileName.substring(0, 25)}..";
   }
+
 }

@@ -40,7 +40,7 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
                   SizedBox(
                     width: WindowController.to.currentWindowSize.value.width <= 650 ? 180 : WindowController.to.currentWindowSize.value.width * 0.4,
                     child: Text(
-                      "${AlbumContentController.to.getPlaylistPlayingProgress()} ${VideoAndControlController.to.currentVideo.value!.name}",
+                      "${AlbumContentController.to.getPlaylistPlayingProgress()} ${WindowInfoController.to.getCurrentVideoTitle()}",
                       style: Theme.of(context).textTheme.bodySmall,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
