@@ -3,7 +3,6 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
-import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/utils/device/rp_device_utils.dart';
 
@@ -73,7 +72,9 @@ class VideoAndControlController extends GetxController {
         isVideoCompleted.value = false;
       }
     });
+
     await player.open(Media(media.location));
+
     if (play) {
       await player.play();
     } else {

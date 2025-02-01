@@ -8,60 +8,80 @@ class MainMenuController extends GetxController {
   static MainMenuController get to => Get.find();
 
   OverlayEntry? overlayEntry;
-  OverlayEntry? submenuOverlay;
-  RxBool isHovering = false.obs;
+  final List<OverlayEntry> submenuOverlays = [];
+  RxBool isHoveringMain = false.obs;
+  RxBool isHoveringSub = false.obs;
 
   void showMainMenu(BuildContext context, Offset position) {
-    overlayEntry = null;
+    hideMenu();
+
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         left: position.dx,
         top: position.dy,
-        child: RpCustomMenu(),
+        child: const RpCustomMenu(),
       ),
     );
-    Overlay.of(context).insert(overlayEntry!);
-    overlayEntry!.markNeedsBuild();
-    isHovering.value = true;
+    Overlay.of(context)!.insert(overlayEntry!);
+    isHoveringMain.value = true;
   }
 
   void showSubmenu(BuildContext context, Offset position, List<MenuItem> submenuItems) {
-    hideSubmenu();
-    submenuOverlay = OverlayEntry(
+    hideSubmenusFromLevel(submenuOverlays.length);
+
+    final overlay = OverlayEntry(
       builder: (context) => Positioned(
         left: position.dx + 200,
         top: position.dy,
-        child: Submenu(items: submenuItems),
+        child: MouseRegion(
+          onEnter: (_) => isHoveringSub.value = true,
+          onExit: (_) {
+            Future.delayed(const Duration(milliseconds: 150), () {
+              if (!isHoveringSub.value) {
+                hideSubmenu();
+              }
+            });
+          },
+          child: Submenu(items: submenuItems),
+        ),
       ),
     );
-    Overlay.of(context).insert(submenuOverlay!);
+    Overlay.of(context)!.insert(overlay);
+    submenuOverlays.add(overlay);
   }
 
   void hideMenu() {
-    print("now here ${isHovering.value}");
-    if (overlayEntry != null ) {
-      print("hiding menu");
-      overlayEntry?.remove();
-      overlayEntry!.markNeedsBuild();
+    if (overlayEntry != null) {
+      overlayEntry!.remove();
       overlayEntry = null;
-      // hideSubmenu();
+      isHoveringMain.value = false;
     }
-    print("HHHH: $overlayEntry");
+    hideAllSubmenus();
   }
 
   void hideSubmenu() {
-    submenuOverlay?.remove();
-    submenuOverlay = null;
-  }
-
-  void onHover(bool value, BuildContext context, Offset position, List<MenuItem> submenuItems) {
-    isHovering.value = value;
-    if (value) {
-      showSubmenu(context, position, submenuItems);
-    } else {
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (!isHovering.value) hideSubmenu();
-      });
+    if (submenuOverlays.isNotEmpty) {
+      final overlay = submenuOverlays.removeLast();
+      overlay.remove();
+      isHoveringSub.value = false;
     }
   }
+
+  void hideAllSubmenus() {
+    while (submenuOverlays.isNotEmpty) {
+      hideSubmenu();
+    }
+  }
+
+  void hideSubmenusFromLevel(int level) {
+    while (submenuOverlays.length >= level + 1) {
+      hideSubmenu();
+    }
+  }
+
+  void onMainHover(bool value, BuildContext context, Offset position, List<MenuItem> submenuItems) {
+    isHoveringMain.value = value;
+    showSubmenu(context, position, submenuItems);
+  }
+
 }

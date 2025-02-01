@@ -18,8 +18,9 @@ class RpWindowPlayerMenu extends StatelessWidget {
           MainMenuController.to.showMainMenu(context, position + const Offset(0, 25));
         },
         onExit: (_) {
+          MainMenuController.to.isHoveringMain.value = false;
           Future.delayed(const Duration(milliseconds: 100), () {
-            if (!MainMenuController.to.isHovering.value) {
+            if (!MainMenuController.to.isHoveringMain.value) {
               MainMenuController.to.hideMenu();
             }
           });

@@ -12,11 +12,11 @@ class Submenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => MainMenuController.to.isHovering.value = true,
+      onEnter: (_) => MainMenuController.to.isHoveringSub.value = true,
       onExit: (_) {
-        MainMenuController.to.isHovering.value = false;
+        MainMenuController.to.isHoveringSub.value = false;
         Future.delayed(const Duration(milliseconds: 100), () {
-          if (!MainMenuController.to.isHovering.value) {
+          if (!MainMenuController.to.isHoveringSub.value) {
             MainMenuController.to.hideSubmenu();
             MainMenuController.to.hideMenu();
           }

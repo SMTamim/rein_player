@@ -8,6 +8,7 @@ class MenuItem extends StatelessWidget {
   final List<MenuItem>? subMenuItems;
 
   const MenuItem({
+    super.key,
     required this.text,
     this.onTap,
     this.subMenuItems,
@@ -15,13 +16,16 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return subMenuItems != null ? _buildWithSubMenu(context) : _buildWithoutSubMenu();
+    return subMenuItems != null
+        ? _buildWithSubMenu(context)
+        : _buildWithoutSubMenu(context);
   }
 
   Widget _buildWithSubMenu(BuildContext context) {
     return MouseRegion(
       onEnter: (_) => _handleMouseEnter(context),
-      onExit: (_) => _handleMouseExit(),
+      onExit: (_) => _handleMouseExit(context),
+      cursor: SystemMouseCursors.click,
       child: _buildMenuContainer(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,7 +38,7 @@ class MenuItem extends StatelessWidget {
     );
   }
 
-  Widget _buildWithoutSubMenu() {
+  Widget _buildWithoutSubMenu(BuildContext context) {
     return GestureDetector(
       onTap: () {
         onTap?.call();
@@ -48,7 +52,7 @@ class MenuItem extends StatelessWidget {
 
   Widget _buildMenuContainer({required Widget child}) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      padding: const EdgeInsets.only(top: 5, bottom: 5, left: 16, right: 3),
       width: 200,
       decoration: const BoxDecoration(
         color: RpColors.gray_800,
@@ -60,17 +64,14 @@ class MenuItem extends StatelessWidget {
   void _handleMouseEnter(BuildContext context) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     Offset position = renderBox.localToGlobal(Offset.zero);
-    MainMenuController.to.isHovering.value = true;
-    MainMenuController.to.onHover(true, context, position, subMenuItems!);
+    MainMenuController.to.isHoveringMain.value = true;
+    MainMenuController.to.onMainHover(true, context, position, subMenuItems!);
   }
 
-  void _handleMouseExit() {
-    MainMenuController.to.isHovering.value = false;
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (!MainMenuController.to.isHovering.value) {
-        MainMenuController.to.hideSubmenu();
-      }
-    });
+  void _handleMouseExit(BuildContext context) {
+    if(!MainMenuController.to.isHoveringSub.value){
+      MainMenuController.to.hideSubmenu();
+    }
   }
 
   TextStyle get _menuTextStyle => const TextStyle(color: Colors.white, fontSize: 12);

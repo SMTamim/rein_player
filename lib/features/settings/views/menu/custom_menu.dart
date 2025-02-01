@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rein_player/common/widgets/rp_horizontal_divider.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
@@ -7,14 +8,19 @@ import 'package:rein_player/features/settings/views/menu/menu_item.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
 class RpCustomMenu extends StatelessWidget {
+  const RpCustomMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => MainMenuController.to.isHovering.value = true,
+      onEnter: (_) {
+        MainMenuController.to.isHoveringMain.value = true;
+      },
       onExit: (_) {
-        MainMenuController.to.isHovering.value = false;
         Future.delayed(const Duration(milliseconds: 100), () {
-          if (!MainMenuController.to.isHovering.value) {
+          if (MainMenuController.to.isHoveringSub.value) {
+            MainMenuController.to.isHoveringMain.value = true;
+          } else {
             MainMenuController.to.hideMenu();
           }
         });
@@ -24,20 +30,28 @@ class RpCustomMenu extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MenuItem(text: "Open File", onTap: () {
-              ControlsController.to.open();
-            }),
-
-             MenuItem(
+            MenuItem(
+              text: "Open File",
+              onTap: () {
+                ControlsController.to.open();
+              },
+            ),
+            MenuItem(
               text: "Subtitles",
               subMenuItems: [
-                MenuItem(text: "Add Subtitle", onTap: SubtitleController.to.loadSubtitle),
+                MenuItem(
+                  text: "Add Subtitle",
+                  onTap: SubtitleController.to.loadSubtitle,
+                ),
                 MenuItem(text: "Disable Subtitle", onTap: SubtitleController.to.disableSubtitle),
               ],
             ),
-            MenuItem(text: "Exit", onTap: (){
-              WindowActionsController.to.closeWindow();
-            }),
+            MenuItem(
+              text: "Exit",
+              onTap: () {
+                WindowActionsController.to.closeWindow();
+              },
+            )
           ],
         ),
       ),
