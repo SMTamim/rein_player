@@ -8,6 +8,7 @@ import 'package:rein_player/features/player_frame/controller/window_actions_cont
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
+import 'package:rein_player/features/settings/controller/settings_controller.dart';
 
 import '../features/player_frame/controller/window_controller.dart';
 import '../features/player_frame/controller/window_info_controller.dart';
@@ -27,5 +28,6 @@ class GeneralBindings extends Bindings {
     Get.put(AlbumContentController());
     Get.put(MainMenuController());
     Get.lazyPut(() => SubtitleController());
+    Get.lazyPut(() => SettingsController());
   }
 }
