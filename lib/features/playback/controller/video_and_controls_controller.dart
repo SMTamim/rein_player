@@ -58,8 +58,7 @@ class VideoAndControlController extends GetxController {
 
     await player.open(Media(media.location));
 
-    final settings =  Settings.fromJson((await storage.readData(RpKeysConstants.settingsKey)));
-    if(!settings.isSubtitleEnabled){
+    if(!SubtitleController.to.isSubtitleEnabled.value){
       await SubtitleController.to.disableSubtitle();
     }
 

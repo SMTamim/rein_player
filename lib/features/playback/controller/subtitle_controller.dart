@@ -2,12 +2,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/settings/controller/settings_controller.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+
+import '../../settings/models/settings.dart';
 
 class SubtitleController extends GetxController {
   static SubtitleController get to => Get.find();
@@ -18,6 +21,14 @@ class SubtitleController extends GetxController {
 
   RxBool isSubtitleEnabled = false.obs;
   String currentSubtitleContent = "";
+
+  @override
+  void onInit() async {
+    super.onInit();
+    final settings =  Settings.fromJson((await storage.readData(RpKeysConstants.settingsKey)));
+    print("-------------------------------- ${settings.isSubtitleEnabled}");
+     isSubtitleEnabled.value = settings.isSubtitleEnabled;
+  }
 
   /// load subtitle from file system
   void loadSubtitle() async {
@@ -55,9 +66,11 @@ class SubtitleController extends GetxController {
       isSubtitleEnabled.value = false;
       await disableSubtitle();
     }else {
+      isSubtitleEnabled.value = true;
       if(currentSubtitleContent.isNotEmpty){
-        isSubtitleEnabled.value = true;
         await player.setSubtitleTrack(SubtitleTrack.data(currentSubtitleContent));
+      }else{
+        await player.setSubtitleTrack(SubtitleTrack.auto());
       }
     }
     final settings  = SettingsController.to.settings;

@@ -19,6 +19,7 @@ class GeneralBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(WindowController());
+    Get.put(SubtitleController());
     Get.put(ControlsController());
     Get.put(VideoAndControlController());
     Get.put(WindowActionsController());
@@ -27,7 +28,6 @@ class GeneralBindings extends Bindings {
     Get.put(AlbumController());
     Get.put(AlbumContentController());
     Get.put(MainMenuController());
-    Get.lazyPut(() => SubtitleController());
     Get.lazyPut(() => SettingsController());
   }
 }
