@@ -38,8 +38,9 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
 
                   /// title
                   Obx((){
+                    final width = WindowController.to.currentWindowSize.value.width;
                     return SizedBox(
-                      width: WindowController.to.currentWindowSize.value.width <= 650 ? 180 : WindowController.to.currentWindowSize.value.width * 0.4,
+                      width:  width - 400,
                       child: Text(
                         "${AlbumContentController.to.getPlaylistPlayingProgress()} ${WindowInfoController.to.getCurrentVideoTitle()}",
                         style: Theme.of(context).textTheme.bodySmall,
@@ -48,6 +49,7 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
                       ),
                     );
                   })
+
                 ],
               );
       }),

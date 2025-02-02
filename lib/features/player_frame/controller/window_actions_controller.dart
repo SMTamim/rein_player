@@ -30,7 +30,7 @@ class WindowActionsController extends GetxController {
   }
 
   void fullscreenWindow() {
-    windowManager.setFullScreen(true);
+    // windowManager.se(true);
   }
 
   void exitFullscreen() async {
