@@ -18,7 +18,6 @@ class WindowInfoController extends GetxController {
     final int extensionIndex = fullName.lastIndexOf(".");
 
     final String fileName = extensionIndex != -1 ? fullName.substring(0, extensionIndex) : fullName;
-    print("filename: $fileName");
     if (fileName.length < 25) return fileName;
     return "${fileName.substring(0, 25)}..";
   }

@@ -12,36 +12,35 @@ class RpWindowFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 28,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 3),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
-        color: RpColors.gray_900,
-      ),
-      child: MoveWindow(
-        child:  const Row(
-          children: [
-            /// menu
-            Row(
-              children: [
-                /// player name and menu
-                RpWindowPlayerMenu(),
-        
-                /// black line
-                RpVerticalDivider(),
-        
-                /// video info
-                RpWindowCurrentContentInfo(),
-              ],
-            ),
-            Spacer(),
-        
-            /// window icons
-            RpWindowActions()
-          ],
+        height: 28,
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 3),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+          color: RpColors.gray_900,
         ),
-      )
-    );
+        child: MoveWindow(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// menu
+              Row(
+                children: [
+                  /// player name and menu
+                  RpWindowPlayerMenu(),
+
+                  /// black line
+                  RpVerticalDivider(),
+
+                  /// video info
+                  RpWindowCurrentContentInfo(),
+                ],
+              ),
+
+              /// window icons
+              RpWindowActions()
+            ],
+          ),
+        ));
   }
 }

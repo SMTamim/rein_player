@@ -7,8 +7,6 @@ import 'package:rein_player/utils/constants/rp_text.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 
-import '../../../utils/constants/rp_sizes.dart';
-import '../../../utils/device/rp_device_utils.dart';
 import '../models/album.dart';
 import 'album_content_controller.dart';
 
@@ -77,6 +75,14 @@ class AlbumController extends GetxController {
         ),
       ...loadedAlbums
     ]);
+  }
+
+  bool isMediaInDefaultAlbumLocation(){
+    List<dynamic> albumJson = storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
+    final albums = albumJson.map((el) => Album.fromJson(el)).toList();
+    final defaultAlbum =
+        albums.where((album) => album.id == RpKeysConstants.defaultAlbumKey).firstOrNull;
+    return defaultAlbum == null;
   }
 
   Future<void> loadDefaultAlbumPlaylistContent() async {
