@@ -1,5 +1,7 @@
+import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path/path.dart' as path;
@@ -23,10 +25,13 @@ class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
 
   final storage = RpLocalStorage();
-
   final Player player = VideoPlayer.getInstance.player;
 
+  Timer? _seekDebounceTimer;
+
   RxDouble currentVideoProgress = 0.0.obs;
+  RxBool isProgressIndicatorOnDrag = false.obs;
+
   Rx<Duration?> videoPosition = Rx<Duration?>(null);
   Rx<Duration?> videoDuration = Rx<Duration?>(null);
 
@@ -79,30 +84,30 @@ class ControlsController extends GetxController {
 
   Future<void> seekBackward() async {
     final seekTime = _calculateSeekTime(percentage: 0.01);
-    final position = videoPosition.value?.inSeconds  ?? 0;
+    final position = videoPosition.value?.inSeconds ?? 0;
     final seekTo = position - seekTime.inSeconds;
-    if(seekTo < 0) return;
+    if (seekTo < 0) return;
     await player.seek(Duration(seconds: seekTo));
   }
 
   Future<void> seekForward() async {
     final seekTime = _calculateSeekTime(percentage: 0.01);
-    final position = videoPosition.value?.inSeconds  ?? 0;
+    final position = videoPosition.value?.inSeconds ?? 0;
     final seekTo = position + seekTime.inSeconds;
     await player.seek(Duration(seconds: seekTo));
   }
 
   Future<void> bigSeekBackward() async {
     final seekTime = _calculateSeekTime(percentage: 0.05);
-    final position = videoPosition.value?.inSeconds  ?? 0;
+    final position = videoPosition.value?.inSeconds ?? 0;
     final seekTo = position - seekTime.inSeconds;
-    if(seekTo < 0) return;
+    if (seekTo < 0) return;
     await player.seek(Duration(seconds: seekTo));
   }
 
   Future<void> bigSeekForward() async {
     final seekTime = _calculateSeekTime(percentage: 0.05);
-    final position = videoPosition.value?.inSeconds  ?? 0;
+    final position = videoPosition.value?.inSeconds ?? 0;
     final seekTo = position + seekTime.inSeconds;
     await player.seek(Duration(seconds: seekTo));
   }
@@ -112,24 +117,64 @@ class ControlsController extends GetxController {
     return RpDurationHelper.formatDuration(videoDuration.value!);
   }
 
+  void videoOnPanUpdate(RenderBox box, DragUpdateDetails details){
+    double localDx = details.localPosition.dx;
+    double totalWidth = box.size.width;
+    double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
+
+    currentVideoProgress.value = newProgress;
+    isProgressIndicatorOnDrag.value = true;
+  }
+
+  Future<void> videoOnPanEnd() async {
+    final progress = currentVideoProgress.value;
+    if (videoDuration.value == null) return;
+    final duration = videoDuration.value!;
+    final seekPosition = Duration(seconds: (progress * duration.inSeconds).toInt());
+
+    await player.seek(seekPosition);
+    isProgressIndicatorOnDrag.value = false;
+  }
+
+  Future<void> videoOnTapDown(RenderBox box, TapDownDetails details) async {
+    double localDx = details.localPosition.dx;
+    double totalWidth = box.size.width;
+    double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
+
+    ControlsController.to.currentVideoProgress.value = newProgress;
+    if (ControlsController.to.videoDuration.value != null) {
+      final duration = ControlsController.to.videoDuration.value!;
+      final seekPosition = Duration(seconds: (newProgress * duration.inSeconds).toInt());
+      await player.seek(seekPosition);
+    }
+  }
+
+
   void updateProgressFromPosition() {
     if (videoPosition.value == null ||
         videoDuration.value == null ||
-        videoDuration.value!.inMilliseconds == 0) return;
-    double progress = videoPosition.value!.inMilliseconds /
-        videoDuration.value!.inMilliseconds;
+        videoDuration.value!.inMilliseconds == 0 || isProgressIndicatorOnDrag.value) return;
+    double progress = videoPosition.value!.inMilliseconds / videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);
     currentVideoProgress.value = progress;
   }
 
-  void updateVideoProgress(double progress) async {
+  Future<void> updateVideoProgress(double progress, {bool delayUiUpdate = false}) async {
     if (videoDuration.value == null) return;
+
     currentVideoProgress.value = progress;
     final duration = videoDuration.value!;
-    final seekPosition =
-        Duration(seconds: (progress * duration.inSeconds).toInt());
-    currentVideoProgress.value = progress;
-    await player.seek(seekPosition);
+    final seekPosition = Duration(seconds: (progress * duration.inSeconds).toInt());
+
+    if (delayUiUpdate) {
+      _seekDebounceTimer?.cancel();
+      _seekDebounceTimer = Timer(const Duration(milliseconds: 300), () async {
+        await player.seek(seekPosition);
+      });
+    } else {
+      _seekDebounceTimer?.cancel();
+      await player.seek(seekPosition);
+    }
   }
 
   void _resetPlayer() {
@@ -150,16 +195,15 @@ class ControlsController extends GetxController {
   }
 
   Future<void> _pickFileAndPlay() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.video, allowMultiple: false);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.video, allowMultiple: false);
 
     if (result != null) {
       final file = result.files.single;
       if (file.path == null || file.extension == null) return;
       final filePath = file.path!;
 
-      VideoOrAudioItem srcFile =
-          VideoOrAudioItem(file.name, filePath, size: file.size);
+      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, filePath, size: file.size);
       VideoAndControlController.to.loadVideoFromUrl(srcFile);
       AlbumContentController.to.currentContent.clear();
       AlbumContentController.to.addToCurrentPlaylistContent(
@@ -171,10 +215,9 @@ class ControlsController extends GetxController {
       await AlbumController.to.dumpAllAlbumsToStorage();
 
       /// set the default album location
-      await AlbumController.to
-          .setDefaultAlbum(filePath, currentItemToPlay: filePath);
-      await AlbumContentController.to.loadSimilarContentInDefaultAlbum(
-          path.basename(filePath), path.dirname(filePath));
+      await AlbumController.to.setDefaultAlbum(filePath, currentItemToPlay: filePath);
+      await AlbumContentController.to
+          .loadSimilarContentInDefaultAlbum(path.basename(filePath), path.dirname(filePath));
       AlbumContentController.to.updatePlaylistItemDuration(filePath);
 
       WindowActionsController.to.maximizeWindow();
