@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/bindings/general_bindings.dart';
@@ -60,38 +61,61 @@ class RpHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints.expand(),
-      child: Column(
+    return DropTarget(
+      onDragEntered: (details) => WindowController.to.isDraggingOnWindow.value = true,
+      onDragExited: (details) => WindowController.to.isDraggingOnWindow.value = false,
+      onDragDone: (DropDoneDetails details) async {
+        await WindowController.to.onWindowDrop(details.files);
+      },
+      child: Stack(
         children: [
-          /// custom window frame
-          const RpWindowFrame(),
-
-          Expanded(
-            child: Row(
+          /// home
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: Column(
               children: [
-                /// video and controls screen
-                const Expanded(child: RpVideoAndControlsScreen()),
+                /// custom window frame
+                const RpWindowFrame(),
 
-                /// slider
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onHorizontalDragUpdate: playlistController.updatePlaylistWindowSizeOnDrag,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.resizeColumn,
-                    child: Container(width: 2, color: RpColors.black),
+                Expanded(
+                  child: Row(
+                    children: [
+                      /// video and controls screen
+                      const Expanded(child: RpVideoAndControlsScreen()),
+
+                      /// slider
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onHorizontalDragUpdate: playlistController.updatePlaylistWindowSizeOnDrag,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.resizeColumn,
+                          child: Container(width: 2, color: RpColors.black),
+                        ),
+                      ),
+
+                      /// playlist
+                      Obx(() {
+                        return playlistController.isPlaylistWindowOpened.value
+                            ? const RpPlaylistSideBar()
+                            : const SizedBox.shrink();
+                      })
+                    ],
                   ),
-                ),
-
-                /// playlist
-                Obx(() {
-                  return playlistController.isPlaylistWindowOpened.value
-                      ? const RpPlaylistSideBar()
-                      : const SizedBox.shrink();
-                })
+                )
               ],
             ),
-          )
+          ),
+
+          /// drag overlay
+          Obx((){
+            if(WindowController.to.isDraggingOnWindow.value){
+              return Positioned(child: Container(
+                color: RpColors.dropColor,
+                width: double.infinity,
+              ));
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
     );

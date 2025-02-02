@@ -17,4 +17,6 @@ class RpColors {
   static const black_300 = Color(0xFFB0B0B0);
   static const black_500 = Color(0xFF6D6D6D);
   static const black_600 = Color(0xFF5D5D5D);
+
+  static const dropColor = Color(0xC21A1A1A);
 }

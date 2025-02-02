@@ -3,10 +3,12 @@ import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
+import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_extensions.dart';
+import 'package:rein_player/utils/extensions/media_extensions.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
 
@@ -14,7 +16,6 @@ class AlbumContentController extends GetxController {
   static AlbumContentController get to => Get.find();
 
   final RxList<PlaylistItem> currentContent = <PlaylistItem>[].obs;
-  final RxString currentPath = ''.obs;
   final RxBool isLoading = false.obs;
   final RxBool canNavigateBack = false.obs;
 
@@ -30,7 +31,6 @@ class AlbumContentController extends GetxController {
       }
 
       currentContent.value = mediaFiles;
-      currentPath.value = dirPath;
     } finally {
       canNavigateBack.value = canNavigationStackBack();
     }
@@ -41,8 +41,9 @@ class AlbumContentController extends GetxController {
     currentContent.add(item);
   }
 
-  void addItemsToPlaylistContent(List<PlaylistItem> items) {
+  void addItemsToPlaylistContent(List<PlaylistItem> items, {clearBefore = false}) {
     if (items.isEmpty) return;
+    if(clearBefore) currentContent.clear();
     currentContent.addAll(items);
     sortPlaylistContent();
   }
@@ -80,11 +81,11 @@ class AlbumContentController extends GetxController {
       AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
       await AlbumController.to.dumpAllAlbumsToStorage();
       await VideoAndControlController.to
-          .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+          .loadVideoFromUrl(media.toVideoOrAudioItem());
     }
   }
 
-  //TODO: show time on watched videos
+  //TODO: complete it to show time on watched videos
   void updatePlaylistItemDuration(String url) {
     for (var item in currentContent) {
       if (item.location == url) {
@@ -125,7 +126,7 @@ class AlbumContentController extends GetxController {
     if (currentVideoIndex + 1 == currentContent.length) return;
     final media = currentContent[currentVideoIndex + 1];
     await VideoAndControlController.to
-        .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+        .loadVideoFromUrl(media.toVideoOrAudioItem());
     AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
     await AlbumController.to.dumpAllAlbumsToStorage();
   }
@@ -137,7 +138,7 @@ class AlbumContentController extends GetxController {
         currentVideoIndex == 0) return;
     final media = currentContent[currentVideoIndex - 1];
     VideoAndControlController.to
-        .loadVideoFromUrl(VideoOrAudioItem(media.name, media.location));
+        .loadVideoFromUrl(media.toVideoOrAudioItem());
     AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
     await AlbumController.to.dumpAllAlbumsToStorage();
   }

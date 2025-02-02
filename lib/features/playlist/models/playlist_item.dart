@@ -17,4 +17,6 @@ class PlaylistItem {
   bool isDirectory;
   PlaylistItemType type;
 
+
+
 }
