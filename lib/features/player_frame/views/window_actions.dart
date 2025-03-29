@@ -63,9 +63,9 @@ class RpWindowActions extends StatelessWidget {
         ),
 
         /// fullscreen mode
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         GestureDetector(
-          onTap: WindowActionsController.to.fullscreenWindow,
+          onTap: WindowActionsController.to.toggleFullScreenWindow,
           child: SvgPicture.asset("assets/icons/fullscreen.svg"),
         ),
         const SizedBox(width: 10),

@@ -29,14 +29,24 @@ class WindowActionsController extends GetxController {
     appWindow.maximizeOrRestore();
   }
 
-  void fullscreenWindow() {
-    // windowManager.se(true);
+  void toggleFullScreenWindow() async {
+    isFullScreenMode.value = !isFullScreenMode.value;
+    if (isFullScreenMode.value) {
+      isPinned.value = true;
+      await windowManager.setFullScreen(true);
+      await windowManager.setAlwaysOnTop(isPinned.value);
+    } else {
+      await windowManager.setFullScreen(false);
+      await windowManager.setAlwaysOnTop(isPinned.value);
+    }
   }
 
   void exitFullscreen() async {
     if (isFullScreenMode.value) {
       isFullScreenMode.value = false;
       await windowManager.setFullScreen(false);
+      // Reset always on top to match pinned state
+      await windowManager.setAlwaysOnTop(isPinned.value);
     }
   }
 

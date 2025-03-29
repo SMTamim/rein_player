@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rein_player/bindings/general_bindings.dart';
 import 'package:rein_player/features/playback/views/video_and_controls_screen.dart';
 import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_controller.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
@@ -39,7 +40,8 @@ class RpApp extends StatelessWidget {
             child: Obx(() {
               return windowController.isWindowLoaded.value
                   ? RpHome(playlistController: playlistController)
-                  : const Center(child: CircularProgressIndicator(color: Colors.white));
+                  : const Center(
+                      child: CircularProgressIndicator(color: Colors.white));
             }),
           ),
         ),
@@ -59,8 +61,10 @@ class RpHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropTarget(
-      onDragEntered: (details) => WindowController.to.isDraggingOnWindow.value = true,
-      onDragExited: (details) => WindowController.to.isDraggingOnWindow.value = false,
+      onDragEntered: (details) =>
+          WindowController.to.isDraggingOnWindow.value = true,
+      onDragExited: (details) =>
+          WindowController.to.isDraggingOnWindow.value = false,
       onDragDone: (DropDoneDetails details) async {
         await WindowController.to.onWindowDrop(details.files);
       },
@@ -72,7 +76,13 @@ class RpHome extends StatelessWidget {
             child: Column(
               children: [
                 /// custom window frame
-                const RpWindowFrame(),
+                Obx(() {
+                  final isFullScreenMode =
+                      WindowActionsController.to.isFullScreenMode.value;
+                  return isFullScreenMode
+                      ? const SizedBox.shrink()
+                      : const RpWindowFrame();
+                }),
 
                 Expanded(
                   child: Row(
@@ -83,7 +93,8 @@ class RpHome extends StatelessWidget {
                       /// slider
                       GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onHorizontalDragUpdate: playlistController.updatePlaylistWindowSizeOnDrag,
+                        onHorizontalDragUpdate:
+                            playlistController.updatePlaylistWindowSizeOnDrag,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeColumn,
                           child: Container(width: 2, color: RpColors.black),
@@ -92,7 +103,10 @@ class RpHome extends StatelessWidget {
 
                       /// playlist
                       Obx(() {
-                        return playlistController.isPlaylistWindowOpened.value
+                        return playlistController
+                                    .isPlaylistWindowOpened.value &&
+                                !WindowActionsController
+                                    .to.isFullScreenMode.value
                             ? const RpPlaylistSideBar()
                             : const SizedBox.shrink();
                       })
@@ -104,9 +118,10 @@ class RpHome extends StatelessWidget {
           ),
 
           /// drag overlay
-          Obx((){
-            if(WindowController.to.isDraggingOnWindow.value){
-              return Positioned(child: Container(
+          Obx(() {
+            if (WindowController.to.isDraggingOnWindow.value) {
+              return Positioned(
+                  child: Container(
                 color: RpColors.dropColor,
                 width: double.infinity,
               ));

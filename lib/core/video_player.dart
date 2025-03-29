@@ -1,19 +1,28 @@
 import 'package:media_kit/media_kit.dart';
 
 class VideoPlayer {
+  static final VideoPlayer _instance = VideoPlayer._internal();
+  static VideoPlayer get getInstance => _instance;
+  
+  Player? _player;
+  
   VideoPlayer._internal();
 
-  late final Player player;
-
-  static final VideoPlayer _instance =  VideoPlayer._internal();
-
-  static VideoPlayer get getInstance => _instance;
-
-  void ensureInitialized(){
-    player = Player();
+  Future<void> ensureInitialized() async {
+    await _player?.dispose();
+    
+    _player = Player();
   }
 
-  void dispose(){
-    player.dispose();
+  Player get player {
+    if (_player == null) {
+      throw Exception('VideoPlayer not initialized');
+    }
+    return _player!;
+  }
+
+  Future<void> dispose() async {
+    await _player?.dispose();
+    _player = null;
   }
 }

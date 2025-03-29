@@ -13,7 +13,8 @@ void main() async {
   MediaKit.ensureInitialized();
   await GetStorage.init();
   await windowManager.ensureInitialized();
-  VideoPlayer.getInstance.ensureInitialized();
+
+  await VideoPlayer.getInstance.ensureInitialized();
 
   doWhenWindowReady(() {
     windowManager.setSize(RpSizes.initialAppWindowSize);

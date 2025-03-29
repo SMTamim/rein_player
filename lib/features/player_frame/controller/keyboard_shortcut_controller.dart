@@ -20,7 +20,9 @@ class KeyboardController extends GetxController {
 
         /// full screen
         case LogicalKeyboardKey.enter:
-          WindowActionsController.to.toggleWindowSize();
+          if (!WindowActionsController.to.isFullScreenMode.value) {
+            WindowActionsController.to.toggleWindowSize();
+          }
           break;
 
         /// go back
@@ -76,6 +78,8 @@ class KeyboardController extends GetxController {
         case LogicalKeyboardKey.keyH:
           SubtitleController.to.toggleSubtitle();
           break;
+        case LogicalKeyboardKey.escape:
+          WindowActionsController.to.toggleFullScreenWindow();
       }
     }
   }
