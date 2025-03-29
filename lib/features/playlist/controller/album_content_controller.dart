@@ -2,8 +2,6 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
-import 'package:rein_player/features/playback/models/video_audio_item.dart';
-import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';

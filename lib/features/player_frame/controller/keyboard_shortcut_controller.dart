@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
@@ -21,7 +20,7 @@ class KeyboardController extends GetxController {
 
         /// full screen
         case LogicalKeyboardKey.enter:
-          WindowActionsController.to.maximizeWindow();
+          WindowActionsController.to.toggleWindowSize();
           break;
 
         /// go back

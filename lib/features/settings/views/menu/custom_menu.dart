@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rein_player/common/widgets/rp_horizontal_divider.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';

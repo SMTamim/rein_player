@@ -10,8 +10,6 @@ import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/extensions/media_extensions.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:path/path.dart' as path;
-
 import 'package:rein_player/utils/helpers/media_helper.dart';
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 

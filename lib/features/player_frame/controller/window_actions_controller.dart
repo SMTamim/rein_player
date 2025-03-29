@@ -44,4 +44,8 @@ class WindowActionsController extends GetxController {
     await VolumeController.to.dumpVolumeToStorage();
     windowManager.close();
   }
+
+  void toggleWindowSize() {
+    appWindow.maximizeOrRestore();
+  }
 }

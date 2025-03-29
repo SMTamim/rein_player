@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +6,6 @@ import 'package:rein_player/features/playback/views/video_and_controls_screen.da
 import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
-import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 

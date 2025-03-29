@@ -22,7 +22,7 @@ class MainMenuController extends GetxController {
         child: const RpCustomMenu(),
       ),
     );
-    Overlay.of(context)!.insert(overlayEntry!);
+    Overlay.of(context).insert(overlayEntry!);
     isHoveringMain.value = true;
   }
 
@@ -46,7 +46,7 @@ class MainMenuController extends GetxController {
         ),
       ),
     );
-    Overlay.of(context)!.insert(overlay);
+    Overlay.of(context).insert(overlay);
     submenuOverlays.add(overlay);
   }
 
