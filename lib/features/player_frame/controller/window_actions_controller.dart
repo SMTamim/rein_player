@@ -36,6 +36,7 @@ class WindowActionsController extends GetxController {
       await windowManager.setFullScreen(true);
       await windowManager.setAlwaysOnTop(isPinned.value);
     } else {
+      isPinned.value = false;
       await windowManager.setFullScreen(false);
       await windowManager.setAlwaysOnTop(isPinned.value);
     }

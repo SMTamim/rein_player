@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
@@ -31,6 +33,8 @@ class WindowController extends GetxController with WindowListener {
   Future<void> onWindowDrop(List<DropItem> files) async {
     final List<PlaylistItem> mediaFiles = [];
 
+    print("files: $files");
+
     for (var file in files) {
       if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(file.path)) {
         continue;
@@ -43,10 +47,17 @@ class WindowController extends GetxController with WindowListener {
         type: RpMediaHelper.getPlaylistItemType(file.path),
       ));
     }
+    
     AlbumContentController.to.addItemsToPlaylistContent(mediaFiles, clearBefore: true);
+
+    /// load the first video
     final firstVideo = mediaFiles.firstWhereOrNull((media) => !media.isDirectory);
+    final directory = mediaFiles.firstWhereOrNull((media) => media.isDirectory);
     if(firstVideo != null){
       await VideoAndControlController.to.loadVideoFromUrl(firstVideo.toVideoOrAudioItem());
+      await AlbumController.to.setDefaultAlbum(firstVideo.location, currentItemToPlay: firstVideo.location);
+    }else if(directory != null){
+      await AlbumController.to.setDefaultAlbum(directory.location);
     }
   }
 

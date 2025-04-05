@@ -22,7 +22,7 @@ class RpWindowActions extends StatelessWidget {
 
         /// pin window
         Obx(
-          () => GestureDetector(
+          () => InkWell(
             onTap: WindowActionsController.to.togglePin,
             child: Container(
               color: Colors.transparent,
@@ -41,7 +41,7 @@ class RpWindowActions extends StatelessWidget {
         const SizedBox(width: 10),
 
         /// minimize
-        GestureDetector(
+        InkWell(
           onTap: WindowActionsController.to.minimizeWindow,
           child: Container(
               color: Colors.transparent,
@@ -52,7 +52,7 @@ class RpWindowActions extends StatelessWidget {
         const SizedBox(width: 10),
 
         /// maximize
-        GestureDetector(
+        InkWell(
           onTap: WindowActionsController.to.maximizeOrRestoreWindow,
           child: Container(
             color: Colors.transparent,
@@ -64,14 +64,14 @@ class RpWindowActions extends StatelessWidget {
 
         /// fullscreen mode
         const SizedBox(width: 10),
-        GestureDetector(
+        InkWell(
           onTap: WindowActionsController.to.toggleFullScreenWindow,
           child: SvgPicture.asset("assets/icons/fullscreen.svg"),
         ),
         const SizedBox(width: 10),
 
         /// close
-        GestureDetector(
+        InkWell(
           onTap: WindowActionsController.to.closeWindow,
           child: Container(
             color: Colors.transparent,

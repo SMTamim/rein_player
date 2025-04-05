@@ -20,7 +20,7 @@ class RpWindowFrame extends StatelessWidget {
           color: RpColors.gray_900,
         ),
         child: MoveWindow(
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /// menu

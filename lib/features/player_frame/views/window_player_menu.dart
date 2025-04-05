@@ -12,6 +12,7 @@ class RpWindowPlayerMenu extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 9),
       child: MouseRegion(
+        cursor: SystemMouseCursors.click,
         onEnter: (_) {
           RenderBox renderBox = context.findRenderObject() as RenderBox;
           Offset position = renderBox.localToGlobal(Offset.zero);

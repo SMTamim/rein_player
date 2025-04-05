@@ -118,6 +118,7 @@ class ControlsController extends GetxController {
   }
 
   void videoOnPanUpdate(RenderBox box, DragUpdateDetails details){
+    if(VideoAndControlController.to.currentVideo.value == null) return;
     double localDx = details.localPosition.dx;
     double totalWidth = box.size.width;
     double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
@@ -127,6 +128,7 @@ class ControlsController extends GetxController {
   }
 
   Future<void> videoOnPanEnd() async {
+    if(VideoAndControlController.to.currentVideo.value == null) return;
     final progress = currentVideoProgress.value;
     if (videoDuration.value == null) return;
     final duration = videoDuration.value!;
@@ -137,6 +139,7 @@ class ControlsController extends GetxController {
   }
 
   Future<void> videoOnTapDown(RenderBox box, TapDownDetails details) async {
+    if(VideoAndControlController.to.currentVideo.value == null) return;
     double localDx = details.localPosition.dx;
     double totalWidth = box.size.width;
     double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
@@ -186,12 +189,20 @@ class ControlsController extends GetxController {
     VolumeController.to.currentVolume.value = 0;
     PlaylistController.to.isPlaylistWindowOpened.value = false;
     windowManager.setSize(RpSizes.initialAppWindowSize);
+    _resetDefaultAlbum();
   }
 
   void resetVideoProgress() {
     currentVideoProgress.value = 0;
     videoPosition.value = null;
     videoDuration.value = null;
+  }
+
+  void _resetDefaultAlbum(){
+    AlbumController.to.updateSelectedAlbumIndex(0);
+    AlbumController.to.updateAlbumCurrentItemToPlay("");
+    AlbumController.to.setDefaultAlbum("");
+    AlbumContentController.to.currentContent.clear();
   }
 
   Future<void> _pickFileAndPlay() async {

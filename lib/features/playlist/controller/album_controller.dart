@@ -24,7 +24,7 @@ class AlbumController extends GetxController {
     super.onInit();
     Get.put(AlbumContentController());
     await loadAllAlbumsFromStorage();
-    await loadDefaultAlbumPlaylistContent();
+    await loadDefaultAlbumPlaylistContentAndPlay();
   }
 
   Future<void> updateSelectedAlbumIndex(int index) async {
@@ -39,17 +39,22 @@ class AlbumController extends GetxController {
     }
   }
 
-  Future<void> setDefaultAlbum(String filePath, {String currentItemToPlay = ""}) async {
+  Future<void> setDefaultAlbum(String filePath,
+      {String currentItemToPlay = ""}) async {
     final location = path.dirname(filePath);
+    final ok = AlbumController.to.albums.map((album) => "album: ${album.location}, id: ${album.id}").toList();
+    print("ok: $ok");
     AlbumController.to.albums.value = AlbumController.to.albums.map(
       (album) {
         if (album.id == 'default_album') {
+          print("localtion: $filePath");
           return Album(
               name: album.name,
               location: location,
               id: album.id,
-              currentItemToPlay:
-                  currentItemToPlay.isEmpty ? album.currentItemToPlay : currentItemToPlay);
+              currentItemToPlay: currentItemToPlay.isEmpty
+                  ? album.currentItemToPlay
+                  : currentItemToPlay);
         }
         return album;
       },
@@ -63,11 +68,13 @@ class AlbumController extends GetxController {
   }
 
   Future<void> loadAllAlbumsFromStorage() async {
-    List<dynamic> albumJson = storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
+    List<dynamic> albumJson =
+        storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
     final loadedAlbums = albumJson.map((el) => Album.fromJson(el)).toList();
 
     albums([
-      if (!(loadedAlbums.any((item) => item.id == RpKeysConstants.defaultAlbumKey)))
+      if (!(loadedAlbums
+          .any((item) => item.id == RpKeysConstants.defaultAlbumKey)))
         Album(
           name: RpText.defaultAlbumName,
           location: "",
@@ -77,26 +84,31 @@ class AlbumController extends GetxController {
     ]);
   }
 
-  bool isMediaInDefaultAlbumLocation(){
-    List<dynamic> albumJson = storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
+  bool isMediaInDefaultAlbumLocation() {
+    List<dynamic> albumJson =
+        storage.readData(RpKeysConstants.allAlbumsKey) ?? [];
     final albums = albumJson.map((el) => Album.fromJson(el)).toList();
-    final defaultAlbum =
-        albums.where((album) => album.id == RpKeysConstants.defaultAlbumKey).firstOrNull;
+    final defaultAlbum = albums
+        .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
+        .firstOrNull;
     return defaultAlbum == null;
   }
 
-  Future<void> loadDefaultAlbumPlaylistContent() async {
-    final defaultAlbum =
-        albums.where((album) => album.id == RpKeysConstants.defaultAlbumKey).firstOrNull;
+  Future<void> loadDefaultAlbumPlaylistContentAndPlay() async {
+    final defaultAlbum = albums
+        .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
+        .firstOrNull;
     if (defaultAlbum == null) return;
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
-    final mediaInDirectory = await RpMediaHelper.getMediaFilesInDirectory(defaultAlbum.location);
-    final currentItemToPlay = mediaInDirectory
-        .firstWhereOrNull((media) => media.location == defaultAlbum.currentItemToPlay);
+    final mediaInDirectory =
+        await RpMediaHelper.getMediaFilesInDirectory(defaultAlbum.location);
+    final currentItemToPlay = mediaInDirectory.firstWhereOrNull(
+        (media) => media.location == defaultAlbum.currentItemToPlay);
     if (currentItemToPlay != null) {
-      final media = VideoOrAudioItem(currentItemToPlay.name, currentItemToPlay.location);
+      final media =
+          VideoOrAudioItem(currentItemToPlay.name, currentItemToPlay.location);
       await VideoAndControlController.to.loadVideoFromUrl(media, play: false);
       await AlbumContentController.to.loadSimilarContentInDefaultAlbum(
           path.basename(defaultAlbum.currentItemToPlay), defaultAlbum.location,
@@ -106,10 +118,22 @@ class AlbumController extends GetxController {
     }
   }
 
+  Future<void> loadDefaultAlbumPlaylistContent() async {
+    final defaultAlbum = albums
+        .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
+        .firstOrNull;
+    if (defaultAlbum == null) return;
+
+    AlbumContentController.to.clearNavigationStack();
+    AlbumContentController.to.currentContent.value = [];
+    await AlbumContentController.to.loadDirectory(defaultAlbum.location);
+  }
+
   void removeAlbumFromList(Album album) async {
     final filteredAlbums = albums
         .where((album) =>
-            album.id == RpKeysConstants.defaultAlbumKey || album.location != album.location)
+            album.id == RpKeysConstants.defaultAlbumKey ||
+            album.location != album.location)
         .toList();
 
     albums(filteredAlbums);
