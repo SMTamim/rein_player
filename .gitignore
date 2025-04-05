@@ -45,8 +45,8 @@ app.*.map.json
 
 #Custom
 test_video.mp4
+ReinPlayer.AppDir/data
+ReinPlayer.AppDir/rein_player
+ReinPlayer.AppDir/lib
+ReinPlayer.AppDir/.DirIcon
 ReinPlayer-x86_64.AppImage
-ReinPlayer.AppDir
-install.sh
-uninstall.sh
-build_appimage.sh
