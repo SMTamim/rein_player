@@ -21,6 +21,7 @@ class VolumeController extends GetxController {
     super.onInit();
     final savedVolume = await storage.readData(RpKeysConstants.volumeStorageKey);
     currentVolume.value = savedVolume ?? RpSizes.defaultVolume;
+    await player.setVolume(currentVolume.value * 100);
   }
 
   bool isVideoOnMute() => currentVolume.value == 0;
@@ -28,7 +29,9 @@ class VolumeController extends GetxController {
   Future<void> updateVolume(double volume) async {
     if(VideoAndControlController.to.currentVideoUrl.isEmpty) return;
     currentVolume.value = volume;
-    await player.setVolume(volume * 100);
+    // Ensure volume is between 0 and 1 before multiplying
+    double normalizedVolume = volume.clamp(0.0, 1.0);
+    await player.setVolume(normalizedVolume * 100);
   }
 
   void toggleVolumeMuteState(){
@@ -46,5 +49,6 @@ class VolumeController extends GetxController {
 
   void resetVolume(){
     currentVolume.value = 0;
+    player.setVolume(currentVolume.value);
   }
 }

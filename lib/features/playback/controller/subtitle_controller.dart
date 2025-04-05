@@ -25,7 +25,6 @@ class SubtitleController extends GetxController {
   void onInit() async {
     super.onInit();
     final settings =  Settings.fromJson((await storage.readData(RpKeysConstants.settingsKey)));
-    print("-------------------------------- ${settings.isSubtitleEnabled}");
      isSubtitleEnabled.value = settings.isSubtitleEnabled;
   }
 

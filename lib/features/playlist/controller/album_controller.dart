@@ -42,12 +42,9 @@ class AlbumController extends GetxController {
   Future<void> setDefaultAlbum(String filePath,
       {String currentItemToPlay = ""}) async {
     final location = path.dirname(filePath);
-    final ok = AlbumController.to.albums.map((album) => "album: ${album.location}, id: ${album.id}").toList();
-    print("ok: $ok");
     AlbumController.to.albums.value = AlbumController.to.albums.map(
       (album) {
         if (album.id == 'default_album') {
-          print("localtion: $filePath");
           return Album(
               name: album.name,
               location: location,

@@ -40,7 +40,6 @@ class AlbumContentController extends GetxController {
   }
 
   void addItemsToPlaylistContent(List<PlaylistItem> items, {clearBefore = false}) {
-    print("clearBefore: $clearBefore");
     if (items.isEmpty) return;
     if(clearBefore) currentContent.clear();
     currentContent.addAll(items);

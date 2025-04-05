@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as path;
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
@@ -33,8 +32,6 @@ class WindowController extends GetxController with WindowListener {
   Future<void> onWindowDrop(List<DropItem> files) async {
     final List<PlaylistItem> mediaFiles = [];
 
-    print("files: $files");
-
     for (var file in files) {
       if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(file.path)) {
         continue;
@@ -56,6 +53,7 @@ class WindowController extends GetxController with WindowListener {
     if(firstVideo != null){
       await VideoAndControlController.to.loadVideoFromUrl(firstVideo.toVideoOrAudioItem());
       await AlbumController.to.setDefaultAlbum(firstVideo.location, currentItemToPlay: firstVideo.location);
+      WindowActionsController.to.maximizeWindow();
     }else if(directory != null){
       await AlbumController.to.setDefaultAlbum(directory.location);
     }
