@@ -55,7 +55,8 @@ class WindowController extends GetxController with WindowListener {
       await AlbumController.to.setDefaultAlbum(firstVideo.location, currentItemToPlay: firstVideo.location);
       WindowActionsController.to.maximizeWindow();
     }else if(directory != null){
-      await AlbumController.to.setDefaultAlbum(directory.location);
+      await AlbumController.to.setDefaultAlbum(directory.location, makeDirectoryPath: false);
+      await AlbumContentController.to.loadDirectory(directory.location);
     }
   }
 

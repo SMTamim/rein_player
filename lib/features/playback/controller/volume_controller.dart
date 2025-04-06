@@ -49,6 +49,10 @@ class VolumeController extends GetxController {
 
   void resetVolume(){
     currentVolume.value = 0;
-    player.setVolume(currentVolume.value);
+    player.setVolume(0);
+  }
+
+  Future<void> ensureVolume() async {
+    await player.setVolume(currentVolume.value * 100);
   }
 }

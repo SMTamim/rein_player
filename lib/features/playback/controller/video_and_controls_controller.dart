@@ -55,6 +55,7 @@ class VideoAndControlController extends GetxController {
     addMediaStreamsForInfo();
 
     await player.open(Media(media.location));
+    await VolumeController.to.ensureVolume();
 
     if(!SubtitleController.to.isSubtitleEnabled.value){
       await SubtitleController.to.disableSubtitle();

@@ -40,8 +40,8 @@ class AlbumController extends GetxController {
   }
 
   Future<void> setDefaultAlbum(String filePath,
-      {String currentItemToPlay = ""}) async {
-    final location = path.dirname(filePath);
+      {String currentItemToPlay = "", makeDirectoryPath = true}) async {
+    final location = makeDirectoryPath?  path.dirname(filePath) : filePath;
     AlbumController.to.albums.value = AlbumController.to.albums.map(
       (album) {
         if (album.id == 'default_album') {
@@ -56,6 +56,7 @@ class AlbumController extends GetxController {
         return album;
       },
     ).toList();
+    print("defaultAlbum location3: ${albums[0].location} , dirLocation: $location , filePath: $filePath");
     await dumpAllAlbumsToStorage();
   }
 
@@ -96,6 +97,8 @@ class AlbumController extends GetxController {
         .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
         .firstOrNull;
     if (defaultAlbum == null) return;
+
+    print("defaultAlbum location2: ${defaultAlbum.location}");
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
