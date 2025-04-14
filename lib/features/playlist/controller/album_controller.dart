@@ -56,7 +56,6 @@ class AlbumController extends GetxController {
         return album;
       },
     ).toList();
-    print("defaultAlbum location3: ${albums[0].location} , dirLocation: $location , filePath: $filePath");
     await dumpAllAlbumsToStorage();
   }
 
@@ -96,9 +95,7 @@ class AlbumController extends GetxController {
     final defaultAlbum = albums
         .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
         .firstOrNull;
-    if (defaultAlbum == null) return;
-
-    print("defaultAlbum location2: ${defaultAlbum.location}");
+    if (defaultAlbum == null || defaultAlbum.location.isEmpty || defaultAlbum.location == ".") return;
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];

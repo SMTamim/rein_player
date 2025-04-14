@@ -60,6 +60,7 @@ class WindowController extends GetxController with WindowListener {
     }
   }
 
+  //not in use, totally forgot what I was using it for
   @override
   void onWindowResize() async {
     super.onWindowResize();

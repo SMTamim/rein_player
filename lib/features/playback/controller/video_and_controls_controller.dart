@@ -36,7 +36,7 @@ class VideoAndControlController extends GetxController {
 
   /// load media file from url
   Future<void> loadVideoFromUrl(VideoOrAudioItem media, {bool play = true}) async {
-    if (currentVideo.value?.location == media.location) return;
+    // if (currentVideo.value?.location == media.location) return;
     currentVideoUrl.value = media.location;
     currentVideo.value = media;
     ControlsController.to.resetVideoProgress();
@@ -53,7 +53,6 @@ class VideoAndControlController extends GetxController {
 
     /// Add media streams to gather info
     addMediaStreamsForInfo();
-
     await player.open(Media(media.location));
     await VolumeController.to.ensureVolume();
 

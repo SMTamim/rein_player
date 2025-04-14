@@ -24,8 +24,11 @@ class SubtitleController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    final settings =  Settings.fromJson((await storage.readData(RpKeysConstants.settingsKey)));
-     isSubtitleEnabled.value = settings.isSubtitleEnabled;
+    final settingsData = await storage.readData(RpKeysConstants.settingsKey);
+    if(settingsData != null){
+      final settings =  Settings.fromJson((settingsData));
+      isSubtitleEnabled.value = settings.isSubtitleEnabled;
+    }
   }
 
   /// load subtitle from file system

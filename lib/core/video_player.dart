@@ -10,7 +10,7 @@ class VideoPlayer {
 
   Future<void> ensureInitialized() async {
     await _player?.dispose();
-    
+    _player = null;
     _player = Player();
   }
 
