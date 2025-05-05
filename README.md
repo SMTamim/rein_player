@@ -135,14 +135,14 @@ ReinPlayer follows the **MVVM** architecture along with a hybrid **feature + lay
      - Additional inline documentation
 
 ## 📦 Downloads
-All builds are available in the [final_builds](final_builds) folder.
+All builds are available in the [releases page](https://github.com/Ahurein/rein_player/releases/tag/v1.0.0) .
 
 | Version | OS    | Download URL                                                                                                            |
 | ------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
 | v1.0.0  | Linux | [Download from GitHub](https://github.com/Ahurein/rein_player/releases/download/v1.0.0/ReinPlayer-x86_64_v1-0-0.AppImage) |
 | v1.0.0  | Windows | [Download from GitHub](https://github.com/Ahurein/rein_player/releases/download/v1.0.0/ReinPlayer-x64_v1-0-0.exe) |
 
-Download player icon: [Download](https://github.com/USERNAME/REPO_NAME/raw/main/assets/images/reinplayer.png)
+Download player icon: [Download](https://github.com/Ahurein/rein_player/raw/main/assets/images/reinplayer.png)
 
 ![ReinPlayer Icon](assets/images/reinplayer.png)
 
