@@ -119,23 +119,32 @@ class AlbumController extends GetxController {
     final defaultAlbum = albums
         .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
         .firstOrNull;
-    if (defaultAlbum == null) return;
+    if (defaultAlbum == null || defaultAlbum.location.isEmpty || defaultAlbum.location == ".") return;
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
     await AlbumContentController.to.loadDirectory(defaultAlbum.location);
   }
 
-  void removeAlbumFromList(Album album) async {
+  void removeAlbumFromList(Album albumToRemove) async {
+    final albumIndex = albums.indexWhere((album) => album.location == albumToRemove.location);
+    if (albumIndex == -1) return;
+
     final filteredAlbums = albums
         .where((album) =>
             album.id == RpKeysConstants.defaultAlbumKey ||
-            album.location != album.location)
+            album.location != albumToRemove.location)
         .toList();
 
+    if(albumIndex == selectedAlbumIndex.value || filteredAlbums.length == 1) {
+      await updateSelectedAlbumIndex(0);
+    }else {
+      await updateSelectedAlbumIndex(selectedAlbumIndex.value - 1);
+    }
     albums(filteredAlbums);
+
     await storage.removeData(RpKeysConstants.allAlbumsKey);
-    final _ = await dumpAllAlbumsToStorage();
+    await dumpAllAlbumsToStorage();
   }
 
   void updateAlbumCurrentItemToPlay(String currentMediaUrl) {

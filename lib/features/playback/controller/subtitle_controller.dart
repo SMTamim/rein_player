@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:rein_player/core/video_player.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/settings/controller/settings_controller.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
@@ -16,7 +16,7 @@ class SubtitleController extends GetxController {
 
   final storage = RpLocalStorage();
 
-  final player = VideoPlayer.getInstance.player;
+  final player = VideoAndControlController.to.videoPlayerController.player;
 
   RxBool isSubtitleEnabled = false.obs;
   String currentSubtitleContent = "";
@@ -25,8 +25,8 @@ class SubtitleController extends GetxController {
   void onInit() async {
     super.onInit();
     final settingsData = await storage.readData(RpKeysConstants.settingsKey);
-    if(settingsData != null){
-      final settings =  Settings.fromJson((settingsData));
+    if (settingsData != null) {
+      final settings = Settings.fromJson((settingsData));
       isSubtitleEnabled.value = settings.isSubtitleEnabled;
     }
   }
@@ -46,11 +46,11 @@ class SubtitleController extends GetxController {
       log(content);
 
       final extension = filePath.split(".").last.toLowerCase();
-      if(extension == "srt" || extension == "vtt") {
+      if (extension == "srt" || extension == "vtt") {
         currentSubtitleContent = content;
         isSubtitleEnabled.value = true;
         await player.setSubtitleTrack(SubtitleTrack.data(content));
-      }else{
+      } else {
         Get.snackbar('Error', 'Only SRT and VTT are supported',
             snackPosition: SnackPosition.TOP, maxWidth: 500);
       }
@@ -63,18 +63,18 @@ class SubtitleController extends GetxController {
 
   /// toggle subtitle
   void toggleSubtitle() async {
-    if(isSubtitleEnabled.value){
+    if (isSubtitleEnabled.value) {
       isSubtitleEnabled.value = false;
       await disableSubtitle();
-    }else {
+    } else {
       isSubtitleEnabled.value = true;
-      if(currentSubtitleContent.isNotEmpty){
+      if (currentSubtitleContent.isNotEmpty) {
         await player.setSubtitleTrack(SubtitleTrack.data(currentSubtitleContent));
-      }else{
+      } else {
         await player.setSubtitleTrack(SubtitleTrack.auto());
       }
     }
-    final settings  = SettingsController.to.settings;
+    final settings = SettingsController.to.settings;
     settings.isSubtitleEnabled = isSubtitleEnabled.value;
     await storage.saveData(RpKeysConstants.settingsKey, settings.toJson());
   }

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path/path.dart' as path;
-import 'package:rein_player/core/video_player.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
@@ -25,7 +24,7 @@ class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
 
   final storage = RpLocalStorage();
-  final Player player = VideoPlayer.getInstance.player;
+  final Player player = VideoAndControlController.to.videoPlayerController.player;
 
   Timer? _seekDebounceTimer;
 
@@ -50,7 +49,7 @@ class ControlsController extends GetxController {
 
   void stop() async {
     await player.stop();
-    _resetPlayer();
+    resetPlayer();
   }
 
   void pauseOrPlay() async {
@@ -117,8 +116,8 @@ class ControlsController extends GetxController {
     return RpDurationHelper.formatDuration(videoDuration.value!);
   }
 
-  void videoOnPanUpdate(RenderBox box, DragUpdateDetails details){
-    if(VideoAndControlController.to.currentVideo.value == null) return;
+  void videoOnPanUpdate(RenderBox box, DragUpdateDetails details) {
+    if (VideoAndControlController.to.currentVideo.value == null) return;
     double localDx = details.localPosition.dx;
     double totalWidth = box.size.width;
     double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
@@ -128,18 +127,19 @@ class ControlsController extends GetxController {
   }
 
   Future<void> videoOnPanEnd() async {
-    if(VideoAndControlController.to.currentVideo.value == null) return;
+    if (VideoAndControlController.to.currentVideo.value == null) return;
     final progress = currentVideoProgress.value;
     if (videoDuration.value == null) return;
     final duration = videoDuration.value!;
-    final seekPosition = Duration(seconds: (progress * duration.inSeconds).toInt());
+    final seekPosition =
+        Duration(seconds: (progress * duration.inSeconds).toInt());
 
     await player.seek(seekPosition);
     isProgressIndicatorOnDrag.value = false;
   }
 
   Future<void> videoOnTapDown(RenderBox box, TapDownDetails details) async {
-    if(VideoAndControlController.to.currentVideo.value == null) return;
+    if (VideoAndControlController.to.currentVideo.value == null) return;
     double localDx = details.localPosition.dx;
     double totalWidth = box.size.width;
     double newProgress = (localDx / totalWidth).clamp(0.0, 1.0);
@@ -147,27 +147,31 @@ class ControlsController extends GetxController {
     ControlsController.to.currentVideoProgress.value = newProgress;
     if (ControlsController.to.videoDuration.value != null) {
       final duration = ControlsController.to.videoDuration.value!;
-      final seekPosition = Duration(seconds: (newProgress * duration.inSeconds).toInt());
+      final seekPosition =
+          Duration(seconds: (newProgress * duration.inSeconds).toInt());
       await player.seek(seekPosition);
     }
   }
 
-
   void updateProgressFromPosition() {
     if (videoPosition.value == null ||
         videoDuration.value == null ||
-        videoDuration.value!.inMilliseconds == 0 || isProgressIndicatorOnDrag.value) return;
-    double progress = videoPosition.value!.inMilliseconds / videoDuration.value!.inMilliseconds;
+        videoDuration.value!.inMilliseconds == 0 ||
+        isProgressIndicatorOnDrag.value) return;
+    double progress = videoPosition.value!.inMilliseconds /
+        videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);
     currentVideoProgress.value = progress;
   }
 
-  Future<void> updateVideoProgress(double progress, {bool delayUiUpdate = false}) async {
+  Future<void> updateVideoProgress(double progress,
+      {bool delayUiUpdate = false}) async {
     if (videoDuration.value == null) return;
 
     currentVideoProgress.value = progress;
     final duration = videoDuration.value!;
-    final seekPosition = Duration(seconds: (progress * duration.inSeconds).toInt());
+    final seekPosition =
+        Duration(seconds: (progress * duration.inSeconds).toInt());
 
     if (delayUiUpdate) {
       _seekDebounceTimer?.cancel();
@@ -180,7 +184,7 @@ class ControlsController extends GetxController {
     }
   }
 
-  void _resetPlayer() {
+  void resetPlayer() {
     videoDuration.value = null;
     videoPosition.value = null;
     currentVideoProgress.value = 0;
@@ -198,7 +202,7 @@ class ControlsController extends GetxController {
     videoDuration.value = null;
   }
 
-  void _resetDefaultAlbum(){
+  void _resetDefaultAlbum() {
     AlbumController.to.updateSelectedAlbumIndex(0);
     AlbumController.to.updateAlbumCurrentItemToPlay("");
     AlbumController.to.setDefaultAlbum("");
@@ -206,15 +210,16 @@ class ControlsController extends GetxController {
   }
 
   Future<void> _pickFileAndPlay() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.video, allowMultiple: false);
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.video, allowMultiple: false);
 
     if (result != null) {
       final file = result.files.single;
       if (file.path == null || file.extension == null) return;
       final filePath = file.path!;
 
-      VideoOrAudioItem srcFile = VideoOrAudioItem(file.name, filePath, size: file.size);
+      VideoOrAudioItem srcFile =
+          VideoOrAudioItem(file.name, filePath, size: file.size);
       VideoAndControlController.to.loadVideoFromUrl(srcFile);
       AlbumContentController.to.currentContent.clear();
       AlbumContentController.to.addToCurrentPlaylistContent(
@@ -226,9 +231,10 @@ class ControlsController extends GetxController {
       await AlbumController.to.dumpAllAlbumsToStorage();
 
       /// set the default album location
-      await AlbumController.to.setDefaultAlbum(filePath, currentItemToPlay: filePath);
-      await AlbumContentController.to
-          .loadSimilarContentInDefaultAlbum(path.basename(filePath), path.dirname(filePath));
+      await AlbumController.to
+          .setDefaultAlbum(filePath, currentItemToPlay: filePath);
+      await AlbumContentController.to.loadSimilarContentInDefaultAlbum(
+          path.basename(filePath), path.dirname(filePath));
       AlbumContentController.to.updatePlaylistItemDuration(filePath);
 
       WindowActionsController.to.maximizeWindow();

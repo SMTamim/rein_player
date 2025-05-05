@@ -4,6 +4,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
+import 'package:rein_player/features/playback/views/playback_speed_overlay.dart';
 
 import 'no_media_placeholder.dart';
 
@@ -20,18 +21,26 @@ class RpVideoScreen extends StatelessWidget {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.width * 9.0 / 16.0,
-          child: GestureDetector(
-            onDoubleTap: WindowActionsController.to.toggleWindowSize,
-            child: Obx(() {
-              if (VideoAndControlController.to.currentVideoUrl.isEmpty) {
-                return const RpNoMediaPlaceholder();
-              }
-              return Video(
-                key: ValueKey(VideoAndControlController.to.currentVideoUrl),
-                controller: videoController.videoPlayerController,
-                controls: NoVideoControls,
-              );
-            }),
+          child: Stack(
+            children: [
+              /// video
+              GestureDetector(
+                onDoubleTap: WindowActionsController.to.toggleWindowSize,
+                child: Obx(() {
+                  if (VideoAndControlController.to.currentVideoUrl.isEmpty) {
+                    return const RpNoMediaPlaceholder();
+                  }
+                  return Video(
+                    key: ValueKey(VideoAndControlController.to.currentVideoUrl),
+                    controller: videoController.videoPlayerController,
+                    controls: NoVideoControls,
+                  );
+                }),
+              ),
+
+              /// playback speed overlay
+              const PlaybackSpeedOverlay(),
+            ],
           ),
         ),
       ),

@@ -24,6 +24,7 @@ mkdir -p ReinPlayer.AppDir
 
 echo "📋 Copying bundle to AppDir..."
 cp -r build/linux/x64/release/bundle/* ReinPlayer.AppDir/
+mv ReinPlayer.AppDir/rein_player ReinPlayer.AppDir/reinplayer
 
 if ! command -v appimagetool &> /dev/null; then
     echo "❌ appimagetool not found. Please install it first."

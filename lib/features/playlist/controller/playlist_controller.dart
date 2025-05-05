@@ -54,10 +54,8 @@ class PlaylistController extends GetxController {
 
   Future<void> pickFolder() async {
     String? folderPath = await FilePicker.platform.getDirectoryPath();
-    if (folderPath != null) {
-      selectedFolderPath.value = folderPath;
+    selectedFolderPath.value = folderPath ?? "";
     }
-  }
 
   void createNewPlaylist() async {
     if (playlistNameController.text.trim().isEmpty ||

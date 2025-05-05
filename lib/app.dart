@@ -2,25 +2,28 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/bindings/general_bindings.dart';
+import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/views/video_and_controls_screen.dart';
 import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/device/rp_device_utils.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 
 import 'features/player_frame/views/window_frame.dart';
 import 'features/playlist/views/playlist_sidebar.dart';
+import 'features/developer/views/developer_log_window.dart';
 
 class RpApp extends StatelessWidget {
-  RpApp({super.key});
-
+  final videoPlayerController = Get.put(VideoAndControlController());
   final playlistController = Get.put(PlaylistController());
   final keyboardController = Get.put(KeyboardController());
   final windowController = Get.put(WindowController());
-
   final focus = FocusNode();
+
+  RpApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +33,29 @@ class RpApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: RpAppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: Scaffold(
-        body: GestureDetector(
-          onTap: focus.requestFocus,
-          child: KeyboardListener(
-            autofocus: true,
-            focusNode: focus,
-            onKeyEvent: keyboardController.handleKey,
-            child: Obx(() {
-              return windowController.isWindowLoaded.value
-                  ? RpHome(playlistController: playlistController)
-                  : const Center(
-                      child: CircularProgressIndicator(color: Colors.white));
-            }),
+      home: Stack(
+        children: [
+          Scaffold(
+            body: GestureDetector(
+              onTap: focus.requestFocus,
+              child: KeyboardListener(
+                autofocus: true,
+                focusNode: focus,
+                onKeyEvent: keyboardController.handleKey,
+                child: RpDeviceUtils.isLinux()
+                    ? Obx(() {
+                        return windowController.isWindowLoaded.value
+                            ? RpHome(playlistController: playlistController)
+                            : const Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.white));
+                      })
+                    : RpHome(playlistController: playlistController),
+              ),
+            ),
           ),
-        ),
+          const DeveloperLogWindow(),
+        ],
       ),
     );
   }

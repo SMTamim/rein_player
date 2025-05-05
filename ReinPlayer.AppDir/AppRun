@@ -3,4 +3,4 @@ HERE="$(dirname "$(readlink -f "${0}")")"
 
 # Just run the app
 cd "${HERE}"
-exec "${HERE}/rein_player"
+exec "${HERE}/reinplayer" "$@"

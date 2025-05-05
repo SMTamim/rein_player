@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,5 +37,13 @@ class RpDeviceUtils {
 
   static Future<void> setWindowFrameSize(Size size) async {
     await windowManager.setSize(size);
+  }
+
+  static bool isWindows() {
+    return Platform.isWindows;
+  }
+
+  static bool isLinux() {
+    return Platform.isLinux;
   }
 }

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ICON_URL="https://raw.githubusercontent.com/Ahurein/rein_player/main/assets/images/reinplayer.png"
+
 installReinPlayer() {
     if ! [ -f /opt/reinplayer.appimage ]; then
         echo "Installing ReinPlayer..."
@@ -22,7 +24,7 @@ installReinPlayer() {
 
         # Paths for installation
         APPIMAGE_PATH="/opt/reinplayer.appimage"
-        ICON_PATH="/opt/reinplayer.svg"
+        ICON_PATH="/opt/reinplayer.png"
         DESKTOP_ENTRY_PATH="/usr/share/applications/reinplayer.desktop"
 
         # Copy AppImage and make it executable
@@ -30,33 +32,55 @@ installReinPlayer() {
         sudo cp "$1" "$APPIMAGE_PATH"
         sudo chmod +x "$APPIMAGE_PATH"
 
-        # Extract and copy icon from AppImage
-        echo "Installing icon..."
-        TEMP_DIR=$(mktemp -d)
-        cp "$1" "$TEMP_DIR/"
-        cd "$TEMP_DIR" || exit
-        chmod +x "$(basename "$1")"
-        "./$1" --appimage-extract reinplayer.svg >/dev/null
-        sudo cp squashfs-root/reinplayer.svg "$ICON_PATH"
-        cd "$CURRENT_DIR" || exit
-        rm -rf "$TEMP_DIR"
+        # Download icon from GitHub
+        echo "Downloading icon..."
+        if command -v curl >/dev/null 2>&1; then
+            sudo curl -L -o "$ICON_PATH" "$ICON_URL" >/dev/null 2>&1
+            ICON_INSTALLED=$?
+        elif command -v wget >/dev/null 2>&1; then
+            sudo wget -q -O "$ICON_PATH" "$ICON_URL" >/dev/null 2>&1
+            ICON_INSTALLED=$?
+        else
+            echo "Warning: Neither curl nor wget found. Skipping icon download."
+            ICON_INSTALLED=1
+        fi
 
-        # Create desktop entry
+        # Create desktop entry with MIME types
         echo "Creating desktop entry..."
-        sudo bash -c "cat > $DESKTOP_ENTRY_PATH" <<EOL
+        if [ "$ICON_INSTALLED" = 0 ]; then
+            sudo bash -c "cat > $DESKTOP_ENTRY_PATH" <<EOL
 [Desktop Entry]
 Name=ReinPlayer
-Exec=$APPIMAGE_PATH
+Exec=$APPIMAGE_PATH %f
 Icon=$ICON_PATH
 Type=Application
 Terminal=false
-Categories=AudioVideo;Video;
+Categories=AudioVideo;Video;Player;
+Comment=A modern video player for Linux
+GenericName=Video Player
+MimeType=video/x-msvideo;video/x-matroska;video/webm;video/x-ogm+ogg;video/x-theora+ogg;video/mp4;video/mpeg;video/ogg;video/quicktime;video/x-flv;video/x-ms-wmv;video/x-msvideo;video/x-ms-asf;video/x-ms-wmv;video/x-xvid;video/x-avi;video/3gpp;video/3gpp2;video/divx;video/mp2t;video/x-m4v;
 EOL
+        else
+            sudo bash -c "cat > $DESKTOP_ENTRY_PATH" <<EOL
+[Desktop Entry]
+Name=ReinPlayer
+Exec=$APPIMAGE_PATH %f
+Type=Application
+Terminal=false
+Categories=AudioVideo;Video;Player;
+Comment=A modern video player for Linux
+GenericName=Video Player
+MimeType=video/x-msvideo;video/x-matroska;video/webm;video/x-ogm+ogg;video/x-theora+ogg;video/mp4;video/mpeg;video/ogg;video/quicktime;video/x-flv;video/x-ms-wmv;video/x-msvideo;video/x-ms-asf;video/x-ms-wmv;video/x-xvid;video/x-avi;video/3gpp;video/3gpp2;video/divx;video/mp2t;video/x-m4v;
+EOL
+        fi
 
-        # Update system cache
+        # Update MIME database
+        echo "Updating MIME database..."
         sudo update-desktop-database
+        sudo xdg-mime default reinplayer.desktop video/x-msvideo video/x-matroska video/webm video/mp4
 
         echo "Installation complete. ReinPlayer is now integrated with your system."
+        echo "You can now set ReinPlayer as your default video player in your system settings."
     else
         echo "ReinPlayer is already installed."
         echo "Please uninstall first if you want to install a new version."

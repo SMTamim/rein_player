@@ -60,13 +60,15 @@ class WindowController extends GetxController with WindowListener {
     }
   }
 
-  //not in use, totally forgot what I was using it for
   @override
   void onWindowResize() async {
     super.onWindowResize();
+    await checkIfWindowIsLoaded();
+  }
+
+  Future<void> checkIfWindowIsLoaded() async {
     currentWindowSize.value = await windowManager.getSize();
 
-    /// boolean to load the window before rendering the video
     final sizeToCompareWith = AlbumController.to.isMediaInDefaultAlbumLocation()
         ? RpSizes.initialVideoLoadedAppWidowSize
         : RpSizes.initialAppWindowSize;

@@ -34,6 +34,10 @@ class AlbumContentController extends GetxController {
     }
   }
 
+  void clearContent() {
+    currentContent.clear();
+  }
+
   void addToCurrentPlaylistContent(PlaylistItem item) {
     if (currentContent.any((el) => el.location.trim() == item.location)) return;
     currentContent.add(item);

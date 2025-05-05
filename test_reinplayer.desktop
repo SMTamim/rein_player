@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ReinPlayer (Debug)
+Exec=flutter run /path/to/your/rein_player/lib/main.dart %F
+Type=Application
+Terminal=false
+Categories=AudioVideo;Video;Player;
+Comment=A modern video player for Linux (Debug)
+GenericName=Video Player
+MimeType=video/x-msvideo;video/x-matroska;video/webm;video/x-ogm+ogg;video/x-theora+ogg;video/mp4;video/mpeg;video/ogg;video/quicktime;video/x-flv;video/x-ms-wmv;video/x-msvideo;video/x-ms-asf;video/x-ms-wmv;video/x-xvid;video/x-avi;video/3gpp;video/3gpp2;video/divx;video/mp2t;video/x-m4v; 

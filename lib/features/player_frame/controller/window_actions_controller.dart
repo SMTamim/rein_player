@@ -56,7 +56,11 @@ class WindowActionsController extends GetxController {
     windowManager.close();
   }
 
-  void toggleWindowSize() {
-    appWindow.maximizeOrRestore();
+  void toggleWindowSize() async {
+    if (isFullScreenMode.value) {
+      exitFullscreen();
+    } else {
+      appWindow.maximizeOrRestore();
+    }
   }
 }
