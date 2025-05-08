@@ -167,19 +167,21 @@ chmod +x ReinPlayer-x86_64_v1-0-0.AppImage
 ./ReinPlayer-x86_64_v1-0-0.AppImage
 ```
 
-### 2. Install to System
+### 2. Install to System - Linux
+First download the Reinplayer linux app image: [Download](https://github.com/Ahurein/rein_player/tree/main?tab=readme-ov-file#-downloads)
 
 ```bash
-curl -O https://raw.githubusercontent.com/Ahurein/rein_player/blob/main/install.sh
+curl -O https://raw.githubusercontent.com/Ahurein/rein_player/main/install.sh
 chmod +x install.sh
+
 sudo ./install.sh path_to_reinplayer_appimage_download
 
 ```
 
-### 3. Uninstall
+### 3. Uninstall - Linux
 
 ```sh
-curl -O https://raw.githubusercontent.com/Ahurein/rein_player/blob/main/uninstall.sh
+curl -O https://raw.githubusercontent.com/Ahurein/rein_player/main/uninstall.sh
 chmod +x uninstall.sh
 sudo ./uninstall.sh
 ```
