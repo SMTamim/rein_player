@@ -9,7 +9,6 @@ import 'package:rein_player/features/player_frame/controller/window_actions_cont
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
-import 'package:rein_player/utils/device/rp_device_utils.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 
 import 'features/player_frame/views/window_frame.dart';
@@ -42,15 +41,7 @@ class RpApp extends StatelessWidget {
                 autofocus: true,
                 focusNode: focus,
                 onKeyEvent: keyboardController.handleKey,
-                child: RpDeviceUtils.isLinux()
-                    ? Obx(() {
-                        return windowController.isWindowLoaded.value
-                            ? RpHome(playlistController: playlistController)
-                            : const Center(
-                                child: CircularProgressIndicator(
-                                    color: Colors.white));
-                      })
-                    : RpHome(playlistController: playlistController),
+                child: RpHome(playlistController: playlistController),
               ),
             ),
           ),
