@@ -1,7 +1,11 @@
 name: CI Fast
 
 on:
-  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: ["github-actions-test"]
+    tags:
+      - "v*"
 
 jobs:
   build-linux:

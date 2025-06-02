@@ -25,6 +25,8 @@ apps:
       - pulseaudio
       - home
       - removable-media
+      - desktop
+      - desktop-legacy
     slots:
       - dbus-mixin
 
@@ -34,7 +36,13 @@ parts:
     source-type: git
     source-tag: v0.36.0
     plugin: meson
-    meson-parameters: [ '-Dbuild-date=false', '-Dlibmpv=true', '-Dcplayer=false', '--prefix=/usr' ]
+    meson-parameters:
+      [
+        "-Dbuild-date=false",
+        "-Dlibmpv=true",
+        "-Dcplayer=false",
+        "--prefix=/usr",
+      ]
     build-packages:
       - libavcodec-dev
       - libavfilter-dev
@@ -59,6 +67,6 @@ parts:
     plugin: dump
     after:
       - libmpv
-    stage-packages: [libblas3, liblapack3, ffmpeg]
+    stage-packages: [libblas3, liblapack3, ffmpeg, zenity]
     build-environment:
       - LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET"

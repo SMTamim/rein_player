@@ -1,7 +1,7 @@
 There are two build options: the regular one and the accelerated one using a prebuilt image with all dependencies and regular one. To use the accelerated option, you must first build the Docker image and push it to the image registry at ghcr.io. This can be wrapped in a separate repository with GitHub Actions added.
 
-* docker build -t ghcr.io/Ahurein/flutter-gtk-mpv:latest .
-* docker push ghcr.io/Ahurein/flutter-gtk-mpv:latest
+* docker build -t ghcr.io/ahurein/flutter-gtk-mpv:latest .
+* docker push ghcr.io/ahurein/flutter-gtk-mpv:latest
 
 Content of Dockerfile
 ```
