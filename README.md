@@ -117,6 +117,7 @@ ReinPlayer follows the **MVVM** architecture along with a hybrid **feature + lay
 ---
 
 ## 🎯 Challenges & Future Improvements
+
 ### Challenges Overcome
 
 - **Packaging Complexity**: Snap packaging proved challenging due to persistent LXD container issues. Switched to AppImage for a more streamlined distribution approach. 😅
@@ -127,20 +128,30 @@ ReinPlayer follows the **MVVM** architecture along with a hybrid **feature + lay
 ### Current Challenges
 
 **Code**
-   - As a personal project, documentation wasn't the primary focus 
-   - Code could benefit from:
-     - A lot of refactoring 😂
-     - Better documentation of complex logic
-     - Clearer naming conventions
-     - Additional inline documentation
+
+- As a personal project, documentation wasn't the primary focus
+- Code could benefit from:
+  - A lot of refactoring 😂
+  - Better documentation of complex logic
+  - Clearer naming conventions
+  - Additional inline documentation
 
 ## 📦 Downloads
-All builds are available in the [releases page](https://github.com/Ahurein/rein_player/releases/tag/v1.0.0) .
 
-| Version | OS    | Download URL                                                                                                            |
-| ------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
-| v1.0.0  | Linux | [Download from GitHub](https://github.com/Ahurein/rein_player/releases/download/v1.0.0/ReinPlayer-x86_64_v1-0-0.AppImage) |
-| v1.0.0  | Windows | [Download from GitHub](https://github.com/Ahurein/rein_player/releases/download/v1.0.0/ReinPlayer-x64_v1-0-0.exe) |
+All builds are available in the [releases page](https://github.com/Ahurein/rein_player/releases/tag/v1.0.0).
+
+### 🔥 Recommended Installation
+
+**Snap Package (Recommended)**
+
+- ✅ Easy installation and updates
+- ✅ Sandboxed security
+- ✅ All dependencies included
+- ✅ Automatic desktop integration
+
+| Version | Format         | Download URL                                                                                                              |
+| ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| v1.0.1  | Snap, AppImage, Windows, Debian, Portable          | [GitHub Releases](https://github.com/Ahurein/rein_player/releases/tag/v1.0.1)                                 |
 
 Download player icon: [Download](https://github.com/Ahurein/rein_player/raw/main/assets/images/reinplayer.png)
 
@@ -151,7 +162,7 @@ Download player icon: [Download](https://github.com/Ahurein/rein_player/raw/main
 | OS          | Supported | Notes                                                                                                               |
 | ----------- | --------- | ------------------------------------------------------------------------------------------------------------------- |
 | **Linux**   | ✅        | Fully supported                                                                                                     |
-| **Windows** | ✅        | Fully supported (But honestly use PotPlayer instead unless you are just trying out ReinPlayer)                                                                                                       |
+| **Windows** | ✅        | Fully supported (But honestly use PotPlayer instead unless you are just trying out ReinPlayer)                      |
 | **macOS**   | ❌        | Currently not supported. Want to help? Reach out and let's build a macOS version together as I don't have a Mac 😅. |
 | **Android** | ❌        | Not supported – designed for desktop use                                                                            |
 | **iOS**     | ❌        | Not supported – designed for desktop use                                                                            |
@@ -160,33 +171,122 @@ Download player icon: [Download](https://github.com/Ahurein/rein_player/raw/main
 
 ## 📥 Installation Guide
 
-### 1. Portable Mode (No Installation)
+### 🥇 Method 1: Snap Package (Recommended)
+
+**Download the snap file from the release page and install from local file:**
+
+```bash
+sudo snap install --dangerous reinplayer_linux_amd64.snap
+```
+
+**Benefits:**
+
+- ✅ All dependencies included
+- ✅ Automatic updates
+- ✅ Sandboxed security
+- ✅ Perfect desktop integration
+- ✅ No additional setup required
+
+---
+
+### 🥈 Method 2: AppImage (Portable)
+
+**For other installation methods (AppImage, Portable, or Debian), Sometimes, you need to install these dependencies first:**
+
+```bash
+# Install required dependencies
+sudo apt install zenity libmpv-dev libmpv2
+
+# Create compatibility symlinks (choose one that works for your system)
+# Option 1:
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
+
+# Option 2 (alternative path):
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so /usr/lib/libmpv.so.1
+```
+
+**Then run AppImage:**
 
 ```bash
 chmod +x ReinPlayer-x86_64_v1-0-0.AppImage
 ./ReinPlayer-x86_64_v1-0-0.AppImage
 ```
 
-### 2. Install to System - Linux
-First download the Reinplayer linux app image: [Download](https://github.com/Ahurein/rein_player/tree/main?tab=readme-ov-file#-downloads)
+---
+
+### 🥉 Method 3: Debian Package
+
+**Install dependencies first:**
 
 ```bash
-curl -O https://raw.githubusercontent.com/Ahurein/rein_player/main/install.sh
-chmod +x install.sh
+sudo apt install zenity libmpv-dev libmpv2
 
-sudo ./install.sh path_to_reinplayer_appimage_download
-
+# Create compatibility symlinks (choose one that works for your system)
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
+# OR
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so /usr/lib/libmpv.so.1
 ```
 
-### 3. Uninstall - Linux
+**Then install package:**
 
-```sh
-curl -O https://raw.githubusercontent.com/Ahurein/rein_player/main/uninstall.sh
-chmod +x uninstall.sh
-sudo ./uninstall.sh
+```bash
+sudo dpkg -i reinplayer_linux_amd64.deb
+sudo apt-get install -f  # Fix any dependency issues
 ```
 
-Note: If you're using the portable version, simply delete the AppImage file.
+---
+
+### 🏃 Method 4: Portable Bundle
+
+**Install dependencies first:**
+
+```bash
+sudo apt install zenity libmpv-dev libmpv2
+
+# Create compatibility symlinks
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so.2 /usr/lib/x86_64-linux-gnu/libmpv.so.1
+# OR
+sudo ln -s /usr/lib/x86_64-linux-gnu/libmpv.so /usr/lib/libmpv.so.1
+```
+
+**Then extract and run:**
+
+```bash
+tar -xzf reinplayer_linux_amd64_portable.tar.gz
+cd reinplayer_linux_amd64_portable
+./rein_player
+```
+
+---
+
+### 🗑️ Uninstall
+
+**Snap:**
+
+```bash
+sudo snap remove reinplayer
+```
+
+**Debian Package:**
+
+```bash
+sudo apt remove reinplayer
+```
+
+**AppImage/Portable:**
+Simply delete the downloaded files.
+
+---
+
+### ⚠️ Troubleshooting
+
+1. **Install missing packages:**
+   ```bash
+   sudo apt update
+   sudo apt install libmpv2 libmpv-dev zenity
+   ```
+
+**Note:** Snap package users don't need any additional setup - all dependencies are included!
 
 ---
 
