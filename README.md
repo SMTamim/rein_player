@@ -144,7 +144,7 @@ All builds are available in the [releases page](https://github.com/Ahurein/rein_
 
 **Snap Package (Recommended)**
 
-- ✅ Easy installation and updates
+- ✅ Easy installation
 - ✅ Sandboxed security
 - ✅ All dependencies included
 - ✅ Automatic desktop integration
@@ -182,7 +182,6 @@ sudo snap install --dangerous reinplayer_linux_amd64.snap
 **Benefits:**
 
 - ✅ All dependencies included
-- ✅ Automatic updates
 - ✅ Sandboxed security
 - ✅ Perfect desktop integration
 - ✅ No additional setup required
