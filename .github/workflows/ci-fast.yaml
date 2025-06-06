@@ -63,38 +63,38 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
 
-  build-linux-appimage:
-    needs: build-linux
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # build-linux-appimage:
+  #   needs: build-linux
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Install linux dependencies
-        run: sudo apt install -y libfuse2
+  #     - name: Install linux dependencies
+  #       run: sudo apt install -y libfuse2
 
-      - name: Download app archive
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: reinplayer_linux_amd64_portable
+  #     - name: Download app archive
+  #       uses: actions/download-artifact@v4.1.7
+  #       with:
+  #         name: reinplayer_linux_amd64_portable
 
-      - name: uncompress app archive
-        run: |
-          mkdir -p build/linux/x64/release/bundle
-          tar -C build/linux/x64/release/bundle -xvf reinplayer_linux_amd64_portable.tar.gz
+  #     - name: uncompress app archive
+  #       run: |
+  #         mkdir -p build/linux/x64/release/bundle
+  #         tar -C build/linux/x64/release/bundle -xvf reinplayer_linux_amd64_portable.tar.gz
 
-      - name: Create .AppImage package
-        run: ./dist/build.sh appimage
+  #     - name: Create .AppImage package
+  #       run: ./dist/build.sh appimage
 
-      - name: Upload debian package
-        uses: svenstaro/upload-release-action@v2
-        if: startsWith(github.ref, 'refs/tags/v')
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/ReinPlayer-x86_64.AppImage
-          asset_name: ReinPlayer-x86_64.AppImage
-          tag: ${{ github.ref }}
-          overwrite: true
+  #     - name: Upload debian package
+  #       uses: svenstaro/upload-release-action@v2
+  #       if: startsWith(github.ref, 'refs/tags/v')
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: build/ReinPlayer-x86_64.AppImage
+  #         asset_name: ReinPlayer-x86_64.AppImage
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
 
   build-linux-snap:
     needs: build-linux
