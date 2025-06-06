@@ -45,6 +45,10 @@ function build_snap_package() {
     mkdir -p "${PACKAGE_DIR}"
     sed -i "s/^version:.*/version: ${VERSION}/" "${CURRENT_DIR}/snap/snap/snapcraft.yaml"
     cp -fr "${PROJECT_DIR}/build/linux/x64/release/bundle/." "${PACKAGE_DIR}"
+    # Copy GUI files to the package directory
+    mkdir -p "${PACKAGE_DIR}/gui"
+    cp "${CURRENT_DIR}/snap/snap/gui/reinplayer.desktop" "${PACKAGE_DIR}/gui/"
+    cp "${CURRENT_DIR}/snap/snap/gui/reinplayer.png" "${PACKAGE_DIR}/gui/"
     for library in "${PACKAGE_DIR}/lib/"*.so; do
         strip "$library"
     done
