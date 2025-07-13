@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -26,6 +28,11 @@ class RpVideoScreen extends StatelessWidget {
               /// video
               GestureDetector(
                 onDoubleTap: WindowActionsController.to.toggleWindowSize,
+                onTertiaryTapUp: (details) {
+                  if (details.kind == PointerDeviceKind.mouse) {
+                    WindowActionsController.to.toggleWindowSize();
+                  }
+                },
                 child: Obx(() {
                   if (VideoAndControlController.to.currentVideoUrl.isEmpty) {
                     return const RpNoMediaPlaceholder();
