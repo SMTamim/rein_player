@@ -73,14 +73,52 @@ function build_appimage_package() {
     mv "./ReinPlayer-x86_64.AppImage" "${PROJECT_DIR}/build/"
 }
 
+function build_dmg_package() {
+     VERSION="$(extract_version)"
+    validate_version "${VERSION}"
+
+    APP_PATH="${PROJECT_DIR}/build/macos/Build/Products/Release/rein_player.app"
+    OUTPUT_DIR="${PROJECT_DIR}/dist/dmg"
+    DMG_NAME="ReinPlayer-${VERSION}.dmg"
+
+    # Make sure output dir exists
+    mkdir -p "${OUTPUT_DIR}"
+
+    # Check if node is installed
+    if ! command -v node &> /dev/null; then
+      echo "Node.js not found. Installing via Homebrew..."
+      if command -v brew &> /dev/null; then
+        brew install node
+      else
+        echo "Homebrew not found. Please install Node.js manually."
+        exit 1
+      fi
+    fi
+
+    # Check if create-dmg is installed
+    if ! command -v create-dmg &> /dev/null; then
+      echo "'create-dmg' not found. Installing globally with npm..."
+      npm install -g create-dmg
+    fi
+
+    echo "Creating DMG ${DMG_NAME}..."
+
+    # create-dmg --volname "Rein Player" --window-pos 200 --window-size 600 --icon-size 100 --icon "${APP_PATH}"  --app-drop-link 400  "${APP_PATH}"  "${OUTPUT_DIR}/${DMG_NAME}"  --no-sign
+    create-dmg --volname "Rein Player" "${APP_PATH}" "${OUTPUT_DIR}" --icon "${APP_PATH}" --no-sign
+
+    echo "DMG created at: ${OUTPUT_DIR}/${DMG_NAME}"
+}
+
+# Dispatch by platform
 if [[ "$PLATFORM" == "deb" ]]; then
   build_deb_package
-fi
-
-if [[ "$PLATFORM" == "snap" ]]; then
+elif [[ "$PLATFORM" == "snap" ]]; then
   build_snap_package
-fi
-
-if [[ "$PLATFORM" == "appimage" ]]; then
+elif [[ "$PLATFORM" == "appimage" ]]; then
   build_appimage_package
+elif [[ "$PLATFORM" == "macos" ]]; then
+  build_dmg_package
+else
+  echo "Unknown platform: $PLATFORM"
+  exit 1
 fi
