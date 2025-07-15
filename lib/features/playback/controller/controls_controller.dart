@@ -157,7 +157,9 @@ class ControlsController extends GetxController {
     if (videoPosition.value == null ||
         videoDuration.value == null ||
         videoDuration.value!.inMilliseconds == 0 ||
-        isProgressIndicatorOnDrag.value) return;
+        isProgressIndicatorOnDrag.value) {
+      return;
+    }
     double progress = videoPosition.value!.inMilliseconds /
         videoDuration.value!.inMilliseconds;
     progress = progress.clamp(0.0, 1.0);

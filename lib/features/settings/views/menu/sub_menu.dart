@@ -7,7 +7,7 @@ import 'menu_item.dart';
 class Submenu extends StatelessWidget {
   final List<MenuItem> items;
 
-  const Submenu({required this.items});
+  const Submenu({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {

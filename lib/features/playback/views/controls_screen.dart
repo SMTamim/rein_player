@@ -42,7 +42,7 @@ class RpControls extends StatelessWidget {
                   onTap: PlaylistController.to.togglePlaylistWindow,
                   child: Container(
                     height: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 13),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: const BoxDecoration(
                       color: Colors.transparent,
                       border: Border(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
 
 import '../../features/playlist/models/playlist_item.dart';
@@ -35,39 +36,46 @@ class RpMediaHelper {
   static bool isPlaylistItemSupported(String path) =>
       getPlaylistItemType(path) != PlaylistItemType.UNSUPPORTED;
 
-  static bool isPlaylistItemSupportedAndNotSubtitle(String path){
+  static bool isPlaylistItemSupportedAndNotSubtitle(String path) {
     final type = getPlaylistItemType(path);
-    return  type != PlaylistItemType.UNSUPPORTED && type != PlaylistItemType.SUBTITLE;
+    return type != PlaylistItemType.UNSUPPORTED &&
+        type != PlaylistItemType.SUBTITLE;
   }
 
-
   static bool isMediaFile(String filePath) {
-    final allTypes = [...RpFileExtensions.audioExtensions, ...RpFileExtensions.videoExtensions];
+    final allTypes = [
+      ...RpFileExtensions.audioExtensions,
+      ...RpFileExtensions.videoExtensions
+    ];
     final extension = path.extension(filePath).toLowerCase().trim();
     return allTypes.contains(extension);
   }
 
-  static VideoOrAudioItem getCurrentVideoInfoFromUrl(String filePath){
+  static VideoOrAudioItem getCurrentVideoInfoFromUrl(String filePath) {
     String name = path.basenameWithoutExtension(filePath);
     return VideoOrAudioItem(name, filePath);
   }
 
-  static Future<List<PlaylistItem>> getMediaFilesInDirectory(String dirPath) async {
+  static Future<List<PlaylistItem>> getMediaFilesInDirectory(
+      String dirPath) async {
     final List<PlaylistItem> mediaFiles = [];
     final directory = Directory(dirPath);
+    try {
+      await for (var entity in directory.list()) {
+        final name = path.basename(entity.path);
+        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
+          continue;
+        }
 
-    await for (var entity in directory.list()) {
-      final name = path.basename(entity.path);
-      if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(entity.path)) {
-        continue;
+        mediaFiles.add(PlaylistItem(
+          name: name,
+          location: entity.path,
+          isDirectory: entity is Directory,
+          type: RpMediaHelper.getPlaylistItemType(entity.path),
+        ));
       }
-
-      mediaFiles.add(PlaylistItem(
-        name: name,
-        location: entity.path,
-        isDirectory: entity is Directory,
-        type: RpMediaHelper.getPlaylistItemType(entity.path),
-      ));
+    } catch (e) {
+      if (kDebugMode) print(e.toString());
     }
 
     /// Sort: folders first, then files
@@ -76,14 +84,15 @@ class RpMediaHelper {
     return mediaFiles;
   }
 
-  static int sortMediaFiles(a, b) {
-    if (a.isDirectory != b.isDirectory) {
-      return a.isDirectory ? -1 : 1;
-    }
+  static int sortMediaFiles(a, b, {bool isDirectory = false}) {
+    RegExp numberPrefix = RegExp(r'^(\d+)[\.\-_\)\s]*?(.*)');
 
-    RegExp numberPrefix = RegExp(r'^(\d+)\.\s*(.*)');
-    var matchA = numberPrefix.firstMatch(a.name);
-    var matchB = numberPrefix.firstMatch(b.name);
+    var matchA = numberPrefix.firstMatch(a);
+    var matchB = numberPrefix.firstMatch(b);
+    if (!isDirectory) {
+      matchA = numberPrefix.firstMatch(a.name);
+      matchB = numberPrefix.firstMatch(b.name);
+    }
 
     if (matchA != null && matchB != null) {
       int numberA = int.parse(matchA.group(1)!);

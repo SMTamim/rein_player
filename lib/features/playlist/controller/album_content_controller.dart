@@ -47,7 +47,7 @@ class AlbumContentController extends GetxController {
     if (items.isEmpty) return;
     if(clearBefore) currentContent.clear();
     currentContent.addAll(items);
-    sortPlaylistContent();
+    // sortPlaylistContent();
   }
 
   void navigateBack() {
@@ -137,7 +137,9 @@ class AlbumContentController extends GetxController {
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1 ||
         currentContent.isEmpty ||
-        currentVideoIndex == 0) return;
+        currentVideoIndex == 0) {
+      return;
+    }
     final media = currentContent[currentVideoIndex - 1];
     VideoAndControlController.to
         .loadVideoFromUrl(media.toVideoOrAudioItem());
