@@ -1,0 +1,4 @@
+enum PlaylistType {
+  defaultPlaylistType,
+  potPlayerPlaylistType,
+}

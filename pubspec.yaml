@@ -49,6 +49,7 @@ dependencies:
   path: ^1.9.0
   uuid: ^4.5.1
   desktop_drop: ^0.5.0
+  flutter_context_menu: ^0.2.4
 
 dev_dependencies:
   flutter_test:

@@ -6,4 +6,9 @@ class RpKeysConstants {
   static const String defaultAlbumKey = "default_album";
 
   static const String settingsKey = "settingsKey";
+  /// subtitle
+  static const String subtitleEnabledStorageKey = "isSubtitleEnabled";
+
+  /// playlist
+  static const String playlistTypeStorageKey = "playlistTypeStorageKey";
 }

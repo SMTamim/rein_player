@@ -85,14 +85,21 @@ class RpMediaHelper {
   }
 
   static int sortMediaFiles(a, b, {bool isDirectory = false}) {
+    late RegExpMatch? matchA;
+    late RegExpMatch? matchB;
     RegExp numberPrefix = RegExp(r'^(\d+)[\.\-_\)\s]*?(.*)');
 
-    var matchA = numberPrefix.firstMatch(a);
-    var matchB = numberPrefix.firstMatch(b);
-    if (!isDirectory) {
+    if (a.runtimeType == PlaylistItem && b.runtimeType == PlaylistItem) {
+      if (a.isDirectory != b.isDirectory) {
+        return a.isDirectory ? -1 : 1;
+      }
       matchA = numberPrefix.firstMatch(a.name);
       matchB = numberPrefix.firstMatch(b.name);
+    } else {
+      matchA = numberPrefix.firstMatch(a);
+      matchB = numberPrefix.firstMatch(b);
     }
+
 
     if (matchA != null && matchB != null) {
       int numberA = int.parse(matchA.group(1)!);
@@ -107,5 +114,60 @@ class RpMediaHelper {
     if (matchB != null) return 1;
 
     return a.name.compareTo(b.name);
+  }
+
+  static Future<List<PlaylistItem>> flattenDropItemsFromDirectory(
+      String dirPath) async {
+    final List<PlaylistItem> mediaFiles = [];
+
+    try {
+      final entries = await Directory(dirPath).list(recursive: false).toList();
+
+      final List<FileSystemEntity> directories = [];
+      final List<FileSystemEntity> files = [];
+
+      for (final entry in entries) {
+        final isDir = await FileSystemEntity.isDirectory(entry.path);
+        if (isDir) {
+          directories.add(entry);
+        } else {
+          files.add(entry);
+        }
+      }
+
+      // Sort directories using natural sorting by name
+      directories.sort((a, b) {
+        final nameA = a.path.split(Platform.pathSeparator).last;
+        final nameB = b.path.split(Platform.pathSeparator).last;
+        return RpMediaHelper.sortMediaFiles(nameA, nameB, isDirectory: true);
+      });
+
+      for (final file in files) {
+        final path = file.path;
+        final name = path.split(Platform.pathSeparator).last;
+
+        // Skip unsupported formats
+        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(path)) {
+          continue;
+        }
+        // if (kDebugMode) print(path);
+        mediaFiles.add(PlaylistItem(
+          name: name,
+          location: path,
+          isDirectory: false,
+          type: RpMediaHelper.getPlaylistItemType(path),
+        ));
+      }
+      mediaFiles.sort(RpMediaHelper.sortMediaFiles);
+
+      for (final directory in directories) {
+        final subItems = await flattenDropItemsFromDirectory(directory.path);
+        mediaFiles.addAll(subItems);
+      }
+    } catch (e) {
+      if (kDebugMode) print('Error reading directory $dirPath: $e');
+    }
+
+    return mediaFiles;
   }
 }

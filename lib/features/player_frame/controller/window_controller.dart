@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/playback/controller/playlist_type_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
+import 'package:rein_player/utils/constants/rp_enums.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/extensions/media_extensions.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
@@ -29,77 +30,22 @@ class WindowController extends GetxController with WindowListener {
     super.onInit();
   }
 
-  Future<List<PlaylistItem>> flattenDropItemsFromDirectory(
-      String dirPath) async {
-    final List<PlaylistItem> mediaFiles = [];
-
-    try {
-      final entries = await Directory(dirPath).list(recursive: false).toList();
-
-      final List<FileSystemEntity> directories = [];
-      final List<FileSystemEntity> files = [];
-
-      for (final entry in entries) {
-        final isDir = await FileSystemEntity.isDirectory(entry.path);
-        if (isDir) {
-          directories.add(entry);
-        } else {
-          files.add(entry);
-        }
-      }
-
-      // Sort directories using natural sorting by name
-      directories.sort((a, b) {
-        final nameA = a.path.split(Platform.pathSeparator).last;
-        final nameB = b.path.split(Platform.pathSeparator).last;
-        return RpMediaHelper.sortMediaFiles(nameA, nameB, isDirectory: true);
-      });
-
-      for (final file in files) {
-        final path = file.path;
-        final name = path.split(Platform.pathSeparator).last;
-
-        // Skip unsupported formats
-        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(path)) {
-          continue;
-        }
-        // if (kDebugMode) print(path);
-        mediaFiles.add(PlaylistItem(
-          name: name,
-          location: path,
-          isDirectory: false,
-          type: RpMediaHelper.getPlaylistItemType(path),
-        ));
-      }
-      mediaFiles.sort(RpMediaHelper.sortMediaFiles);
-
-      for (final directory in directories) {
-        final subItems = await flattenDropItemsFromDirectory(directory.path);
-        mediaFiles.addAll(subItems);
-      }
-    } catch (e) {
-      if (kDebugMode) print('Error reading directory $dirPath: $e');
-    }
-
-    return mediaFiles;
-  }
-
   Future<void> onWindowDrop(List<DropItem> files) async {
+    PlaylistTypeController.to.dropItems.value = files;
     List<PlaylistItem> mediaFiles = [];
+
+    final PlaylistType playlistType =
+        PlaylistTypeController.to.playlistType.value;
 
     for (var file in files) {
       if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(file.path)) {
         continue;
       }
+      final bool isDir = await FileSystemEntity.isDirectory(file.path);
 
-      if (await FileSystemEntity.isDirectory(file.path)) {
+      if (playlistType == PlaylistType.potPlayerPlaylistType && isDir) {
         final List<PlaylistItem> flattenPlaylistItem =
-            await flattenDropItemsFromDirectory(file.path);
-        for (var f in mediaFiles) {
-          if (kDebugMode) {
-            print(f.name);
-          }
-        }
+            await RpMediaHelper.flattenDropItemsFromDirectory(file.path);
         mediaFiles.addAll(flattenPlaylistItem);
       } else {
         mediaFiles.add(PlaylistItem(
@@ -113,16 +59,21 @@ class WindowController extends GetxController with WindowListener {
 
     AlbumContentController.to
         .addItemsToPlaylistContent(mediaFiles, clearBefore: true);
+
     /// load the first video
     final firstVideo =
         mediaFiles.firstWhereOrNull((media) => !media.isDirectory);
-    if (kDebugMode) print(firstVideo?.name);
+    final directory = mediaFiles.firstWhereOrNull((media) => media.isDirectory);
     if (firstVideo != null) {
       await VideoAndControlController.to
           .loadVideoFromUrl(firstVideo.toVideoOrAudioItem());
       await AlbumController.to.setDefaultAlbum(firstVideo.location,
           currentItemToPlay: firstVideo.location);
       // WindowActionsController.to.maximizeWindow();
+    } else if (directory != null) {
+      await AlbumController.to
+          .setDefaultAlbum(directory.location, makeDirectoryPath: false);
+      await AlbumContentController.to.loadDirectory(directory.location);
     }
   }
 

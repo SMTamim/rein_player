@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
-class MenuItem extends StatelessWidget {
+class RpMenuItem extends StatelessWidget {
   final String text;
+  final IconData? icon;
   final VoidCallback? onTap;
-  final List<MenuItem>? subMenuItems;
+  final List<RpMenuItem>? subMenuItems;
+  final bool enabled;
 
-  const MenuItem({
+  const RpMenuItem({
     super.key,
     required this.text,
+    this.icon,
     this.onTap,
     this.subMenuItems,
+    this.enabled = true,
   });
+
+  bool get hasSubMenu => subMenuItems != null && subMenuItems!.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {
-    return subMenuItems != null
+    return hasSubMenu
         ? _buildWithSubMenu(context)
         : _buildWithoutSubMenu(context);
   }

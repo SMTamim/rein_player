@@ -47,7 +47,6 @@ class AlbumContentController extends GetxController {
     if (items.isEmpty) return;
     if(clearBefore) currentContent.clear();
     currentContent.addAll(items);
-    // sortPlaylistContent();
   }
 
   void navigateBack() {

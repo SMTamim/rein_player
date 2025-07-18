@@ -26,7 +26,8 @@ class MainMenuController extends GetxController {
     isHoveringMain.value = true;
   }
 
-  void showSubmenu(BuildContext context, Offset position, List<MenuItem> submenuItems) {
+  void showSubmenu(
+      BuildContext context, Offset position, List<RpMenuItem> submenuItems) {
     hideSubmenusFromLevel(submenuOverlays.length);
 
     final overlay = OverlayEntry(
@@ -79,7 +80,8 @@ class MainMenuController extends GetxController {
     }
   }
 
-  void onMainHover(bool value, BuildContext context, Offset position, List<MenuItem> submenuItems) {
+  void onMainHover(bool value, BuildContext context, Offset position,
+      List<RpMenuItem> submenuItems) {
     isHoveringMain.value = value;
     showSubmenu(context, position, submenuItems);
   }

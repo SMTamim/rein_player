@@ -5,7 +5,7 @@ import '../../controller/menu_controller.dart';
 import 'menu_item.dart';
 
 class Submenu extends StatelessWidget {
-  final List<MenuItem> items;
+  final List<RpMenuItem> items;
 
   const Submenu({super.key, required this.items});
 
