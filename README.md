@@ -86,6 +86,8 @@ ReinPlayer follows the **MVVM** architecture along with a hybrid **feature + lay
 | Ctrl + b            | Toggle Playlist Window  |
 | x                   | Decrease Playback Speed |
 | c                   | Increase Playback Speed |
+| Page Up             | Goto Previous Video     |
+| Page Down           | Goto Next Video         |
 
 - Window actions (Always-on-top, minimize, maximize, fullscreen, close)
 - Player controls: Play, Pause, Stop, Open, Next, Previous
