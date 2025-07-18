@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rein_player/core/app_icons.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
 
 import '../../../utils/constants/rp_colors.dart';
@@ -35,7 +36,7 @@ class RpWindowPlayerMenu extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             SvgPicture.asset(
-              "assets/icons/chevron_down.svg",
+              AppIcons.chevronDownIcon,
               colorFilter: const ColorFilter.mode(RpColors.black_300, BlendMode.srcIn),
             )
           ],

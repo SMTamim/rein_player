@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/core/app_icons.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
@@ -23,8 +24,8 @@ class RpVolumeBar extends StatelessWidget {
             onTap: VolumeController.to.toggleVolumeMuteState,
             child: Obx(() {
               return VolumeController.to.isVideoOnMute()
-                  ? SvgPicture.asset("assets/icons/volume_mute.svg")
-                  : SvgPicture.asset("assets/icons/volume.svg");
+                  ? SvgPicture.asset(AppIcons.muteIcon)
+                  : SvgPicture.asset(AppIcons.volumeIcon);
             }),
           ),
           const SizedBox(width: 8),
