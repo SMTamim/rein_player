@@ -24,7 +24,6 @@ class RpVideoScreen extends StatelessWidget {
     return Obx(() {
       return ContextMenuRegion(
         contextMenu: ContextMenu(entries: contextMenuItems),
-        onItemSelected: (value) => print(value),
         child: MouseRegion(
           onHover: (_) => MainMenuController.to.hideMenu,
           child: ScrollDetector(

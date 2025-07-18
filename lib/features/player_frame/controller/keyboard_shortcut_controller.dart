@@ -5,6 +5,7 @@ import 'package:rein_player/features/playback/controller/playback_speed_controll
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
+import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
 
@@ -106,6 +107,13 @@ class KeyboardController extends GetxController {
           break;
         case LogicalKeyboardKey.keyC:
           PlaybackSpeedController.to.increaseSpeed();
+          break;
+
+        case LogicalKeyboardKey.pageDown:
+          await AlbumContentController.to.goNextItemInPlaylist();
+          break;
+        case LogicalKeyboardKey.pageUp:
+          AlbumContentController.to.goPreviousItemInPlaylist();
           break;
       }
     }
