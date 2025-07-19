@@ -4,7 +4,7 @@ import 'package:rein_player/features/playback/controller/playback_speed_controll
 import 'package:rein_player/utils/constants/rp_colors.dart';
 
 class PlaybackSpeedOverlay extends StatelessWidget {
-  const PlaybackSpeedOverlay({Key? key}) : super(key: key);
+  const PlaybackSpeedOverlay({super.key});
 
   @override
   Widget build(BuildContext context) {

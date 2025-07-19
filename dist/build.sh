@@ -72,15 +72,67 @@ function build_appimage_package() {
     appimagetool "${PACKAGE_DIR}"
     mv "./ReinPlayer-x86_64.AppImage" "${PROJECT_DIR}/build/"
 }
+function build_dmg_package() {
+    VERSION="$(extract_version)"
+    validate_version "${VERSION}"
 
+    APP_PATH="${PROJECT_DIR}/build/macos/Build/Products/Release/rein_player.app"
+    OUTPUT_DIR="${PROJECT_DIR}/dist/dmg"
+    DMG_NAME="ReinPlayer-v${VERSION}.dmg"
+    DMG_PATH="${OUTPUT_DIR}/${DMG_NAME}"
+
+    # Make sure output dir exists
+    mkdir -p "${OUTPUT_DIR}"
+
+    # Check if create-dmg is installed
+    if ! command -v create-dmg &> /dev/null; then
+        echo "'create-dmg' not found. Installing via Homebrew..."
+        if command -v brew &> /dev/null; then
+            brew install create-dmg
+        else
+            echo "Homebrew not found. Please install create-dmg manually."
+            exit 1
+        fi
+    fi
+
+    # Prepare a staging folder that contains the app bundle for the DMG
+    STAGING_DIR="${OUTPUT_DIR}/staging"
+    rm -rf "${STAGING_DIR}"
+    mkdir -p "${STAGING_DIR}"
+    cp -R "${APP_PATH}" "${STAGING_DIR}/"
+
+    # Remove old DMG if exists
+    if [ -f "${DMG_PATH}" ]; then
+        echo "Removing existing DMG: ${DMG_PATH}"
+        rm "${DMG_PATH}"
+    fi
+
+    echo "Creating DMG ${DMG_NAME}..."
+
+    create-dmg \
+        --volname "Rein Player" \
+        --icon "rein_player.app" 200 190 \
+        --app-drop-link 600 185 \
+        --window-pos 200 120 \
+        --window-size 800 400 \
+        --icon-size 100 \
+        --hide-extension "rein_player.app" \
+        "${DMG_PATH}" \
+        "${STAGING_DIR}"
+
+    echo "DMG created at: ${DMG_PATH}"
+}
+
+# Dispatch by platform
 if [[ "$PLATFORM" == "deb" ]]; then
   build_deb_package
-fi
-
-if [[ "$PLATFORM" == "snap" ]]; then
+elif [[ "$PLATFORM" == "snap" ]]; then
   build_snap_package
-fi
-
-if [[ "$PLATFORM" == "appimage" ]]; then
+elif [[ "$PLATFORM" == "appimage" ]]; then
   build_appimage_package
+elif [[ "$PLATFORM" == "macos" ]]; then
+  build_dmg_package
+else
+  echo "Unknown platform: $PLATFORM"
+  exit 1
 fi

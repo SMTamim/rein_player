@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/core/app_icons.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/views/video_action_controls.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
@@ -42,7 +43,7 @@ class RpControls extends StatelessWidget {
                   onTap: PlaylistController.to.togglePlaylistWindow,
                   child: Container(
                     height: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 13),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: const BoxDecoration(
                       color: Colors.transparent,
                       border: Border(
@@ -51,11 +52,10 @@ class RpControls extends StatelessWidget {
                     ),
                     child: Obx(() {
                       if (PlaylistController.to.isPlaylistWindowOpened.value) {
-                        return SvgPicture.asset(
-                            "assets/icons/playlist_burger.svg");
+                        return SvgPicture.asset(AppIcons.playlistBurgerIcon);
                       }
                       return SvgPicture.asset(
-                        "assets/icons/playlist_burger.svg",
+                        AppIcons.playlistBurgerIcon,
                         colorFilter: const ColorFilter.mode(
                             RpColors.white, BlendMode.srcIn),
                       );
@@ -79,7 +79,7 @@ class RpVideoTypeAndTimeCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,

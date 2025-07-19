@@ -43,7 +43,7 @@ class RpWindowCurrentContentInfo extends StatelessWidget {
                       final width =
                           WindowController.to.currentWindowSize.value.width;
                       return SizedBox(
-                        width: width - 400,
+                        width: width > 400 ? width - 400 : width,
                         child: Text(
                           "${AlbumContentController.to.getPlaylistPlayingProgress()} ${WindowInfoController.to.getCurrentVideoTitle()}",
                           style: Theme.of(context).textTheme.bodySmall,

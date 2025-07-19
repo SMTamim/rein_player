@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
@@ -9,6 +10,7 @@ class VolumeController extends GetxController {
   static VolumeController get to => Get.find();
 
   final storage = RpLocalStorage();
+  final double scrollStep = 0.05;
 
   // UI volume range: 0.0 to 1.0
   RxDouble currentVolume = 0.0.obs;
@@ -54,6 +56,12 @@ class VolumeController extends GetxController {
       previousVolume = currentVolume.value;
       updateVolume(0);
     }
+  }
+
+  void onScrollUpdateVolume(PointerScrollEvent scrollEvent) {
+    final bool scrollUp = scrollEvent.scrollDelta.dy < 0;
+    double delta = scrollUp ? scrollStep : -scrollStep;
+    updateVolume((currentVolume.value + delta).clamp(0.0, 1.0));
   }
 
   Future<void> dumpVolumeToStorage() async {

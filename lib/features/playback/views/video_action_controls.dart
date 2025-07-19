@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/core/app_icons.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 
@@ -20,11 +21,11 @@ class RpVideoActionControls extends StatelessWidget {
           Obx(() {
             return VideoAndControlController.to.isVideoPlaying.value
                 ? _buildControlButton(
-                    assetPath: "assets/icons/pause.svg",
+                    assetPath: AppIcons.pauseIcon,
                     onTap: ControlsController.to.pause,
                   )
                 : _buildControlButton(
-                    assetPath: "assets/icons/play.svg",
+                    assetPath: AppIcons.playIcon,
                     onTap: ControlsController.to.play,
                   );
           }),
@@ -32,28 +33,28 @@ class RpVideoActionControls extends StatelessWidget {
 
           /// stop
           _buildControlButton(
-            assetPath: "assets/icons/stop_video.svg",
+            assetPath: AppIcons.stopIcon,
             onTap:  ControlsController.to.stop,
           ),
           const RpVerticalDivider(),
 
           /// previous
           _buildControlButton(
-            assetPath: "assets/icons/previous.svg",
+            assetPath: AppIcons.previousIcon,
             onTap: ControlsController.to.goPreviousItemInPlaylist,
           ),
           const RpVerticalDivider(),
 
           /// next
           _buildControlButton(
-            assetPath: "assets/icons/next.svg",
+            assetPath: AppIcons.nextIcon,
             onTap: ControlsController.to.goNextItemInPlaylist,
           ),
           const RpVerticalDivider(),
 
           /// open
           _buildControlButton(
-            assetPath: "assets/icons/open_video.svg",
+            assetPath: AppIcons.openVideoIcon,
             onTap: ControlsController.to.open,
           ),
           const RpVerticalDivider(),

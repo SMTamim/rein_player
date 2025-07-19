@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
+import 'package:rein_player/features/playback/controller/playlist_type_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
@@ -31,5 +32,6 @@ class GeneralBindings extends Bindings {
     Get.put(AlbumContentController());
     Get.put(MainMenuController());
     Get.lazyPut(() => SettingsController());
+    Get.lazyPut(() => PlaylistTypeController());
   }
 }
