@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/core/app_icons.dart';
+import 'package:rein_player/utils/constants/rp_app_icons.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 
@@ -21,11 +21,11 @@ class RpVideoActionControls extends StatelessWidget {
           Obx(() {
             return VideoAndControlController.to.isVideoPlaying.value
                 ? _buildControlButton(
-                    assetPath: AppIcons.pauseIcon,
+                    assetPath: RpAppIcons.pauseIcon,
                     onTap: ControlsController.to.pause,
                   )
                 : _buildControlButton(
-                    assetPath: AppIcons.playIcon,
+                    assetPath: RpAppIcons.playIcon,
                     onTap: ControlsController.to.play,
                   );
           }),
@@ -33,28 +33,28 @@ class RpVideoActionControls extends StatelessWidget {
 
           /// stop
           _buildControlButton(
-            assetPath: AppIcons.stopIcon,
-            onTap:  ControlsController.to.stop,
+            assetPath: RpAppIcons.stopIcon,
+            onTap: ControlsController.to.stop,
           ),
           const RpVerticalDivider(),
 
           /// previous
           _buildControlButton(
-            assetPath: AppIcons.previousIcon,
+            assetPath: RpAppIcons.previousIcon,
             onTap: ControlsController.to.goPreviousItemInPlaylist,
           ),
           const RpVerticalDivider(),
 
           /// next
           _buildControlButton(
-            assetPath: AppIcons.nextIcon,
+            assetPath: RpAppIcons.nextIcon,
             onTap: ControlsController.to.goNextItemInPlaylist,
           ),
           const RpVerticalDivider(),
 
           /// open
           _buildControlButton(
-            assetPath: AppIcons.openVideoIcon,
+            assetPath: RpAppIcons.openVideoIcon,
             onTap: ControlsController.to.open,
           ),
           const RpVerticalDivider(),

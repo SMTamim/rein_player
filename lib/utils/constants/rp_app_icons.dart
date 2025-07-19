@@ -1,4 +1,4 @@
-class AppIcons {
+class RpAppIcons {
   static const String pauseIcon = "assets/icons/pause.svg";
   static const String playIcon = "assets/icons/play.svg";
   static const String stopIcon = "assets/icons/stop_video.svg";
