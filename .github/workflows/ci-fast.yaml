@@ -36,9 +36,10 @@ jobs:
 
       - name: Upload DMG
         uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/dmg/ReinPlayer-*.dmg
+          file: dist/dmg/ReinPlayer-${{ github.ref_name }}.dmg
           asset_name: ReinPlayer-${{ github.ref_name }}.dmg
           tag: ${{ github.ref }}
           overwrite: true
