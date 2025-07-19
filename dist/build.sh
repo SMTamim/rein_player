@@ -78,7 +78,7 @@ function build_dmg_package() {
 
     APP_PATH="${PROJECT_DIR}/build/macos/Build/Products/Release/rein_player.app"
     OUTPUT_DIR="${PROJECT_DIR}/dist/dmg"
-    DMG_NAME="ReinPlayer-${VERSION}.dmg"
+    DMG_NAME="ReinPlayer-v${VERSION}.dmg"
     DMG_PATH="${OUTPUT_DIR}/${DMG_NAME}"
 
     # Make sure output dir exists
