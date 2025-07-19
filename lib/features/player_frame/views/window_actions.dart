@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/core/app_icons.dart';
+import 'package:rein_player/utils/constants/rp_app_icons.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
@@ -31,11 +31,11 @@ class RpWindowActions extends StatelessWidget {
               height: 58,
               child: WindowActionsController.to.isPinned.value
                   ? SvgPicture.asset(
-                      AppIcons.pinDownIcon,
+                      RpAppIcons.pinDownIcon,
                       colorFilter: const ColorFilter.mode(
                           RpColors.accent, BlendMode.srcIn),
                     )
-                  : SvgPicture.asset(AppIcons.pinDownIcon),
+                  : SvgPicture.asset(RpAppIcons.pinDownIcon),
             ),
           ),
         ),
@@ -48,7 +48,7 @@ class RpWindowActions extends StatelessWidget {
               color: Colors.transparent,
               padding: const EdgeInsets.symmetric(horizontal: RpSizes.sm),
               height: 58,
-              child: SvgPicture.asset(AppIcons.minimizeIcon)),
+              child: SvgPicture.asset(RpAppIcons.minimizeIcon)),
         ),
         const SizedBox(width: 10),
 
@@ -59,7 +59,7 @@ class RpWindowActions extends StatelessWidget {
             color: Colors.transparent,
             padding: const EdgeInsets.symmetric(horizontal: RpSizes.sm),
             height: 58,
-            child: SvgPicture.asset(AppIcons.maximizeIcon),
+            child: SvgPicture.asset(RpAppIcons.maximizeIcon),
           ),
         ),
 
@@ -67,7 +67,7 @@ class RpWindowActions extends StatelessWidget {
         const SizedBox(width: 10),
         InkWell(
           onTap: WindowActionsController.to.toggleFullScreenWindow,
-          child: SvgPicture.asset(AppIcons.fullscreenIcon),
+          child: SvgPicture.asset(RpAppIcons.fullscreenIcon),
         ),
         const SizedBox(width: 10),
 
@@ -78,7 +78,7 @@ class RpWindowActions extends StatelessWidget {
             color: Colors.transparent,
             padding: const EdgeInsets.symmetric(horizontal: RpSizes.sm),
             height: 58,
-            child: SvgPicture.asset(AppIcons.closeIcon),
+            child: SvgPicture.asset(RpAppIcons.closeIcon),
           ),
         ),
         const SizedBox(width: 9)
