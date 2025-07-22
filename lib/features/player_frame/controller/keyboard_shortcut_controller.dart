@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/playback_speed_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
@@ -7,7 +8,6 @@ import 'package:rein_player/features/playback/controller/volume_controller.dart'
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
-import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
 
 class KeyboardController extends GetxController {
   static KeyboardController get to => Get.find();
