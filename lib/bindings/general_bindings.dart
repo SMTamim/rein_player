@@ -12,6 +12,7 @@ import 'package:rein_player/features/player_frame/controller/fullscreen_overlay_
 import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import 'package:rein_player/features/settings/controller/settings_controller.dart';
+import 'package:rein_player/features/settings/controller/keyboard_preferences_controller.dart';
 
 import '../features/player_frame/controller/window_controller.dart';
 import '../features/player_frame/controller/window_info_controller.dart';
@@ -21,6 +22,7 @@ class GeneralBindings extends Bindings {
   @override
   void dependencies() {
     Get.put(DeveloperLogController());
+    Get.put(KeyboardPreferencesController());
     Get.put(WindowController());
     Get.put(SubtitleController());
     Get.put(AudioTrackController());
