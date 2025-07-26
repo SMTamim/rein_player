@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
+import 'package:rein_player/features/playback/controller/audio_track_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/controller/playlist_type_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/settings/views/menu/menu_item.dart';
 import 'package:rein_player/utils/constants/rp_enums.dart';
+import 'package:rein_player/utils/constants/rp_colors.dart';
 
 List<RpMenuItem> get defaultMenuData {
   final currentType = PlaylistTypeController.to.playlistType.value;
+  final availableAudioTracks = AudioTrackController.to.availableAudioTracks;
+  final currentAudioTrack = AudioTrackController.to.currentAudioTrack.value;
 
   return [
     RpMenuItem(
@@ -32,6 +36,21 @@ List<RpMenuItem> get defaultMenuData {
         ),
       ],
     ),
+    // Audio submenu - only show if there are multiple audio tracks
+    if (availableAudioTracks.length > 1)
+      RpMenuItem(
+        text: "Audio",
+        icon: Icons.audiotrack,
+        subMenuItems: availableAudioTracks.map((track) {
+          print('track: ${track.id} ${track.title} ${track.language}');
+          final isSelected = currentAudioTrack?.id == track.id;
+          return RpMenuItem(
+            icon: isSelected ? Icons.check : null,
+            text: AudioTrackController.to.getAudioTrackDisplayName(track),
+            onTap: () => AudioTrackController.to.selectAudioTrack(track),
+          );
+        }).toList(),
+      ),
     RpMenuItem(
       text: "Playlist Type",
       icon: Icons.featured_play_list,
@@ -64,8 +83,15 @@ List<RpMenuItem> get defaultMenuData {
   ];
 }
 
-List<ContextMenuEntry> get contextMenuItems {
-  return convertToContextMenuEntries(defaultMenuData);
+ContextMenu createContextMenu() {
+  return ContextMenu(
+    entries: convertToContextMenuEntries(defaultMenuData),
+    boxDecoration: const BoxDecoration(
+      color: RpColors.gray_800,
+      borderRadius: BorderRadius.zero,
+    ),
+    padding: EdgeInsets.zero,
+  );
 }
 
 List<ContextMenuEntry> convertToContextMenuEntries(List<RpMenuItem> items) {

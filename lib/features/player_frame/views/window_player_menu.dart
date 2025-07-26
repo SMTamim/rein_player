@@ -21,18 +21,21 @@ class _RpWindowPlayerMenuState extends State<RpWindowPlayerMenu> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 9),
       child: ContextMenuRegion(
-        contextMenu: ContextMenu(entries: contextMenuItems),
+        contextMenu: createContextMenu(),
         child: GestureDetector(
           onTap: () {
             // Show context menu on left-click
             final RenderBox renderBox = context.findRenderObject() as RenderBox;
             final Offset position = renderBox.localToGlobal(Offset.zero);
 
+            final menu = createContextMenu();
             showContextMenu(
               context,
               contextMenu: ContextMenu(
-                entries: contextMenuItems,
+                entries: menu.entries,
                 position: position + const Offset(0, 25),
+                boxDecoration: menu.boxDecoration,
+                padding: menu.padding,
               ),
             );
           },

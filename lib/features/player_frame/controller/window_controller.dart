@@ -31,49 +31,54 @@ class WindowController extends GetxController with WindowListener {
   }
 
   Future<void> onWindowDrop(List<DropItem> files) async {
-    PlaylistTypeController.to.dropItems.value = files;
-    List<PlaylistItem> mediaFiles = [];
+    try {
+      PlaylistTypeController.to.dropItems.value = files;
+      List<PlaylistItem> mediaFiles = [];
 
-    final PlaylistType playlistType =
-        PlaylistTypeController.to.playlistType.value;
+      final PlaylistType playlistType =
+          PlaylistTypeController.to.playlistType.value;
 
-    for (var file in files) {
-      if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(file.path)) {
-        continue;
+      for (var file in files) {
+        if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(file.path)) {
+          continue;
+        }
+        final bool isDir = await FileSystemEntity.isDirectory(file.path);
+
+        if (playlistType == PlaylistType.potPlayerPlaylistType && isDir) {
+          final List<PlaylistItem> flattenPlaylistItem =
+              await RpMediaHelper.flattenDropItemsFromDirectory(file.path);
+          mediaFiles.addAll(flattenPlaylistItem);
+        } else {
+          mediaFiles.add(PlaylistItem(
+            name: file.name,
+            location: file.path,
+            isDirectory: await FileSystemEntity.isDirectory(file.path),
+            type: RpMediaHelper.getPlaylistItemType(file.path),
+          ));
+        }
       }
-      final bool isDir = await FileSystemEntity.isDirectory(file.path);
 
-      if (playlistType == PlaylistType.potPlayerPlaylistType && isDir) {
-        final List<PlaylistItem> flattenPlaylistItem =
-            await RpMediaHelper.flattenDropItemsFromDirectory(file.path);
-        mediaFiles.addAll(flattenPlaylistItem);
-      } else {
-        mediaFiles.add(PlaylistItem(
-          name: file.name,
-          location: file.path,
-          isDirectory: await FileSystemEntity.isDirectory(file.path),
-          type: RpMediaHelper.getPlaylistItemType(file.path),
-        ));
+      AlbumContentController.to
+          .addItemsToPlaylistContent(mediaFiles, clearBefore: true);
+
+      /// load the first video
+      final firstVideo =
+          mediaFiles.firstWhereOrNull((media) => !media.isDirectory);
+      final directory =
+          mediaFiles.firstWhereOrNull((media) => media.isDirectory);
+      if (firstVideo != null) {
+        await VideoAndControlController.to
+            .loadVideoFromUrl(firstVideo.toVideoOrAudioItem());
+        await AlbumController.to.setDefaultAlbum(firstVideo.location,
+            currentItemToPlay: firstVideo.location);
+        // WindowActionsController.to.maximizeWindow();
+      } else if (directory != null) {
+        await AlbumController.to
+            .setDefaultAlbum(directory.location, makeDirectoryPath: false);
+        await AlbumContentController.to.loadDirectory(directory.location);
       }
-    }
-
-    AlbumContentController.to
-        .addItemsToPlaylistContent(mediaFiles, clearBefore: true);
-
-    /// load the first video
-    final firstVideo =
-        mediaFiles.firstWhereOrNull((media) => !media.isDirectory);
-    final directory = mediaFiles.firstWhereOrNull((media) => media.isDirectory);
-    if (firstVideo != null) {
-      await VideoAndControlController.to
-          .loadVideoFromUrl(firstVideo.toVideoOrAudioItem());
-      await AlbumController.to.setDefaultAlbum(firstVideo.location,
-          currentItemToPlay: firstVideo.location);
-      // WindowActionsController.to.maximizeWindow();
-    } else if (directory != null) {
-      await AlbumController.to
-          .setDefaultAlbum(directory.location, makeDirectoryPath: false);
-      await AlbumContentController.to.loadDirectory(directory.location);
+    } catch (e) {
+      print("Error in onWindowDrop: $e");
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
+import 'package:rein_player/features/playback/controller/audio_track_controller.dart';
 import 'package:rein_player/features/playback/controller/playlist_type_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
@@ -22,6 +23,7 @@ class GeneralBindings extends Bindings {
     Get.put(DeveloperLogController());
     Get.put(WindowController());
     Get.put(SubtitleController());
+    Get.put(AudioTrackController());
     Get.put(ControlsController());
     Get.put(VideoAndControlController());
     Get.put(WindowActionsController());

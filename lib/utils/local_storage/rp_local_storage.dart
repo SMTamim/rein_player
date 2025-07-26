@@ -5,7 +5,7 @@ class RpLocalStorage {
 
   final _storage = GetStorage();
 
-  factory RpLocalStorage(){
+  factory RpLocalStorage() {
     return _instance;
   }
 

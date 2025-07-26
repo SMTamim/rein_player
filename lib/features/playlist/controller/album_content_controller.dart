@@ -43,9 +43,10 @@ class AlbumContentController extends GetxController {
     currentContent.add(item);
   }
 
-  void addItemsToPlaylistContent(List<PlaylistItem> items, {clearBefore = false}) {
+  void addItemsToPlaylistContent(List<PlaylistItem> items,
+      {clearBefore = false}) {
     if (items.isEmpty) return;
-    if(clearBefore) currentContent.clear();
+    if (clearBefore) currentContent.clear();
     currentContent.addAll(items);
   }
 
@@ -90,7 +91,8 @@ class AlbumContentController extends GetxController {
   void updatePlaylistItemDuration(String url) {
     for (var item in currentContent) {
       if (item.location == url) {
-        item.duration.value = RpDurationHelper.formatDuration(ControlsController.to.videoDuration.value);
+        item.duration.value = RpDurationHelper.formatDuration(
+            ControlsController.to.videoDuration.value);
         break;
       }
     }
@@ -115,7 +117,7 @@ class AlbumContentController extends GetxController {
   }
 
   String getPlaylistPlayingProgress() {
-    if(AlbumContentController.to.currentContent.length == 1) return "";
+    if (AlbumContentController.to.currentContent.length == 1) return "";
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1) return "";
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
@@ -140,8 +142,7 @@ class AlbumContentController extends GetxController {
       return;
     }
     final media = currentContent[currentVideoIndex - 1];
-    VideoAndControlController.to
-        .loadVideoFromUrl(media.toVideoOrAudioItem());
+    VideoAndControlController.to.loadVideoFromUrl(media.toVideoOrAudioItem());
     AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
     await AlbumController.to.dumpAllAlbumsToStorage();
   }
