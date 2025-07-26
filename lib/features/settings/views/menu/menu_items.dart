@@ -83,7 +83,6 @@ List<RpMenuItem> get defaultMenuData {
   ];
 }
 
-// Create a reactive ContextMenu that updates when data changes
 ContextMenu createContextMenu() {
   return ContextMenu(
     entries: convertToContextMenuEntries(defaultMenuData),
@@ -93,11 +92,6 @@ ContextMenu createContextMenu() {
     ),
     padding: EdgeInsets.zero,
   );
-}
-
-// Backward compatibility - this will get current menu at the time it's called
-List<ContextMenuEntry> get contextMenuItems {
-  return convertToContextMenuEntries(defaultMenuData);
 }
 
 List<ContextMenuEntry> convertToContextMenuEntries(List<RpMenuItem> items) {
