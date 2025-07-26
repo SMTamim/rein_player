@@ -98,9 +98,7 @@ class KeyboardPreferencesController extends GetxController {
       }
       await storage.saveData(RpKeysConstants.keyboardBindingsKey, saveData);
     } catch (e) {
-      if (kDebugMode) {
-        print('ERROR: Failed to save keyboard bindings: $e');
-      }
+
     }
   }
 

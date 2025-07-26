@@ -105,10 +105,6 @@ List<RpMenuItem> _buildAudioTrackMenu(
     List<AudioTrack> availableAudioTracks, AudioTrack? currentAudioTrack) {
   List<RpMenuItem> audioMenuItems = [];
 
-  print(
-      'DEBUG: Building audio menu - Current track ID: ${currentAudioTrack?.id}');
-  print('DEBUG: Available tracks count: ${availableAudioTracks.length}');
-
   // Add "Track auto" option
   final isAutoSelected = currentAudioTrack?.id == 'auto' ||
       (currentAudioTrack == null && availableAudioTracks.isNotEmpty);
@@ -120,9 +116,8 @@ List<RpMenuItem> _buildAudioTrackMenu(
       onTap: () async {
         try {
           await AudioTrackController.to.player.setAudioTrack(AudioTrack.auto());
-          print('DEBUG: Selected audio track: auto');
         } catch (e) {
-          print('ERROR: Failed to set auto audio track: $e');
+          //do nothing
         }
       },
     ),
@@ -138,9 +133,8 @@ List<RpMenuItem> _buildAudioTrackMenu(
       onTap: () async {
         try {
           await AudioTrackController.to.player.setAudioTrack(AudioTrack.no());
-          print('DEBUG: Selected audio track: no');
         } catch (e) {
-          print('ERROR: Failed to set no audio track: $e');
+          //do nothing
         }
       },
     ),
@@ -151,7 +145,7 @@ List<RpMenuItem> _buildAudioTrackMenu(
     audioMenuItems.add(
       RpMenuItem(
         icon: null,
-        text: "─────────────", // Visual separator
+        text: "─────────────",
         enabled: false,
         onTap: () {},
       ),
@@ -164,9 +158,6 @@ List<RpMenuItem> _buildAudioTrackMenu(
     final isSelected = currentAudioTrack?.id == track.id;
     final displayName = AudioTrackController.to.getAudioTrackDisplayName(track);
 
-    print(
-        'DEBUG: Adding track ${i + 1}: ${displayName} (ID: ${track.id}) - Selected: $isSelected');
-
     audioMenuItems.add(
       RpMenuItem(
         icon: isSelected ? Icons.check : null,
@@ -174,9 +165,8 @@ List<RpMenuItem> _buildAudioTrackMenu(
         onTap: () async {
           try {
             await AudioTrackController.to.selectAudioTrack(track);
-            print('DEBUG: User selected audio track: ${displayName}');
           } catch (e) {
-            print('ERROR: Failed to select audio track: $e');
+            //do nothing
           }
         },
       ),
@@ -194,10 +184,6 @@ List<RpMenuItem> _buildAudioTrackMenu(
       ),
     );
   }
-
-  print('DEBUG: Built audio menu with ${audioMenuItems.length} total items');
-  print(
-      'DEBUG: Menu items: ${audioMenuItems.map((item) => item.text).join(", ")}');
 
   return audioMenuItems;
 }
