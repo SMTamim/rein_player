@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:rein_player/features/developer/controller/developer_log_controller.dart';
+import 'package:rein_player/features/playback/controller/audio_track_controller.dart';
 import 'package:rein_player/features/playback/controller/subtitle_controller.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
