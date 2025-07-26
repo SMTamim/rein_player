@@ -78,7 +78,7 @@ class WindowController extends GetxController with WindowListener {
         await AlbumContentController.to.loadDirectory(directory.location);
       }
     } catch (e) {
-      print("Error in onWindowDrop: $e");
+      //do nothing
     }
   }
 

@@ -7,10 +7,8 @@ class AudioTrackController extends GetxController {
 
   final player = VideoAndControlController.to.videoPlayerController.player;
 
-  // Observable list of available audio tracks
   final RxList<AudioTrack> availableAudioTracks = <AudioTrack>[].obs;
 
-  // Currently selected audio track
   final Rx<AudioTrack?> currentAudioTrack = Rx<AudioTrack?>(null);
 
   @override
@@ -20,18 +18,14 @@ class AudioTrackController extends GetxController {
   }
 
   void _setupAudioTrackListener() {
-    // Listen to track changes to update available audio tracks
     player.stream.tracks.listen((tracks) {
       availableAudioTracks.value = tracks.audio;
-      print('availableAudioTracks: ${tracks.audio.length}');
 
-      // Set the first track as current if none is selected and tracks are available
       if (tracks.audio.isNotEmpty && currentAudioTrack.value == null) {
         currentAudioTrack.value = tracks.audio.first;
       }
     });
 
-    // Listen to current audio track changes
     player.stream.track.listen((track) {
       currentAudioTrack.value = track.audio;
     });
@@ -52,9 +46,7 @@ class AudioTrackController extends GetxController {
     }
   }
 
-  /// Get display name for an audio track
   String getAudioTrackDisplayName(AudioTrack track) {
-    // Build a display name from available properties
     final parts = <String>[];
 
     if (track.title?.isNotEmpty == true) {

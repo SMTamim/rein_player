@@ -8,6 +8,7 @@ import 'package:rein_player/features/playback/controller/volume_controller.dart'
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/playlist/controller/album_content_controller.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/features/settings/controller/keyboard_preferences_controller.dart';
 
 class KeyboardController extends GetxController {
   static KeyboardController get to => Get.find();
@@ -16,105 +17,123 @@ class KeyboardController extends GetxController {
     if (event is KeyDownEvent) {
       final isShiftPressed = HardwareKeyboard.instance.isShiftPressed;
       final isCtrlPressed = HardwareKeyboard.instance.isControlPressed;
+      final currentKey = event.logicalKey;
 
-      switch (event.logicalKey) {
-        /// pause or play
-        case LogicalKeyboardKey.space:
-          ControlsController.to.pauseOrPlay();
-          break;
+      // Get the keyboard preferences controller
+      final keyPrefs = KeyboardPreferencesController.to;
 
-        /// full screen
-        case LogicalKeyboardKey.enter:
-          if (!WindowActionsController.to.isFullScreenMode.value) {
-            WindowActionsController.to.toggleWindowSize();
-          }
-          break;
+      // Check each action and its assigned key
+      final keyBindings = keyPrefs.keyBindings;
 
-        /// go back
-        case LogicalKeyboardKey.arrowLeft:
-          {
-            if (isShiftPressed) {
-              await ControlsController.to.bigSeekBackward();
-            } else {
-              await ControlsController.to.seekBackward();
-            }
-            break;
-          }
+      // Play/Pause
+      if (currentKey == keyBindings['play_pause']) {
+        ControlsController.to.pauseOrPlay();
+        return;
+      }
 
-        /// go forward
-        case LogicalKeyboardKey.arrowRight:
-          {
-            if (isShiftPressed) {
-              await ControlsController.to.bigSeekForward();
-            } else {
-              await ControlsController.to.seekForward();
-            }
-            break;
-          }
+      // Fullscreen
+      if (currentKey == keyBindings['fullscreen'] &&
+          !WindowActionsController.to.isFullScreenMode.value) {
+        WindowActionsController.to.toggleWindowSize();
+        return;
+      }
 
-        /// increase volume
-        case LogicalKeyboardKey.arrowUp:
-          {
-            final currentVolume = VolumeController.to.currentVolume.value;
-            final volumeToSet = currentVolume + 0.1;
-            if (volumeToSet > 1) {
-              VolumeController.to.updateVolume(1);
-            } else {
-              VolumeController.to.updateVolume(volumeToSet);
-            }
-            break;
-          }
+      // Seek operations (with modifier key support)
+      if (currentKey == keyBindings['seek_backward'] ||
+          currentKey == keyBindings['big_seek_backward']) {
+        if (isShiftPressed && currentKey == keyBindings['big_seek_backward']) {
+          await ControlsController.to.bigSeekBackward();
+        } else if (!isShiftPressed &&
+            currentKey == keyBindings['seek_backward']) {
+          await ControlsController.to.seekBackward();
+        }
+        return;
+      }
 
-        /// volume down
-        case LogicalKeyboardKey.arrowDown:
-          {
-            final currentVolume = VolumeController.to.currentVolume.value;
-            final volumeToSet = currentVolume - 0.1;
-            if (volumeToSet < 0) {
-              VolumeController.to.updateVolume(0);
-            } else {
-              VolumeController.to.updateVolume(volumeToSet);
-            }
-            break;
-          }
-        case LogicalKeyboardKey.keyM:
-          VolumeController.to.toggleVolumeMuteState();
-          break;
-        case LogicalKeyboardKey.keyH:
-          SubtitleController.to.toggleSubtitle();
-          break;
+      if (currentKey == keyBindings['seek_forward'] ||
+          currentKey == keyBindings['big_seek_forward']) {
+        if (isShiftPressed && currentKey == keyBindings['big_seek_forward']) {
+          await ControlsController.to.bigSeekForward();
+        } else if (!isShiftPressed &&
+            currentKey == keyBindings['seek_forward']) {
+          await ControlsController.to.seekForward();
+        }
+        return;
+      }
 
-        /// full screen and playlist
-        case LogicalKeyboardKey.escape:
-          WindowActionsController.to.toggleFullScreenWindow();
-          break;
-        case LogicalKeyboardKey.keyB:
-          if (isCtrlPressed) {
-            PlaylistController.to.togglePlaylistWindow();
-          }
-          break;
+      // Volume controls
+      if (currentKey == keyBindings['volume_up']) {
+        final currentVolume = VolumeController.to.currentVolume.value;
+        final volumeToSet = currentVolume + 0.1;
+        if (volumeToSet > 1) {
+          VolumeController.to.updateVolume(1);
+        } else {
+          VolumeController.to.updateVolume(volumeToSet);
+        }
+        return;
+      }
 
-        /// Developer log
-        case LogicalKeyboardKey.keyD:
-          if (isCtrlPressed) {
-            DeveloperLogController.to.toggleVisibility();
-          }
-          break;
+      if (currentKey == keyBindings['volume_down']) {
+        final currentVolume = VolumeController.to.currentVolume.value;
+        final volumeToSet = currentVolume - 0.1;
+        if (volumeToSet < 0) {
+          VolumeController.to.updateVolume(0);
+        } else {
+          VolumeController.to.updateVolume(volumeToSet);
+        }
+        return;
+      }
 
-        // Playback speed controls
-        case LogicalKeyboardKey.keyX:
-          PlaybackSpeedController.to.decreaseSpeed();
-          break;
-        case LogicalKeyboardKey.keyC:
-          PlaybackSpeedController.to.increaseSpeed();
-          break;
+      // Toggle mute
+      if (currentKey == keyBindings['toggle_mute']) {
+        VolumeController.to.toggleVolumeMuteState();
+        return;
+      }
 
-        case LogicalKeyboardKey.pageDown:
-          await AlbumContentController.to.goNextItemInPlaylist();
-          break;
-        case LogicalKeyboardKey.pageUp:
-          AlbumContentController.to.goPreviousItemInPlaylist();
-          break;
+      // Toggle subtitle
+      if (currentKey == keyBindings['toggle_subtitle']) {
+        SubtitleController.to.toggleSubtitle();
+        return;
+      }
+
+      // Exit fullscreen
+      if (currentKey == keyBindings['exit_fullscreen']) {
+        WindowActionsController.to.toggleFullScreenWindow();
+        return;
+      }
+
+      // Toggle playlist (with Ctrl modifier)
+      if (currentKey == keyBindings['toggle_playlist'] && isCtrlPressed) {
+        PlaylistController.to.togglePlaylistWindow();
+        return;
+      }
+
+      // Toggle developer log (with Ctrl modifier)
+      if (currentKey == keyBindings['toggle_developer_log'] && isCtrlPressed) {
+        DeveloperLogController.to.toggleVisibility();
+        return;
+      }
+
+      // Playback speed controls
+      if (currentKey == keyBindings['decrease_speed']) {
+        PlaybackSpeedController.to.decreaseSpeed();
+        return;
+      }
+
+      if (currentKey == keyBindings['increase_speed']) {
+        PlaybackSpeedController.to.increaseSpeed();
+        return;
+      }
+
+      // Playlist navigation
+      if (currentKey == keyBindings['next_track']) {
+        await AlbumContentController.to.goNextItemInPlaylist();
+        return;
+      }
+
+      if (currentKey == keyBindings['previous_track']) {
+        AlbumContentController.to.goPreviousItemInPlaylist();
+        return;
       }
     }
   }

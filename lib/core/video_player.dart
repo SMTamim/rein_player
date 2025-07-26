@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:media_kit/media_kit.dart';
 
 class VideoPlayer {
@@ -70,9 +69,7 @@ class VideoPlayer {
             await (_player!.platform as dynamic).setProperty('hwdec', 'no');
 
           } catch (fallbackError) {
-            if (kDebugMode) {
-              print('Failed to apply basic settings: $fallbackError');
-            }
+            //do nothing
           }
         }
       }
@@ -80,9 +77,7 @@ class VideoPlayer {
       try {
         _player = Player();
       } catch (fallbackError) {
-        if (kDebugMode) {
-          print('Failed to create fallback player: $fallbackError');
-        }
+        //do nothing
         throw Exception('VideoPlayer initialization failed completely');
       }
     }
@@ -100,9 +95,7 @@ class VideoPlayer {
       await _player?.dispose();
       _player = null;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error disposing video player: $e');
-      }
+      //do nothing
       _player = null;
     }
   }

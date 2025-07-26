@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:rein_player/features/playback/models/video_audio_item.dart';
 
 import '../../features/playlist/models/playlist_item.dart';
@@ -75,7 +74,7 @@ class RpMediaHelper {
         ));
       }
     } catch (e) {
-      if (kDebugMode) print(e.toString());
+      //do nothing
     }
 
     /// Sort: folders first, then files
@@ -150,7 +149,6 @@ class RpMediaHelper {
         if (!RpMediaHelper.isPlaylistItemSupportedAndNotSubtitle(path)) {
           continue;
         }
-        // if (kDebugMode) print(path);
         mediaFiles.add(PlaylistItem(
           name: name,
           location: path,
@@ -165,7 +163,7 @@ class RpMediaHelper {
         mediaFiles.addAll(subItems);
       }
     } catch (e) {
-      if (kDebugMode) print('Error reading directory $dirPath: $e');
+      //do nothing
     }
 
     return mediaFiles;
