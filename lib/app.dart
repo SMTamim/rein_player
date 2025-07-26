@@ -33,23 +33,46 @@ class RpApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: RpAppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: Stack(
-        children: [
-          Scaffold(
-            body: GestureDetector(
-              onTap: focus.requestFocus,
-              child: KeyboardListener(
-                autofocus: true,
-                focusNode: focus,
-                onKeyEvent: keyboardController.handleKey,
-                child: FullscreenOverlay(
-                  child: RpHome(playlistController: playlistController),
-                ),
-              ),
-            ),
-          ),
-          const DeveloperLogWindow(),
-        ],
+      home: LayoutBuilder(
+        builder: (context, constraints) {
+          // Only render app content when window is properly sized
+          if (constraints.maxWidth < 400 || constraints.maxHeight < 300) {
+            return const Scaffold(
+              body: SizedBox.expand(),
+            );
+          }
+
+          // Add a small delay to ensure GTK/GDK input devices are initialized
+          return FutureBuilder(
+            future: Future.delayed(const Duration(milliseconds: 100)),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Scaffold(
+                  body: SizedBox.expand(),
+                );
+              }
+
+              return Stack(
+                children: [
+                  Scaffold(
+                    body: GestureDetector(
+                      onTap: focus.requestFocus,
+                      child: KeyboardListener(
+                        autofocus: true,
+                        focusNode: focus,
+                        onKeyEvent: keyboardController.handleKey,
+                        child: FullscreenOverlay(
+                          child: RpHome(playlistController: playlistController),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const DeveloperLogWindow(),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
