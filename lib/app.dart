@@ -42,35 +42,23 @@ class RpApp extends StatelessWidget {
             );
           }
 
-          // Add a small delay to ensure GTK/GDK input devices are initialized
-          return FutureBuilder(
-            future: Future.delayed(const Duration(milliseconds: 100)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Scaffold(
-                  body: SizedBox.expand(),
-                );
-              }
-
-              return Stack(
-                children: [
-                  Scaffold(
-                    body: GestureDetector(
-                      onTap: focus.requestFocus,
-                      child: KeyboardListener(
-                        autofocus: true,
-                        focusNode: focus,
-                        onKeyEvent: keyboardController.handleKey,
-                        child: FullscreenOverlay(
-                          child: RpHome(playlistController: playlistController),
-                        ),
-                      ),
+          return Stack(
+            children: [
+              Scaffold(
+                body: GestureDetector(
+                  onTap: focus.requestFocus,
+                  child: KeyboardListener(
+                    autofocus: true,
+                    focusNode: focus,
+                    onKeyEvent: keyboardController.handleKey,
+                    child: FullscreenOverlay(
+                      child: RpHome(playlistController: playlistController),
                     ),
                   ),
-                  const DeveloperLogWindow(),
-                ],
-              );
-            },
+                ),
+              ),
+              const DeveloperLogWindow(),
+            ],
           );
         },
       ),

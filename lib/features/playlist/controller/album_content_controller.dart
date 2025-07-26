@@ -176,4 +176,39 @@ class AlbumContentController extends GetxController {
     }).toList();
     addItemsToPlaylistContent(relatedMedia);
   }
+
+  bool isDirectoryInCurrentVideoPath(String directoryPath) {
+    final currentVideo = VideoAndControlController.to.currentVideo.value;
+    if (currentVideo == null || currentVideo.location.isEmpty) {
+      return false;
+    }
+
+    final videoDirectoryPath = path.dirname(currentVideo.location);
+    final normalizedDirectoryPath = path.normalize(directoryPath);
+    final normalizedVideoPath = path.normalize(videoDirectoryPath);
+
+    final isInPath = normalizedVideoPath.startsWith(normalizedDirectoryPath) ||
+        normalizedVideoPath == normalizedDirectoryPath;
+    return isInPath;
+  }
+
+  bool isDirectoryContainsAlbumCurrentItem(String directoryPath) {
+    final selectedAlbumIndex = AlbumController.to.selectedAlbumIndex.value;
+    if (selectedAlbumIndex >= AlbumController.to.albums.length) return false;
+
+    final currentItemToPlay =
+        AlbumController.to.albums[selectedAlbumIndex].currentItemToPlay;
+
+    if (currentItemToPlay.isEmpty) {
+      return false;
+    }
+
+    final itemDirectoryPath = path.dirname(currentItemToPlay);
+    final normalizedDirectoryPath = path.normalize(directoryPath);
+    final normalizedItemPath = path.normalize(itemDirectoryPath);
+
+    final isInPath = normalizedItemPath.startsWith(normalizedDirectoryPath) ||
+        normalizedItemPath == normalizedDirectoryPath;
+    return isInPath;
+  }
 }
