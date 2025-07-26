@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
@@ -33,7 +32,7 @@ class AlbumContent extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.only(left: 7),
                   color: isHovered.value
-                      ? RpColors.gray_900.withOpacity(0.2)
+                      ? RpColors.gray_900.withValues(alpha: 0.2)
                       : Colors.transparent,
                   child: const Row(
                     children: [
@@ -87,6 +86,15 @@ class RpAlbumItems extends StatelessWidget {
                         .currentItemToPlay ==
                     media.location;
 
+                final isDirectoryInVideoPath = media.isDirectory &&
+                    AlbumContentController.to
+                        .isDirectoryInCurrentVideoPath(media.location);
+
+                // Also check if this directory contains the album's current item to play
+                final isDirectoryContainsCurrentItem = media.isDirectory &&
+                    AlbumContentController.to
+                        .isDirectoryContainsAlbumCurrentItem(media.location);
+
                 return Row(
                   children: [
                     const SizedBox(width: 5),
@@ -95,7 +103,9 @@ class RpAlbumItems extends StatelessWidget {
                       color: (isCurrentPlayingMedia ||
                               isHovered.value ||
                               media.isDirectory ||
-                              isAlbumCurrentItemToPlay)
+                              isAlbumCurrentItemToPlay ||
+                              isDirectoryInVideoPath ||
+                              isDirectoryContainsCurrentItem)
                           ? RpColors.accent
                           : Colors.white,
                       size: 15,
@@ -111,7 +121,9 @@ class RpAlbumItems extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: (isCurrentPlayingMedia ||
                                       isHovered.value ||
-                                      isAlbumCurrentItemToPlay)
+                                      isAlbumCurrentItemToPlay ||
+                                      isDirectoryInVideoPath ||
+                                      isDirectoryContainsCurrentItem)
                                   ? RpColors.accent
                                   : RpColors.black_300,
                             ),

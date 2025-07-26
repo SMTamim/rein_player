@@ -69,7 +69,8 @@ class SubtitleController extends GetxController {
     } else {
       isSubtitleEnabled.value = true;
       if (currentSubtitleContent.isNotEmpty) {
-        await player.setSubtitleTrack(SubtitleTrack.data(currentSubtitleContent));
+        await player
+            .setSubtitleTrack(SubtitleTrack.data(currentSubtitleContent));
       } else {
         await player.setSubtitleTrack(SubtitleTrack.auto());
       }
