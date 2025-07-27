@@ -104,53 +104,20 @@ List<RpMenuItem> get defaultMenuData {
 List<RpMenuItem> _buildAudioTrackMenu(
     List<AudioTrack> availableAudioTracks, AudioTrack? currentAudioTrack) {
   List<RpMenuItem> audioMenuItems = [];
-
-  // Add "Track auto" option
-  final isAutoSelected = currentAudioTrack?.id == 'auto' ||
-      (currentAudioTrack == null && availableAudioTracks.isNotEmpty);
-
-  audioMenuItems.add(
-    RpMenuItem(
-      icon: isAutoSelected ? Icons.check : null,
-      text: "Track auto",
-      onTap: () async {
-        try {
-          await AudioTrackController.to.player.setAudioTrack(AudioTrack.auto());
-        } catch (e) {
-          //do nothing
-        }
-      },
-    ),
-  );
-
-  // Add "Track no" option (disable audio)
-  final isNoSelected = currentAudioTrack?.id == 'no';
-
-  audioMenuItems.add(
-    RpMenuItem(
-      icon: isNoSelected ? Icons.check : null,
-      text: "Track no",
-      onTap: () async {
-        try {
-          await AudioTrackController.to.player.setAudioTrack(AudioTrack.no());
-        } catch (e) {
-          //do nothing
-        }
-      },
-    ),
-  );
-
-  // Add separator if there are actual tracks
-  if (availableAudioTracks.isNotEmpty) {
+  // If no tracks are available, show a message
+  if (availableAudioTracks.isEmpty) {
     audioMenuItems.add(
       RpMenuItem(
         icon: null,
-        text: "─────────────",
+        text: "No additional tracks available",
         enabled: false,
         onTap: () {},
       ),
     );
+    return audioMenuItems;
   }
+
+  print("availableAudioTracks: ${availableAudioTracks.length}");
 
   // Add all available audio tracks
   for (int i = 0; i < availableAudioTracks.length; i++) {
@@ -169,18 +136,6 @@ List<RpMenuItem> _buildAudioTrackMenu(
             //do nothing
           }
         },
-      ),
-    );
-  }
-
-  // If no tracks are available, show a message
-  if (availableAudioTracks.isEmpty) {
-    audioMenuItems.add(
-      RpMenuItem(
-        icon: null,
-        text: "No additional tracks available",
-        enabled: false,
-        onTap: () {},
       ),
     );
   }
