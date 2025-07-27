@@ -32,7 +32,7 @@ class KeyboardController extends GetxController {
       }
 
       // Fullscreen
-      if (currentKey == keyBindings['fullscreen'] &&
+      if (currentKey == keyBindings['toggle_maximize_window'] &&
           !WindowActionsController.to.isFullScreenMode.value) {
         WindowActionsController.to.toggleWindowSize();
         return;
@@ -97,7 +97,7 @@ class KeyboardController extends GetxController {
       }
 
       // Exit fullscreen
-      if (currentKey == keyBindings['exit_fullscreen']) {
+      if (currentKey == keyBindings['toggle_fullscreen']) {
         WindowActionsController.to.toggleFullScreenWindow();
         return;
       }

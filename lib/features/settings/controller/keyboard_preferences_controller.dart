@@ -14,7 +14,8 @@ class KeyboardPreferencesController extends GetxController {
   // Default keyboard bindings
   static const Map<String, LogicalKeyboardKey> defaultBindings = {
     'play_pause': LogicalKeyboardKey.space,
-    'fullscreen': LogicalKeyboardKey.enter,
+    'toggle_fullscreen': LogicalKeyboardKey.escape,
+    'toggle_maximize_window': LogicalKeyboardKey.enter,
     'seek_backward': LogicalKeyboardKey.arrowLeft,
     'seek_forward': LogicalKeyboardKey.arrowRight,
     'big_seek_backward': LogicalKeyboardKey.arrowLeft, // With Shift
@@ -23,7 +24,6 @@ class KeyboardPreferencesController extends GetxController {
     'volume_down': LogicalKeyboardKey.arrowDown,
     'toggle_mute': LogicalKeyboardKey.keyM,
     'toggle_subtitle': LogicalKeyboardKey.keyH,
-    'exit_fullscreen': LogicalKeyboardKey.escape,
     'toggle_playlist': LogicalKeyboardKey.keyB, // With Ctrl
     'toggle_developer_log': LogicalKeyboardKey.keyD, // With Ctrl
     'decrease_speed': LogicalKeyboardKey.keyX,
@@ -35,7 +35,8 @@ class KeyboardPreferencesController extends GetxController {
   // Action descriptions for UI
   static const Map<String, String> actionDescriptions = {
     'play_pause': 'Play/Pause',
-    'fullscreen': 'Enter Fullscreen',
+    'toggle_fullscreen': 'Enter Fullscreen',
+    'toggle_maximize_window': 'Toggle Maximize Window',
     'seek_backward': 'Seek Backward',
     'seek_forward': 'Seek Forward',
     'big_seek_backward': 'Big Seek Backward',
