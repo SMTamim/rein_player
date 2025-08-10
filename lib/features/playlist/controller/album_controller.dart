@@ -41,7 +41,7 @@ class AlbumController extends GetxController {
 
   Future<void> setDefaultAlbum(String filePath,
       {String currentItemToPlay = "", makeDirectoryPath = true}) async {
-    final location = makeDirectoryPath?  path.dirname(filePath) : filePath;
+    final location = makeDirectoryPath ? path.dirname(filePath) : filePath;
     AlbumController.to.albums.value = AlbumController.to.albums.map(
       (album) {
         if (album.id == 'default_album') {
@@ -99,7 +99,9 @@ class AlbumController extends GetxController {
     final defaultAlbum = albums
         .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
         .firstOrNull;
-    if (defaultAlbum == null || defaultAlbum.location.isEmpty || defaultAlbum.location == ".") return;
+    if (defaultAlbum == null ||
+        defaultAlbum.location.isEmpty ||
+        defaultAlbum.location == ".") return;
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
@@ -123,7 +125,9 @@ class AlbumController extends GetxController {
     final defaultAlbum = albums
         .where((album) => album.id == RpKeysConstants.defaultAlbumKey)
         .firstOrNull;
-    if (defaultAlbum == null || defaultAlbum.location.isEmpty || defaultAlbum.location == ".") return;
+    if (defaultAlbum == null ||
+        defaultAlbum.location.isEmpty ||
+        defaultAlbum.location == ".") return;
 
     AlbumContentController.to.clearNavigationStack();
     AlbumContentController.to.currentContent.value = [];
@@ -131,7 +135,8 @@ class AlbumController extends GetxController {
   }
 
   void removeAlbumFromList(Album albumToRemove) async {
-    final albumIndex = albums.indexWhere((album) => album.location == albumToRemove.location);
+    final albumIndex =
+        albums.indexWhere((album) => album.location == albumToRemove.location);
     if (albumIndex == -1) return;
 
     final filteredAlbums = albums
@@ -140,9 +145,9 @@ class AlbumController extends GetxController {
             album.location != albumToRemove.location)
         .toList();
 
-    if(albumIndex == selectedAlbumIndex.value || filteredAlbums.length == 1) {
+    if (albumIndex == selectedAlbumIndex.value || filteredAlbums.length == 1) {
       await updateSelectedAlbumIndex(0);
-    }else {
+    } else {
       await updateSelectedAlbumIndex(selectedAlbumIndex.value - 1);
     }
     albums(filteredAlbums);

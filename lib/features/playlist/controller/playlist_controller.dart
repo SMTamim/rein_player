@@ -55,7 +55,7 @@ class PlaylistController extends GetxController {
   Future<void> pickFolder() async {
     String? folderPath = await FilePicker.platform.getDirectoryPath();
     selectedFolderPath.value = folderPath ?? "";
-    }
+  }
 
   void createNewPlaylist() async {
     if (playlistNameController.text.trim().isEmpty ||
@@ -65,7 +65,8 @@ class PlaylistController extends GetxController {
       return;
     }
 
-    if(AlbumController.to.albums.any((album) => album.location == selectedFolderPath.value)){
+    if (AlbumController.to.albums
+        .any((album) => album.location == selectedFolderPath.value)) {
       Get.snackbar('Error', 'Album already added',
           snackPosition: SnackPosition.TOP, maxWidth: 500);
       return;
@@ -77,9 +78,11 @@ class PlaylistController extends GetxController {
         location: selectedFolderPath.value,
       ),
     );
+
     /// dump list to local storage
     AlbumController.to.dumpAllAlbumsToStorage();
-    await AlbumController.to.updateSelectedAlbumIndex(AlbumController.to.albums.length - 1);
+    await AlbumController.to
+        .updateSelectedAlbumIndex(AlbumController.to.albums.length - 1);
     clearForm();
     Get.back();
   }

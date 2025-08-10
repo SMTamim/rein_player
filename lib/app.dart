@@ -7,6 +7,7 @@ import 'package:rein_player/features/playback/views/video_and_controls_screen.da
 import 'package:rein_player/features/player_frame/controller/keyboard_shortcut_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
+import 'package:rein_player/features/player_frame/views/fullscreen_overlay.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/theme/theme.dart';
@@ -32,21 +33,34 @@ class RpApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: RpAppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: Stack(
-        children: [
-          Scaffold(
-            body: GestureDetector(
-              onTap: focus.requestFocus,
-              child: KeyboardListener(
-                autofocus: true,
-                focusNode: focus,
-                onKeyEvent: keyboardController.handleKey,
-                child: RpHome(playlistController: playlistController),
+      home: LayoutBuilder(
+        builder: (context, constraints) {
+          // Only render app content when window is properly sized
+          if (constraints.maxWidth < 400 || constraints.maxHeight < 300) {
+            return const Scaffold(
+              body: SizedBox.expand(),
+            );
+          }
+
+          return Stack(
+            children: [
+              Scaffold(
+                body: GestureDetector(
+                  onTap: focus.requestFocus,
+                  child: KeyboardListener(
+                    autofocus: true,
+                    focusNode: focus,
+                    onKeyEvent: keyboardController.handleKey,
+                    child: FullscreenOverlay(
+                      child: RpHome(playlistController: playlistController),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          const DeveloperLogWindow(),
-        ],
+              const DeveloperLogWindow(),
+            ],
+          );
+        },
       ),
     );
   }
@@ -86,6 +100,7 @@ class RpHome extends StatelessWidget {
                       : const RpWindowFrame();
                 }),
 
+                /// main content
                 Expanded(
                   child: Row(
                     children: [

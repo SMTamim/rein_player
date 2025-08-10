@@ -43,9 +43,10 @@ class AlbumContentController extends GetxController {
     currentContent.add(item);
   }
 
-  void addItemsToPlaylistContent(List<PlaylistItem> items, {clearBefore = false}) {
+  void addItemsToPlaylistContent(List<PlaylistItem> items,
+      {clearBefore = false}) {
     if (items.isEmpty) return;
-    if(clearBefore) currentContent.clear();
+    if (clearBefore) currentContent.clear();
     currentContent.addAll(items);
   }
 
@@ -90,7 +91,8 @@ class AlbumContentController extends GetxController {
   void updatePlaylistItemDuration(String url) {
     for (var item in currentContent) {
       if (item.location == url) {
-        item.duration.value = RpDurationHelper.formatDuration(ControlsController.to.videoDuration.value);
+        item.duration.value = RpDurationHelper.formatDuration(
+            ControlsController.to.videoDuration.value);
         break;
       }
     }
@@ -115,7 +117,7 @@ class AlbumContentController extends GetxController {
   }
 
   String getPlaylistPlayingProgress() {
-    if(AlbumContentController.to.currentContent.length == 1) return "";
+    if (AlbumContentController.to.currentContent.length == 1) return "";
     final currentVideoIndex = getIndexOfCurrentItemInPlaylist();
     if (currentVideoIndex == -1) return "";
     return "[${currentVideoIndex + 1}/${currentContent.length}]";
@@ -140,8 +142,7 @@ class AlbumContentController extends GetxController {
       return;
     }
     final media = currentContent[currentVideoIndex - 1];
-    VideoAndControlController.to
-        .loadVideoFromUrl(media.toVideoOrAudioItem());
+    VideoAndControlController.to.loadVideoFromUrl(media.toVideoOrAudioItem());
     AlbumController.to.updateAlbumCurrentItemToPlay(media.location);
     await AlbumController.to.dumpAllAlbumsToStorage();
   }
@@ -174,5 +175,40 @@ class AlbumContentController extends GetxController {
       return otherFileNameWithoutExtension.contains(substringToMatch);
     }).toList();
     addItemsToPlaylistContent(relatedMedia);
+  }
+
+  bool isDirectoryInCurrentVideoPath(String directoryPath) {
+    final currentVideo = VideoAndControlController.to.currentVideo.value;
+    if (currentVideo == null || currentVideo.location.isEmpty) {
+      return false;
+    }
+
+    final videoDirectoryPath = path.dirname(currentVideo.location);
+    final normalizedDirectoryPath = path.normalize(directoryPath);
+    final normalizedVideoPath = path.normalize(videoDirectoryPath);
+
+    final isInPath = normalizedVideoPath.startsWith(normalizedDirectoryPath) ||
+        normalizedVideoPath == normalizedDirectoryPath;
+    return isInPath;
+  }
+
+  bool isDirectoryContainsAlbumCurrentItem(String directoryPath) {
+    final selectedAlbumIndex = AlbumController.to.selectedAlbumIndex.value;
+    if (selectedAlbumIndex >= AlbumController.to.albums.length) return false;
+
+    final currentItemToPlay =
+        AlbumController.to.albums[selectedAlbumIndex].currentItemToPlay;
+
+    if (currentItemToPlay.isEmpty) {
+      return false;
+    }
+
+    final itemDirectoryPath = path.dirname(currentItemToPlay);
+    final normalizedDirectoryPath = path.normalize(directoryPath);
+    final normalizedItemPath = path.normalize(itemDirectoryPath);
+
+    final isInPath = normalizedItemPath.startsWith(normalizedDirectoryPath) ||
+        normalizedItemPath == normalizedDirectoryPath;
+    return isInPath;
   }
 }

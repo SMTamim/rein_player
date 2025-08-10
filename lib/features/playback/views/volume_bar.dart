@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:rein_player/core/app_icons.dart';
+import 'package:rein_player/utils/constants/rp_app_icons.dart';
 import 'package:rein_player/features/playback/controller/volume_controller.dart';
 
 import '../../../common/widgets/rp_rounded_indicator.dart';
@@ -24,8 +24,8 @@ class RpVolumeBar extends StatelessWidget {
             onTap: VolumeController.to.toggleVolumeMuteState,
             child: Obx(() {
               return VolumeController.to.isVideoOnMute()
-                  ? SvgPicture.asset(AppIcons.muteIcon)
-                  : SvgPicture.asset(AppIcons.volumeIcon);
+                  ? SvgPicture.asset(RpAppIcons.muteIcon)
+                  : SvgPicture.asset(RpAppIcons.volumeIcon);
             }),
           ),
           const SizedBox(width: 8),
@@ -33,12 +33,14 @@ class RpVolumeBar extends StatelessWidget {
           /// volume slider
           GestureDetector(
             onPanUpdate: (details) {
-              double newVolume = VolumeController.to.currentVolume.value + details.delta.dx / 50;
+              double newVolume = VolumeController.to.currentVolume.value +
+                  details.delta.dx / 50;
               newVolume = newVolume.clamp(0.0, 1.0);
               VolumeController.to.updateVolume(newVolume);
             },
             onTapDown: (details) {
-              RenderBox box = sliderKey.currentContext!.findRenderObject() as RenderBox;
+              RenderBox box =
+                  sliderKey.currentContext!.findRenderObject() as RenderBox;
               double containerWidth = box.size.width;
               double localDx = details.localPosition.dx;
               double newVolume = (localDx / containerWidth).clamp(0.0, 1.0);
@@ -65,7 +67,8 @@ class RpVolumeBar extends StatelessWidget {
                       ),
                     ),
                     Align(
-                      alignment: Alignment(VolumeController.to.currentVolume.value * 2 - 1, 0),
+                      alignment: Alignment(
+                          VolumeController.to.currentVolume.value * 2 - 1, 0),
                       child: const RpRoundedIndicator(),
                     )
                   ],

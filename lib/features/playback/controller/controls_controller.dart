@@ -24,7 +24,8 @@ class ControlsController extends GetxController {
   static ControlsController get to => Get.find();
 
   final storage = RpLocalStorage();
-  final Player player = VideoAndControlController.to.videoPlayerController.player;
+  final Player player =
+      VideoAndControlController.to.videoPlayerController.player;
 
   Timer? _seekDebounceTimer;
 
